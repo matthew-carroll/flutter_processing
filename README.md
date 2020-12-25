@@ -408,8 +408,8 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] randomSeed()
 
 ## Constants
-- [ ] HALF_PI
-- [ ] PI
-- [ ] QUARTER_PI
-- [ ] TAU
-- [ ] TWO_PI
+- [x] HALF_PI
+- [x] PI
+- [x] QUARTER_PI
+- [x] TAU
+- [x] TWO_PI
