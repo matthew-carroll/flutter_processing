@@ -110,15 +110,15 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] PShape
 
 ### 2D Primitives
-- [ ] arc()
-- [ ] circle()
-- [ ] ellipse()
-- [ ] line()
+- [-] arc()
+- [-] circle()
+- [-] ellipse()
+- [-] line()
 - [ ] point()
-- [ ] quad()
-- [ ] rect()
-- [ ] square()
-- [ ] triangle()
+- [-] quad()
+- [-] rect()
+- [-] square()
+- [-] triangle()
 
 ### Curves
 - [ ] bezier()
@@ -286,24 +286,24 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ## Color
 ### Setting
-- [ ] background()
+- [-] background(): fills all available space with a given color or image
 - [ ] clear()
-- [ ] colorMode()
-- [ ] fill()
-- [ ] noFill()
-- [ ] noStroke()
-- [ ] stroke()
+- [ ] ~~colorMode()~~: use standard `Color` configurations instead
+- [-] fill()
+- [-] noFill()
+- [-] noStroke()
+- [-] stroke()
 
 ### Creating & Reading
-- [ ] alpha()
-- [ ] blue()
-- [ ] brightness()
-- [ ] color()
-- [ ] green()
-- [ ] hue()
-- [ ] lerpColor()
-- [ ] red()
-- [ ] saturation()
+- [ ] ~~alpha()~~: Use standard Flutter `Color` properties instead.
+- [ ] ~~blue()~~: Use standard Flutter `Color` properties instead.
+- [ ] ~~brightness()~~: Use standard Flutter `HSVColor` properties instead.
+- [ ] ~~color()~~: Use standard Flutter `Color` properties instead.
+- [ ] ~~green()~~: Use standard Flutter `Color` properties instead.
+- [ ] ~~hue()~~: Use standard Flutter `HSVColor` properties instead.
+- [ ] ~~lerpColor()~~: Use standard Flutter `Color` properties instead.
+- [ ] ~~red()~~: Use standard Flutter `Color` properties instead.
+- [ ] ~~saturation()~~: Use standard Flutter `HSVColor` properties instead.
 
 ## Image
 - [ ] createImage()
