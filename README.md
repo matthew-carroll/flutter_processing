@@ -110,15 +110,15 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] PShape
 
 ### 2D Primitives
-- [-] arc()
-- [-] circle()
-- [-] ellipse()
-- [-] line()
+- [x] arc()
+- [x] circle()
+- [x] ellipse()
+- [x] line()
 - [ ] point()
-- [-] quad()
-- [-] rect()
-- [-] square()
-- [-] triangle()
+- [x] quad()
+- [x] rect()
+- [x] square()
+- [x] triangle()
 
 ### Curves
 - [ ] bezier()
@@ -286,13 +286,13 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ## Color
 ### Setting
-- [-] background(): fills all available space with a given color or image
+- [x] background(): fills all available space with a given color or image
 - [ ] clear()
 - [ ] ~~colorMode()~~: use standard `Color` configurations instead
-- [-] fill()
-- [-] noFill()
-- [-] noStroke()
-- [-] stroke()
+- [x] fill()
+- [x] noFill()
+- [x] noStroke()
+- [x] stroke()
 
 ### Creating & Reading
 - [ ] ~~alpha()~~: Use standard Flutter `Color` properties instead.
