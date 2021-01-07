@@ -1,7 +1,6 @@
 name: flutter_processing
 description: A Flutter version of Processing.
 version: 0.1.0
-author: SuperDeclarative!
 homepage: https://github.com/matthew-carroll/flutter_processing
 
 environment:
