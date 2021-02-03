@@ -111,7 +111,7 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ### 2D Primitives
 - [ ] arc()
-- [-] circle()
+- [x] circle()
 - [ ] ellipse()
 - [ ] line()
 - [ ] point()
