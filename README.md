@@ -116,8 +116,8 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] line()
 - [ ] point()
 - [ ] quad()
-- [ ] rect()
-- [ ] square()
+- [x] rect()
+- [x] square()
 - [ ] triangle()
 
 ### Curves

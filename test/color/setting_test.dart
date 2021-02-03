@@ -87,10 +87,7 @@ void main() {
             sketch: Sketch.simple(
               draw: (s) {
                 s.fill(color: const Color(0xFF969696));
-                s.circle(
-                  center: Offset(56, 46),
-                  diameter: 55,
-                );
+                s.rect(rect: Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -107,10 +104,7 @@ void main() {
             sketch: Sketch.simple(
               draw: (s) {
                 s.fill(color: const Color(0xFFCC6600));
-                s.circle(
-                  center: Offset(56, 46),
-                  diameter: 55,
-                );
+                s.rect(rect: Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -126,15 +120,9 @@ void main() {
           Processing(
             sketch: Sketch.simple(
               draw: (s) {
-                s.circle(
-                  center: Offset(40, 40),
-                  diameter: 55,
-                );
+                s.rect(rect: Rect.fromLTWH(15, 10, 55, 55));
                 s.noFill();
-                s.circle(
-                  center: Offset(60, 60),
-                  diameter: 55,
-                );
+                s.rect(rect: Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -151,10 +139,7 @@ void main() {
             sketch: Sketch.simple(
               draw: (s) {
                 s.stroke(color: const Color(0xFFAAAAAA));
-                s.circle(
-                  center: Offset(56, 46),
-                  diameter: 55,
-                );
+                s.rect(rect: Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -171,10 +156,7 @@ void main() {
             sketch: Sketch.simple(
               draw: (s) {
                 s.stroke(color: const Color(0xFFCC6600));
-                s.circle(
-                  center: Offset(56, 46),
-                  diameter: 55,
-                );
+                s.rect(rect: Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -191,10 +173,7 @@ void main() {
             sketch: Sketch.simple(
               draw: (s) {
                 s.noStroke();
-                s.circle(
-                  center: Offset(56, 46),
-                  diameter: 55,
-                );
+                s.rect(rect: Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
