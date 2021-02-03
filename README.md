@@ -111,7 +111,7 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ### 2D Primitives
 - [ ] arc()
-- [ ] circle()
+- [-] circle()
 - [ ] ellipse()
 - [ ] line()
 - [ ] point()
@@ -286,13 +286,13 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ## Color
 ### Setting
-- [ ] background()
+- [x] background()
 - [ ] clear()
-- [ ] colorMode()
-- [ ] fill()
-- [ ] noFill()
-- [ ] noStroke()
-- [ ] stroke()
+- [ ] ~~colorMode()~~: Use Flutter's `Color` objects instead.
+- [x] fill()
+- [x] noFill()
+- [x] noStroke()
+- [x] stroke()
 
 ### Creating & Reading
 - [ ] alpha()

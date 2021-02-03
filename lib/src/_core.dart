@@ -64,6 +64,7 @@ class Sketch {
   Paint _fillPaint;
   Paint _strokePaint;
 
+  //------ Start Color/Setting -----
   void background({
     @required Color color,
   }) {
@@ -71,6 +72,28 @@ class Sketch {
     canvas.drawRect(Offset.zero & size, paint);
   }
 
+  void fill({
+    @required Color color,
+  }) {
+    _fillPaint.color = color;
+  }
+
+  void noFill() {
+    _fillPaint.color = const Color(0x00000000);
+  }
+
+  void stroke({
+    @required Color color,
+  }) {
+    _strokePaint.color = color;
+  }
+
+  void noStroke() {
+    _strokePaint.color = const Color(0x00000000);
+  }
+  //------- End Color/Setting -----
+
+  //----- Start Shape/2D Primitives ----
   void circle({
     @required Offset center,
     @required double diameter,
@@ -79,6 +102,7 @@ class Sketch {
       ..drawCircle(center, diameter / 2, _fillPaint)
       ..drawCircle(center, diameter / 2, _strokePaint);
   }
+  //------- End Shape/2D Primitives -----
 
   // TODO: implement all other Processing APIs
 }
