@@ -33,8 +33,20 @@ class Sketch {
   void Function(Sketch) _draw;
 
   void _doSetup() {
+    assert(canvas != null);
+    assert(size != null);
+
     // By default fill the background with a light grey.
     background(color: const Color(0xFFC5C5C5));
+
+    // By default, the fill color is white and the stroke is 1px black.
+    _fillPaint = Paint()
+      ..color = const Color(0xFFFFFFFF)
+      ..style = PaintingStyle.fill;
+    _strokePaint = Paint()
+      ..color = const Color(0xFF000000)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
 
     setup();
   }
@@ -49,15 +61,23 @@ class Sketch {
 
   Canvas canvas;
   Size size;
+  Paint _fillPaint;
+  Paint _strokePaint;
 
   void background({
     @required Color color,
   }) {
-    assert(canvas != null);
-    assert(size != null);
-
     final paint = Paint()..color = color;
     canvas.drawRect(Offset.zero & size, paint);
+  }
+
+  void circle({
+    @required Offset center,
+    @required double diameter,
+  }) {
+    canvas
+      ..drawCircle(center, diameter / 2, _fillPaint)
+      ..drawCircle(center, diameter / 2, _strokePaint);
   }
 
   // TODO: implement all other Processing APIs
