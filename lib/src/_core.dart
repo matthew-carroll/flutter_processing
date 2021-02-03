@@ -102,9 +102,57 @@ class Sketch {
       ..drawCircle(center, diameter / 2, _fillPaint)
       ..drawCircle(center, diameter / 2, _strokePaint);
   }
+
+  void square(Square square) {
+    canvas
+      ..drawRect(square.rect, _fillPaint)
+      ..drawRect(square.rect, _strokePaint);
+  }
+
+  void rect({
+    @required Rect rect,
+    BorderRadius borderRadius,
+  }) {
+    if (borderRadius == null) {
+      canvas //
+        ..drawRect(rect, _fillPaint) //
+        ..drawRect(rect, _strokePaint);
+    } else {
+      final rrect = RRect.fromRectAndCorners(
+        rect,
+        topLeft: borderRadius.topLeft,
+        topRight: borderRadius.topRight,
+        bottomLeft: borderRadius.bottomLeft,
+        bottomRight: borderRadius.bottomRight,
+      );
+      canvas //
+        ..drawRRect(rrect, _fillPaint) //
+        ..drawRRect(rrect, _strokePaint);
+    }
+  }
   //------- End Shape/2D Primitives -----
 
   // TODO: implement all other Processing APIs
+}
+
+class Square {
+  Square.fromLTE(Offset topLeft, double extent)
+      : _rect = Rect.fromLTWH(
+          topLeft.dx,
+          topLeft.dy,
+          extent,
+          extent,
+        );
+
+  Square.fromCenter(Offset center, double extent)
+      : _rect = Rect.fromCenter(
+          center: center,
+          width: extent,
+          height: extent,
+        );
+
+  final Rect _rect;
+  Rect get rect => _rect;
 }
 
 class _SketchPainter extends CustomPainter {
