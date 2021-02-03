@@ -20,12 +20,25 @@ class Processing extends StatelessWidget {
   }
 }
 
-abstract class Sketch {
-  // TODO: find a way to allow for sketch implementations to avoid
-  //       subclassing Sketch.
-  void setup() {}
+class Sketch {
+  Sketch.simple({
+    void Function(Sketch) setup,
+    void Function(Sketch) draw,
+  })  : _setup = setup,
+        _draw = draw;
 
-  void draw() {}
+  Sketch();
+
+  void Function(Sketch) _setup;
+  void Function(Sketch) _draw;
+
+  void setup() {
+    _setup?.call(this);
+  }
+
+  void draw() {
+    _draw?.call(this);
+  }
 
   Canvas canvas;
   Size size;
