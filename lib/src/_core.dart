@@ -32,6 +32,13 @@ class Sketch {
   void Function(Sketch) _setup;
   void Function(Sketch) _draw;
 
+  void _doSetup() {
+    // By default fill the background with a light grey.
+    background(color: const Color(0xFFC5C5C5));
+
+    setup();
+  }
+
   void setup() {
     _setup?.call(this);
   }
@@ -68,7 +75,7 @@ class _SketchPainter extends CustomPainter {
     sketch
       ..canvas = canvas
       ..size = size
-      ..setup()
+      .._doSetup()
       ..draw();
   }
 

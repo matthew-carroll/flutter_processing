@@ -7,6 +7,19 @@ import 'test_infra.dart';
 
 void main() {
   group('core', () {
+    testGoldens('setup() paints light grey background by default',
+        (tester) async {
+      configureWindowForSpecTest(tester);
+
+      await tester.pumpWidget(
+        Processing(
+          sketch: Sketch.simple(),
+        ),
+      );
+
+      await screenMatchesGolden(tester, 'core_setup_paints_default_background');
+    });
+
     testGoldens('user can paint background in setup()', (tester) async {
       configureWindowForSpecTest(tester);
 
