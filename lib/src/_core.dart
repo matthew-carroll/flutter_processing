@@ -94,6 +94,14 @@ class Sketch {
   //------- End Color/Setting -----
 
   //----- Start Shape/2D Primitives ----
+  void line(Offset p1, Offset p2, [Offset p3]) {
+    if (p3 != null) {
+      throw UnimplementedError('3D line drawing is not yet supported.');
+    }
+
+    canvas.drawLine(p1, p2, _strokePaint);
+  }
+
   void circle({
     @required Offset center,
     @required double diameter,
@@ -132,6 +140,19 @@ class Sketch {
       ..moveTo(p1.dx, p1.dy)
       ..lineTo(p2.dx, p2.dy)
       ..lineTo(p3.dx, p3.dy)
+      ..close();
+
+    canvas //
+      ..drawPath(path, _fillPaint) //
+      ..drawPath(path, _strokePaint);
+  }
+
+  void quad(Offset p1, Offset p2, Offset p3, Offset p4) {
+    final path = Path()
+      ..moveTo(p1.dx, p1.dy)
+      ..lineTo(p2.dx, p2.dy)
+      ..lineTo(p3.dx, p3.dy)
+      ..lineTo(p4.dx, p4.dy)
       ..close();
 
     canvas //

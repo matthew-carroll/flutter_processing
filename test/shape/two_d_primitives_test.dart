@@ -128,6 +128,76 @@ void main() {
 
         await screenMatchesGolden(tester, 'shape_2d-primitives_triangle-example-1');
       });
+
+      testGoldens('quad(): example 1', (tester) async {
+        configureWindowForSpecTest(tester);
+
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              draw: (s) {
+                s.quad(
+                  Offset(38, 31),
+                  Offset(86, 20),
+                  Offset(69, 63),
+                  Offset(30, 76),
+                );
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'shape_2d-primitives_quad-example-1');
+      });
+
+      testGoldens('line(): example 1', (tester) async {
+        configureWindowForSpecTest(tester);
+
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              draw: (s) {
+                s.line(
+                  Offset(30, 20),
+                  Offset(85, 75),
+                );
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'shape_2d-primitives_line-example-1');
+      });
+
+      testGoldens('line(): example 2', (tester) async {
+        configureWindowForSpecTest(tester);
+
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              draw: (s) {
+                s
+                  ..line(
+                    Offset(30, 20),
+                    Offset(85, 20),
+                  )
+                  ..stroke(color: Color.fromARGB(255, 126, 126, 126))
+                  ..line(
+                    Offset(85, 20),
+                    Offset(85, 75),
+                  )
+                  ..stroke(color: Color.fromARGB(255, 255, 255, 255))
+                  ..line(
+                    Offset(85, 75),
+                    Offset(30, 75),
+                  );
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'shape_2d-primitives_line-example-2');
+      });
     });
   });
 }
