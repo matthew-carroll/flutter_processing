@@ -94,6 +94,23 @@ class Sketch {
   //------- End Color/Setting -----
 
   //----- Start Shape/2D Primitives ----
+  void point({
+    @required double x,
+    @required double y,
+    double z,
+  }) {
+    if (z != null) {
+      throw UnimplementedError('3D point drawing is not yet supported.');
+    }
+
+    _strokePaint.style = PaintingStyle.fill;
+    canvas.drawRect(
+      Rect.fromLTWH(x, y, 1, 1),
+      _strokePaint,
+    );
+    _strokePaint.style = PaintingStyle.stroke;
+  }
+
   void line(Offset p1, Offset p2, [Offset p3]) {
     if (p3 != null) {
       throw UnimplementedError('3D line drawing is not yet supported.');

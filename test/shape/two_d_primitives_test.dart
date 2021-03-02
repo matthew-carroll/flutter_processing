@@ -198,6 +198,26 @@ void main() {
 
         await screenMatchesGolden(tester, 'shape_2d-primitives_line-example-2');
       });
+
+      testGoldens('point(): example 1', (tester) async {
+        configureWindowForSpecTest(tester);
+
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              draw: (s) {
+                s //
+                  ..point(x: 30, y: 20) //
+                  ..point(x: 85, y: 20) //
+                  ..point(x: 85, y: 75) //
+                  ..point(x: 30, y: 75);
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'shape_2d-primitives_point-example-1');
+      });
     });
   });
 }
