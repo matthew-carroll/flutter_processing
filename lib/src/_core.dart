@@ -98,15 +98,11 @@ class Sketch {
     @required Offset center,
     @required double diameter,
   }) {
-    canvas
-      ..drawCircle(center, diameter / 2, _fillPaint)
-      ..drawCircle(center, diameter / 2, _strokePaint);
+    canvas..drawCircle(center, diameter / 2, _fillPaint)..drawCircle(center, diameter / 2, _strokePaint);
   }
 
   void square(Square square) {
-    canvas
-      ..drawRect(square.rect, _fillPaint)
-      ..drawRect(square.rect, _strokePaint);
+    canvas..drawRect(square.rect, _fillPaint)..drawRect(square.rect, _strokePaint);
   }
 
   void rect({
@@ -129,6 +125,18 @@ class Sketch {
         ..drawRRect(rrect, _fillPaint) //
         ..drawRRect(rrect, _strokePaint);
     }
+  }
+
+  void triangle(Offset p1, Offset p2, Offset p3) {
+    final path = Path()
+      ..moveTo(p1.dx, p1.dy)
+      ..lineTo(p2.dx, p2.dy)
+      ..lineTo(p3.dx, p3.dy)
+      ..close();
+
+    canvas //
+      ..drawPath(path, _fillPaint) //
+      ..drawPath(path, _strokePaint);
   }
   //------- End Shape/2D Primitives -----
 
