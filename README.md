@@ -110,15 +110,15 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] PShape
 
 ### 2D Primitives
-- [ ] arc()
+- [x] arc()
 - [x] circle()
-- [ ] ellipse()
-- [ ] line()
-- [ ] point()
-- [ ] quad()
+- [x] ellipse()
+- [x] line()
+- [x] point()
+- [x] quad()
 - [x] rect()
 - [x] square()
-- [ ] triangle()
+- [x] triangle()
 
 ### Curves
 - [ ] bezier()
