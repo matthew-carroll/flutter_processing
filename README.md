@@ -403,9 +403,9 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] noise()
 - [ ] noiseDetail()
 - [ ] noiseSeed()
-- [ ] random()
+- [x] random()
 - [ ] randomGaussian()
-- [ ] randomSeed()
+- [x] randomSeed()
 
 ## Constants
 - [ ] HALF_PI

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 
 class Processing extends StatelessWidget {
@@ -63,6 +65,28 @@ class Sketch {
   Size size;
   Paint _fillPaint;
   Paint _strokePaint;
+
+  //------ Start Random -----
+  Random _random = Random();
+
+  /// Sets the seed value for all [random()] invocations to the given
+  /// [seed].
+  ///
+  /// To return to a natural seed value, pass [null] for [seed].
+  void randomSeed(int seed) {
+    _random = Random(seed);
+  }
+
+  double random(num bound1, [num bound2]) {
+    final lowerBound = bound2 != null ? bound1 : 0;
+    final upperBound = bound2 != null ? bound2 : bound1;
+
+    if (upperBound < lowerBound) {
+      throw Exception('random() lower bound must be less than upper bound');
+    }
+
+    return _random.nextDouble() * (upperBound - lowerBound) + lowerBound;
+  }
 
   //------ Start Color/Setting -----
   void background({
