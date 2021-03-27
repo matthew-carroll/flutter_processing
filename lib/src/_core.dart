@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 
 class Processing extends StatelessWidget {
   const Processing({
-    Key key,
-    @required this.sketch,
+    Key? key,
+    required this.sketch,
   }) : super(key: key);
 
   final Sketch sketch;
@@ -24,20 +24,17 @@ class Processing extends StatelessWidget {
 
 class Sketch {
   Sketch.simple({
-    void Function(Sketch) setup,
-    void Function(Sketch) draw,
+    void Function(Sketch)? setup,
+    void Function(Sketch)? draw,
   })  : _setup = setup,
         _draw = draw;
 
   Sketch();
 
-  void Function(Sketch) _setup;
-  void Function(Sketch) _draw;
+  void Function(Sketch)? _setup;
+  void Function(Sketch)? _draw;
 
   void _doSetup() {
-    assert(canvas != null);
-    assert(size != null);
-
     // By default fill the background with a light grey.
     background(color: const Color(0xFFC5C5C5));
 
@@ -61,10 +58,10 @@ class Sketch {
     _draw?.call(this);
   }
 
-  Canvas canvas;
-  Size size;
-  Paint _fillPaint;
-  Paint _strokePaint;
+  late Canvas canvas;
+  late Size size;
+  late Paint _fillPaint;
+  late Paint _strokePaint;
 
   //------ Start Random -----
   Random _random = Random();
@@ -73,11 +70,11 @@ class Sketch {
   /// [seed].
   ///
   /// To return to a natural seed value, pass [null] for [seed].
-  void randomSeed(int seed) {
+  void randomSeed(int? seed) {
     _random = Random(seed);
   }
 
-  double random(num bound1, [num bound2]) {
+  double random(num bound1, [num? bound2]) {
     final lowerBound = bound2 != null ? bound1 : 0;
     final upperBound = bound2 != null ? bound2 : bound1;
 
@@ -90,14 +87,14 @@ class Sketch {
 
   //------ Start Color/Setting -----
   void background({
-    @required Color color,
+    required Color color,
   }) {
     final paint = Paint()..color = color;
     canvas.drawRect(Offset.zero & size, paint);
   }
 
   void fill({
-    @required Color color,
+    required Color color,
   }) {
     _fillPaint.color = color;
   }
@@ -107,7 +104,7 @@ class Sketch {
   }
 
   void stroke({
-    @required Color color,
+    required Color color,
   }) {
     _strokePaint.color = color;
   }
@@ -119,9 +116,9 @@ class Sketch {
 
   //----- Start Shape/2D Primitives ----
   void point({
-    @required double x,
-    @required double y,
-    double z,
+    required double x,
+    required double y,
+    double? z,
   }) {
     if (z != null) {
       throw UnimplementedError('3D point drawing is not yet supported.');
@@ -135,7 +132,7 @@ class Sketch {
     _strokePaint.style = PaintingStyle.stroke;
   }
 
-  void line(Offset p1, Offset p2, [Offset p3]) {
+  void line(Offset p1, Offset p2, [Offset? p3]) {
     if (p3 != null) {
       throw UnimplementedError('3D line drawing is not yet supported.');
     }
@@ -144,8 +141,8 @@ class Sketch {
   }
 
   void circle({
-    @required Offset center,
-    @required double diameter,
+    required Offset center,
+    required double diameter,
   }) {
     canvas..drawCircle(center, diameter / 2, _fillPaint)..drawCircle(center, diameter / 2, _strokePaint);
   }
@@ -157,9 +154,9 @@ class Sketch {
   }
 
   void arc({
-    @required Ellipse ellipse,
-    @required double startAngle,
-    @required double endAngle,
+    required Ellipse ellipse,
+    required double startAngle,
+    required double endAngle,
     ArcMode mode = ArcMode.openStrokePieFill,
   }) {
     switch (mode) {
@@ -197,8 +194,8 @@ class Sketch {
   }
 
   void rect({
-    @required Rect rect,
-    BorderRadius borderRadius,
+    required Rect rect,
+    BorderRadius? borderRadius,
   }) {
     if (borderRadius == null) {
       canvas //
@@ -269,9 +266,9 @@ class Square {
 
 class Ellipse {
   Ellipse.fromLTWH({
-    @required Offset topLeft,
-    @required double width,
-    @required double height,
+    required Offset topLeft,
+    required double width,
+    required double height,
   }) : _rect = Rect.fromLTWH(
           topLeft.dx,
           topLeft.dy,
@@ -280,8 +277,8 @@ class Ellipse {
         );
 
   Ellipse.fromLTRB({
-    @required Offset topLeft,
-    @required Offset bottomRight,
+    required Offset topLeft,
+    required Offset bottomRight,
   }) : _rect = Rect.fromLTRB(
           topLeft.dx,
           topLeft.dy,
@@ -290,9 +287,9 @@ class Ellipse {
         );
 
   Ellipse.fromCenter({
-    @required Offset center,
-    @required double width,
-    @required double height,
+    required Offset center,
+    required double width,
+    required double height,
   }) : _rect = Rect.fromCenter(
           center: center,
           width: width,
@@ -300,9 +297,9 @@ class Ellipse {
         );
 
   Ellipse.fromCenterWithRadius({
-    @required Offset center,
-    @required double radius1,
-    @required double radius2,
+    required Offset center,
+    required double radius1,
+    required double radius2,
   }) : _rect = Rect.fromCenter(
           center: center,
           width: radius1 * 2,
@@ -322,8 +319,8 @@ enum ArcMode {
 
 class _SketchPainter extends CustomPainter {
   _SketchPainter({
-    @required this.sketch,
-  }) : assert(sketch != null);
+    required this.sketch,
+  });
 
   final Sketch sketch;
 
