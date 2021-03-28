@@ -40,9 +40,9 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] pixelWidth
 - [ ] displayDensity()
 - [ ] fullScreen()
-- [ ] frameRate()
-- [ ] frameRate
-- [ ] frameCount
+- [x] frameRate()
+- [x] frameRate
+- [x] frameCount
 - [ ] cursor()
 - [ ] noCursor()
 - [ ] focused

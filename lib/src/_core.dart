@@ -1,8 +1,9 @@
 import 'dart:math';
 
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
-class Processing extends StatelessWidget {
+class Processing extends StatefulWidget {
   const Processing({
     Key? key,
     required this.sketch,
@@ -11,12 +12,48 @@ class Processing extends StatelessWidget {
   final Sketch sketch;
 
   @override
+  _ProcessingState createState() => _ProcessingState();
+}
+
+class _ProcessingState extends State<Processing> with SingleTickerProviderStateMixin {
+  late Ticker _ticker;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker(_onTick)..start();
+  }
+
+  @override
+  void didUpdateWidget(Processing oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.sketch != oldWidget.sketch) {
+      _ticker
+        ..stop()
+        ..start();
+    }
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  void _onTick(elapsedTime) {
+    setState(() {
+      widget.sketch._updateElapsedTime(elapsedTime);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: implement animation frames, keyboard input, mouse input
+    // TODO: implement keyboard input, mouse input
     return CustomPaint(
       size: Size.infinite,
       painter: _SketchPainter(
-        sketch: sketch,
+        sketch: widget.sketch,
       ),
     );
   }
@@ -34,9 +71,16 @@ class Sketch {
   void Function(Sketch)? _setup;
   void Function(Sketch)? _draw;
 
+  bool _hasDoneSetup = false;
+
   void _doSetup() {
+    if (_hasDoneSetup) {
+      return;
+    }
+    _hasDoneSetup = true;
+
     // By default fill the background with a light grey.
-    background(color: const Color(0xFFC5C5C5));
+    background(color: _backgroundColor);
 
     // By default, the fill color is white and the stroke is 1px black.
     _fillPaint = Paint()
@@ -54,6 +98,24 @@ class Sketch {
     _setup?.call(this);
   }
 
+  void _onDraw() {
+    background(color: _backgroundColor);
+
+    if (_lastDrawTime != null) {
+      if (_elapsedTime - _lastDrawTime! < _desiredFrameTime) {
+        return;
+      }
+    }
+
+    draw();
+
+    _frameCount += 1;
+    _lastDrawTime = _elapsedTime;
+
+    final secondsFraction = _elapsedTime.inMilliseconds / 1000.0;
+    _actualFrameRate = secondsFraction > 0 ? (_frameCount / secondsFraction).round() : _actualFrameRate;
+  }
+
   void draw() {
     _draw?.call(this);
   }
@@ -62,6 +124,26 @@ class Sketch {
   late Size size;
   late Paint _fillPaint;
   late Paint _strokePaint;
+  Color _backgroundColor = const Color(0xFFC5C5C5);
+
+  //------ Start Environment -----
+  Duration _elapsedTime = Duration.zero;
+  void _updateElapsedTime(Duration newElapsedTime) => _elapsedTime = newElapsedTime;
+
+  Duration? _lastDrawTime;
+
+  int _frameCount = 0;
+  int get frameCount => _frameCount;
+
+  int _actualFrameRate = 10;
+  int get frameRate => _actualFrameRate;
+
+  Duration _desiredFrameTime = Duration(milliseconds: (1000.0 / 60).floor());
+  set frameRate(int frameRate) {
+    print('WARNING: non-natural frame rates are very buggy at this time');
+
+    _desiredFrameTime = Duration(milliseconds: (1000.0 / frameRate).floor());
+  }
 
   //------ Start Random -----
   Random _random = Random();
@@ -330,7 +412,7 @@ class _SketchPainter extends CustomPainter {
       ..canvas = canvas
       ..size = size
       .._doSetup()
-      ..draw();
+      .._onDraw();
   }
 
   @override
