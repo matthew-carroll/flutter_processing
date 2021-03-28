@@ -47,7 +47,9 @@ void main() {
           ),
         );
 
-        await screenMatchesGolden(tester, 'shape_2d-primitives_square-example-1');
+        await screenMatchesGolden(tester, 'shape_2d-primitives_square-example-1', customPump: (tester) async {
+          await tester.pump(const Duration(milliseconds: 17));
+        });
       });
 
       testGoldens('rect(): example 1', (tester) async {
