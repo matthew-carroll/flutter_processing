@@ -24,8 +24,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Offset _circleOffset = Offset(400, 250);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
