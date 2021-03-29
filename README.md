@@ -141,7 +141,7 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] rectMode()
 - [ ] strokeCap()
 - [ ] strokeJoin()
-- [ ] strokeWeight()
+- [x] strokeWeight()
 
 ### Vertex
 - [ ] beginContour()
