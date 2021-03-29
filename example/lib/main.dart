@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 
@@ -24,6 +26,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _droplets = <Droplet>[];
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    _droplets.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
