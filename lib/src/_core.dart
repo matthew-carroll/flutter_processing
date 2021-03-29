@@ -22,6 +22,11 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     _ticker = createTicker(_onTick)..start();
+
+    widget.sketch
+      .._onSizeChanged = _onSizeChanged
+      .._loop = _loop
+      .._noLoop = _noLoop;
   }
 
   @override
@@ -29,9 +34,20 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     super.didUpdateWidget(oldWidget);
 
     if (widget.sketch != oldWidget.sketch) {
-      _ticker
-        ..stop()
-        ..start();
+      oldWidget.sketch
+        .._onSizeChanged = null
+        .._loop = null
+        .._noLoop = null;
+
+      widget.sketch
+        .._onSizeChanged = _onSizeChanged
+        .._loop = _loop
+        .._noLoop = _noLoop;
+
+      _ticker.stop();
+      if (widget.sketch._isLooping) {
+        _ticker.start();
+      }
     }
   }
 
@@ -45,6 +61,24 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     setState(() {
       widget.sketch._updateElapsedTime(elapsedTime);
     });
+  }
+
+  void _onSizeChanged() {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      setState(() {});
+    });
+  }
+
+  void _noLoop() {
+    if (_ticker.isTicking) {
+      _ticker.stop();
+    }
+  }
+
+  void _loop() {
+    if (!_ticker.isTicking) {
+      _ticker.start();
+    }
   }
 
   @override
@@ -103,11 +137,12 @@ class Sketch {
   void _onDraw() {
     background(color: _backgroundColor);
 
-    if (_lastDrawTime != null) {
-      if (_elapsedTime - _lastDrawTime! < _desiredFrameTime) {
-        return;
-      }
-    }
+    // TODO: figure out how to correctly support varying frame rates
+    // if (_lastDrawTime != null) {
+    //   if (_elapsedTime - _lastDrawTime! < _desiredFrameTime) {
+    //     return;
+    //   }
+    // }
 
     draw();
 
@@ -130,6 +165,22 @@ class Sketch {
 
   int _desiredWidth = 100;
   int _desiredHeight = 100;
+  VoidCallback? _onSizeChanged;
+
+  //------ Start Structure -----
+  bool _isLooping = true;
+  VoidCallback? _loop;
+  VoidCallback? _noLoop;
+
+  void loop() {
+    _isLooping = true;
+    _loop?.call();
+  }
+
+  void noLoop() {
+    _isLooping = false;
+    _noLoop?.call();
+  }
 
   //------ Start Environment -----
   Duration _elapsedTime = Duration.zero;
@@ -160,6 +211,7 @@ class Sketch {
   }) {
     _desiredWidth = width;
     _desiredHeight = height;
+    _onSizeChanged?.call();
   }
 
   //------ Start Random -----

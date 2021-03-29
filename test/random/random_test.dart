@@ -8,7 +8,9 @@ void main() {
         Processing(
           sketch: Sketch.simple(
             draw: (s) {
-              s.randomSeed(0);
+              s
+                ..noLoop()
+                ..randomSeed(0);
 
               // with upper bound
               double randomValue = s.random(50);

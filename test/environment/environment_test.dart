@@ -15,6 +15,7 @@ void main() {
           sketch: Sketch.simple(
             draw: (s) {
               s
+                ..noLoop()
                 ..noStroke()
                 ..background(color: Colors.black)
                 ..rect(rect: Rect.fromLTWH(0, 40, s.width.toDouble(), 20))
@@ -24,9 +25,7 @@ void main() {
         ),
       );
 
-      await screenMatchesGolden(tester, 'environment_width-example-1', customPump: (tester) async {
-        await tester.pump(const Duration(milliseconds: 17));
-      });
+      await screenMatchesGolden(tester, 'environment_width-example-1');
     });
 
     testGoldens('height', (tester) async {
@@ -37,6 +36,7 @@ void main() {
           sketch: Sketch.simple(
             draw: (s) {
               s
+                ..noLoop()
                 ..noStroke()
                 ..background(color: Colors.black)
                 ..rect(rect: Rect.fromLTWH(40, 0, 20, s.height.toDouble()))
@@ -46,9 +46,7 @@ void main() {
         ),
       );
 
-      await screenMatchesGolden(tester, 'environment_height-example-1', customPump: (tester) async {
-        await tester.pump(const Duration(milliseconds: 17));
-      });
+      await screenMatchesGolden(tester, 'environment_height-example-1');
     });
 
     testGoldens('size()', (tester) async {
@@ -62,7 +60,9 @@ void main() {
         Processing(
           sketch: Sketch.simple(
             setup: (s) {
-              s.size(width: 200, height: 200);
+              s
+                ..noLoop()
+                ..size(width: 200, height: 200);
             },
             draw: (s) {
               s.circle(center: Offset(100, 100), diameter: 50);
@@ -71,10 +71,7 @@ void main() {
         ),
       );
 
-      await screenMatchesGolden(tester, 'environment_size-example-1', customPump: (tester) async {
-        await tester.pump(const Duration(milliseconds: 17));
-        await tester.pump(const Duration(milliseconds: 17));
-      });
+      await screenMatchesGolden(tester, 'environment_size-example-1');
     });
   });
 }
