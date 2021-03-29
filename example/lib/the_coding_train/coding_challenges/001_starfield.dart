@@ -42,19 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Processing(
           sketch: Sketch.simple(
             setup: (s) {
-              final width = 1600;
-              final height = 900;
-
               s
-                ..size(width: width, height: height)
+                ..size(width: 1600, height: 900)
                 ..background(color: Colors.black);
 
               for (int i = 0; i < 100; ++i) {
                 _stars.add(
                   Star(
-                    x: s.random(-width / 2, width / 2),
-                    y: s.random(-height / 2, height / 2),
-                    z: s.random(width),
+                    x: s.random(-s.width / 2, s.width / 2),
+                    y: s.random(-s.height / 2, s.height / 2),
+                    z: s.random(s.width),
                   ),
                 );
               }
