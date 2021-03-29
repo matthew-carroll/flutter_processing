@@ -394,6 +394,15 @@ class Sketch {
   }
   //------- End Shape/2D Primitives -----
 
+  //----- Start Shape/Attributes ----
+  void strokeWeight(int newWeight) {
+    if (newWeight < 0) {
+      throw Exception('Stroke weight must be >= 0');
+    }
+
+    _strokePaint.strokeWidth = newWeight.toDouble();
+  }
+
   //------- Start Transform ------
   void translate({
     double? x,
