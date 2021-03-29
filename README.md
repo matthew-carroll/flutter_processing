@@ -32,9 +32,9 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ## Environment
 - [ ] settings()
-- [ ] width
-- [ ] height
-- [ ] size()
+- [x] width
+- [x] height
+- [x] size()
 - [ ] pixelDensity()
 - [ ] pixelHeight
 - [ ] pixelWidth
@@ -246,7 +246,7 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] scale()
 - [ ] shearX()
 - [ ] shearY()
-- [ ] translate()
+- [x] translate()
 
 ## Lights, Camera
 ### Lights
