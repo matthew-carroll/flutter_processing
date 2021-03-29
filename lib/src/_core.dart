@@ -342,6 +342,19 @@ class Sketch {
   }
   //------- End Shape/2D Primitives -----
 
+  //------- Start Transform ------
+  void translate({
+    double? x,
+    double? y,
+    double? z,
+  }) {
+    if (z != null) {
+      throw UnimplementedError('3D translations are not yet supported.');
+    }
+
+    _canvas.translate(x ?? 0, y ?? 0);
+  }
+
   // TODO: implement all other Processing APIs
 }
 
