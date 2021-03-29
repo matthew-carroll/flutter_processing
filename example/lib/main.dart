@@ -32,15 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Processing(
           sketch: Sketch.simple(
             setup: (s) {
-              s
-                ..size(width: 400, height: 400)
-                ..background(color: Colors.white);
+              // TODO:
             },
             draw: (s) {
-              s.circle(
-                center: Size(s.width.toDouble(), s.height.toDouble()).center(Offset.zero),
-                diameter: 50,
-              );
+              // TODO:
             },
           ),
         ),
