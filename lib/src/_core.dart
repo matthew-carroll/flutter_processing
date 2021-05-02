@@ -1,9 +1,10 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Image;
 
 class Processing extends StatefulWidget {
   const Processing({
@@ -51,6 +52,9 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
   late Ticker _ticker;
   late FocusNode _focusNode;
+
+  Image? _currentImage;
+  bool _isDrawing = false;
 
   @override
   void initState() {
@@ -101,8 +105,32 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onTick(elapsedTime) {
+    if (!_isDrawing) {
+      _doDrawFrame(elapsedTime);
+    }
+  }
+
+  Future<void> _doDrawFrame(Duration elapsedTime) async {
+    _isDrawing = true;
+
+    widget.sketch._updateElapsedTime(elapsedTime);
+
+    final recorder = PictureRecorder();
+    final canvas = Canvas(recorder);
+    widget.sketch
+      .._canvas = canvas
+      .._doSetup()
+      .._onDraw();
+
+    final picture = recorder.endRecording();
+
+    final width = widget.sketch._desiredWidth;
+    final height = widget.sketch._desiredHeight;
+    final image = await picture.toImage(width, height);
+
     setState(() {
-      widget.sketch._updateElapsedTime(elapsedTime);
+      _isDrawing = false;
+      _currentImage = image;
     });
   }
 
@@ -259,11 +287,14 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
         onPointerHover: _onPointerHover,
         onPointerSignal: _onPointerSignal,
         child: Center(
-          child: CustomPaint(
-            key: _sketchCanvasKey,
-            size: Size(widget.sketch._desiredWidth.toDouble(), widget.sketch._desiredHeight.toDouble()),
-            painter: _SketchPainter(sketch: widget.sketch, clipBehavior: widget.clipBehavior),
-          ),
+          child: _currentImage != null
+              ? RawImage(
+                  key: _sketchCanvasKey,
+                  image: _currentImage,
+                )
+              : SizedBox(
+                  key: _sketchCanvasKey,
+                ),
         ),
       ),
     );
@@ -438,7 +469,7 @@ class Sketch {
   }
 
   late Canvas _canvas;
-  late Size _size;
+  late Size _size = Size(100, 100);
   late Paint _fillPaint;
   late Paint _strokePaint;
   Color _backgroundColor = const Color(0xFFC5C5C5);
@@ -491,7 +522,10 @@ class Sketch {
   }) {
     _desiredWidth = width;
     _desiredHeight = height;
+    _size = Size(width.toDouble(), height.toDouble());
     _onSizeChanged?.call();
+
+    background(color: _backgroundColor);
   }
 
   //------ Start Random -----
@@ -812,35 +846,4 @@ enum ArcMode {
   open,
   chord,
   pie,
-}
-
-class _SketchPainter extends CustomPainter {
-  _SketchPainter({
-    required this.sketch,
-    required this.clipBehavior,
-  });
-
-  final Sketch sketch;
-  final Clip clipBehavior;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (clipBehavior != Clip.none) {
-      canvas.clipRect(Offset.zero & size,
-          doAntiAlias: clipBehavior == Clip.antiAlias || clipBehavior == Clip.antiAliasWithSaveLayer);
-
-      // TODO: figure out how to save layer for antiAliasWithSaveLayer
-    }
-
-    sketch
-      .._canvas = canvas
-      .._size = size
-      .._doSetup()
-      .._onDraw();
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
 }
