@@ -173,12 +173,12 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] pmouseY
 
 ### Keyboard
-- [ ] key
+- [x] key
 - [ ] keyCode
-- [ ] keyPressed()
-- [ ] keyPressed
-- [ ] keyReleased()
-- [ ] keyTyped()
+- [x] keyPressed()
+- [x] keyPressed
+- [x] keyReleased()
+- [x] keyTyped()
 
 ### Files
 - [ ] BufferedReader
