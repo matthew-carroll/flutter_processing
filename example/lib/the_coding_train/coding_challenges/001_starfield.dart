@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Processing(
           sketch: Sketch.simple(
-            setup: (s) {
+            setup: (s) async {
               s
                 ..size(width: 1600, height: 900)
                 ..background(color: Colors.black);
@@ -56,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
             },
-            draw: (s) {
+            draw: (s) async {
+              s.background(color: Colors.black);
+
               for (final star in _stars) {
                 star.update(s);
               }
@@ -68,6 +70,17 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final star in _stars) {
                 star.paintStar(s);
               }
+
+              // await s.loadPixels();
+              //
+              // final leftHalf = await s.getRegion(origin: Offset.zero, size: Size(s.width / 2, s.height.toDouble()));
+              // s.image(image: leftHalf, origin: Offset(s.width / 2, 0.0));
+              //
+              // final rightHalf =
+              //     await s.getRegion(origin: Offset(s.width / 2, 0), size: Size(s.width / 2, s.height.toDouble()));
+              // s.image(image: rightHalf, origin: Offset.zero);
+
+              print('Frame rate: ${s.frameRate}');
             },
           ),
         ),

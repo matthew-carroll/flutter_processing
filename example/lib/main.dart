@@ -30,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.yellow,
       body: Center(
         child: Processing(
-          sketch: Sketch.simple(setup: (s) {
+          sketch: Sketch.simple(setup: (s) async {
             s.size(width: 500, height: 500);
-          }, draw: (s) {
+          }, draw: (s) async {
             // TODO:
           }, mouseMoved: (s) {
             print(

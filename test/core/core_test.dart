@@ -11,7 +11,7 @@ void main() {
 
       await tester.pumpWidget(
         Processing(
-          sketch: Sketch.simple(setup: (s) {
+          sketch: Sketch.simple(setup: (s) async {
             s.noLoop();
           }),
         ),
