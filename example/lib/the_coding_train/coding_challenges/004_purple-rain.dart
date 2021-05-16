@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // final topLeft = await s.getRegion(origin: Offset.zero, size: Size(1, 1));
               // s.image(image: topLeft, origin: Offset(s.width / 2, s.height / 2));
 
-              final mousePixelColor = s.get(s.mouseX, s.mouseY);
+              final mousePixelColor = await s.get(s.mouseX, s.mouseY);
               s.fill(color: mousePixelColor);
               s.stroke(color: Colors.black);
               s.strokeWeight(3);

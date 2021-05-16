@@ -108,6 +108,10 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onTick(elapsedTime) {
+    if (!widget.sketch._isLooping && widget.sketch.frameCount > 1) {
+      return;
+    }
+
     // _elapsedTime = elapsedTime;
     widget.sketch._doDrawFrame(elapsedTime);
   }
@@ -339,10 +343,6 @@ class Sketch {
   Image? _intermediateImage;
   ByteData? _pixels;
 
-  /// True when _pixels content has been changed without writing
-  /// those changes back to _intermediateImage.
-  bool _hasUncommittedPixelChanges = false;
-
   /// True when [Canvas] operations have taken place without
   /// applying those commands to _intermediateImage.
   bool _hasUnappliedCanvasCommands = false;
@@ -393,11 +393,20 @@ class Sketch {
     return await picture.toImage(width, height);
   }
 
-  Future<void> _doIntermediateRasterization() async {
+  Future<void> _rasterizePendingCanvasCommands() async {
+    if (!_hasUnappliedCanvasCommands) {
+      // Nothing to rasterize
+      return;
+    }
+
     _intermediateImage = await _rasterize();
     _startRecording();
 
-    _canvas.drawImage(_intermediateImage!, Offset.zero, Paint());
+    _canvas.drawImage(
+      _intermediateImage!,
+      Offset.zero,
+      Paint(),
+    );
 
     _hasUnappliedCanvasCommands = false;
   }
@@ -796,22 +805,23 @@ class Sketch {
   //----- Start Image/Pixels ----
   Future<void> loadPixels() async {
     if (_hasUnappliedCanvasCommands) {
-      await _doIntermediateRasterization();
+      await _rasterizePendingCanvasCommands();
     }
 
     final sourceImage = _intermediateImage ?? _currentImage;
     _pixels = await sourceImage!.toByteData(format: ImageByteFormat.rawRgba);
   }
 
-  Color get(int x, int y) {
-    if (_pixels == null) {
-      throw Exception('Call loadPixels() before calling get()');
+  Future<Color> get(int x, int y) async {
+    if (_hasUnappliedCanvasCommands) {
+      await _rasterizePendingCanvasCommands();
     }
 
-    final sourceImage = _intermediateImage ?? _currentImage;
+    final sourceImage = _intermediateImage!;
+    final bitmapData = (await sourceImage.toByteData())!;
 
-    final pixelDataOffset = _getBitmapPixelOffset(imageWidth: sourceImage!.width, x: x, y: y);
-    final pixelColorValue = _pixels!.getUint32(pixelDataOffset);
+    final pixelDataOffset = _getBitmapPixelOffset(imageWidth: sourceImage.width, x: x, y: y);
+    final pixelColorValue = bitmapData.getUint32(pixelDataOffset);
     final argbColor = ((pixelColorValue & 0x000000FF) << 24) | ((pixelColorValue & 0xFFFFFF00) >> 8);
     return Color(argbColor);
   }
@@ -820,18 +830,19 @@ class Sketch {
     required Offset origin,
     required Size size,
   }) async {
-    if (_pixels == null) {
-      throw Exception('Call loadPixels() before calling getRegion()');
+    if (_hasUnappliedCanvasCommands) {
+      await _rasterizePendingCanvasCommands();
     }
 
-    final sourceImage = _intermediateImage ?? _currentImage;
+    final sourceImage = _intermediateImage!;
+    final bitmapData = (await sourceImage.toByteData())!;
 
     final regionTopLeftX = origin.dx.round();
     final regionTopLeftY = origin.dy.round();
     final regionWidth = size.width.round();
     final regionHeight = size.height.round();
 
-    final originalImageWidth = sourceImage!.width;
+    final originalImageWidth = sourceImage.width;
 
     final regionData = Uint8List(regionWidth * regionHeight * 4);
     final rowLength = regionWidth * 4;
@@ -850,26 +861,10 @@ class Sketch {
       regionData.setRange(
         destinationRowOffset,
         destinationRowOffset + rowLength - 1,
-        Uint8List.view(_pixels!.buffer, sourceRowOffset, rowLength),
+        Uint8List.view(bitmapData.buffer, sourceRowOffset, rowLength),
       );
-
-      // for (int column = 0; column < regionWidth; ++column) {
-      //   final sourceOffset = _getBitmapPixelOffset(
-      //     imageWidth: originalImageWidth,
-      //     x: regionTopLeftX + column,
-      //     y: regionTopLeftY + row,
-      //   );
-      //
-      //   regionData[destinationRowOffset + column] = _pixels!.getUint8(sourceOffset);
-      //   regionData[destinationRowOffset + column + 1] = _pixels!.getUint8(sourceOffset + 1);
-      //   regionData[destinationRowOffset + column + 2] = _pixels!.getUint8(sourceOffset + 2);
-      //   regionData[destinationRowOffset + column + 3] = _pixels!.getUint8(sourceOffset + 3);
-      // }
     }
 
-    // final regionData = Uint8List.fromList(regionIntData);
-
-    // print('Encoding image. Size: ${regionWidth}x${regionHeight}, ${regionData.length} bytes');
     final codec = await ImageDescriptor.raw(
       await ImmutableBuffer.fromUint8List(regionData),
       width: regionWidth,
@@ -877,6 +872,75 @@ class Sketch {
       pixelFormat: PixelFormat.rgba8888,
     ).instantiateCodec(targetWidth: regionWidth, targetHeight: regionHeight);
     return (await codec.getNextFrame()).image;
+  }
+
+  void set({
+    required Offset pixel,
+    required Color color,
+  }) {
+    if (_pixels == null) {
+      throw Exception('You must call loadPixels() before calling set()');
+    }
+
+    final pixelIndex = _getBitmapPixelOffset(
+      imageWidth: width,
+      x: pixel.dx.round(),
+      y: pixel.dy.round(),
+    );
+    // TODO: There is a bit order discrepency here. The Image encoder says
+    //       it expects RGBA, but if we encode RGBA and then paint to the Canvas,
+    //       the Canvas seems to try to read bits as ARGB. To make the Canvas
+    //       happy we pass the [color] as-is, but this seems wrong.
+    _pixels!.setUint32(pixelIndex, color.value);
+  }
+
+  Future<void> setRegion({
+    required Image image,
+    Offset origin = Offset.zero,
+  }) async {
+    if (_pixels == null) {
+      throw Exception('You must call loadPixels() before calling set()');
+    }
+
+    // Turn _pixels back into an Image.
+    final pixelsCodec = await ImageDescriptor.raw(
+      await ImmutableBuffer.fromUint8List(_pixels!.buffer.asUint8List()),
+      width: width,
+      height: height,
+      pixelFormat: PixelFormat.rgba8888,
+    ).instantiateCodec();
+    final pixelsImage = (await pixelsCodec.getNextFrame()).image;
+
+    // Use a Canvas to combine the _pixels-based Image with the
+    // given Image. Using a Canvas avoids us needing to do work
+    // pixel by pixel - it should also give us blending mode
+    // options in the future if we want them.
+    final pictureRecorder = PictureRecorder();
+    final canvas = Canvas(pictureRecorder);
+    canvas
+      ..drawImage(pixelsImage, Offset.zero, Paint())
+      ..drawImage(
+        image,
+        origin,
+        Paint(),
+      );
+    final picture = pictureRecorder.endRecording();
+    final combinedImage = await picture.toImage(width, height);
+    _pixels = (await combinedImage.toByteData())!;
+  }
+
+  Future<void> updatePixels() async {
+    final pixelsCodec = await ImageDescriptor.raw(
+      await ImmutableBuffer.fromUint8List(_pixels!.buffer.asUint8List()),
+      width: width,
+      height: height,
+      pixelFormat: PixelFormat.rgba8888,
+    ).instantiateCodec();
+
+    final pixelsImage = (await pixelsCodec.getNextFrame()).image;
+
+    background(color: Color(0xFFFF0000));
+    image(image: pixelsImage);
   }
 
   int _getBitmapPixelOffset({
@@ -887,9 +951,15 @@ class Sketch {
     return (y * imageWidth * 4) + (x * 4);
   }
 
+  Future<Image> loadImage(String assetPath) async {
+    final imageData = await rootBundle.load(assetPath);
+    final codec = await instantiateImageCodec(imageData.buffer.asUint8List());
+    return (await codec.getNextFrame()).image;
+  }
+
   void image({
     required Image image,
-    required Offset origin,
+    Offset origin = Offset.zero,
     Size? imageDisplaySize,
   }) {
     // TODO: implement use of imageDisplaySize
