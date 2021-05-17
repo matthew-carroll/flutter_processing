@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Processing(
           sketch: Sketch.simple(
-            setup: (s) {
+            setup: (s) async {
               s
                 ..size(width: 1600, height: 900)
                 ..background(color: Colors.black);
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
             },
-            draw: (s) {
+            draw: (s) async {
               for (final star in _stars) {
                 star.update(s);
               }
