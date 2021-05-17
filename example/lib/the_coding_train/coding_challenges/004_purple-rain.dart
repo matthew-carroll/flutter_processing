@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Processing(
           sketch: Sketch.simple(
-            setup: (s) {
+            setup: (s) async {
               final width = 640;
               final height = 360;
 
@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
             },
-            draw: (s) {
+            draw: (s) async {
               for (final droplet in _droplets) {
                 droplet
                   ..fall(s)

@@ -13,7 +13,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            draw: (s) {
+            draw: (s) async {
               s
                 ..noLoop()
                 ..translate(x: 30, y: 20)
@@ -35,7 +35,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            draw: (s) {
+            draw: (s) async {
               s
                 ..noLoop()
                 ..rect(rect: Rect.fromLTWH(0, 0, 55, 55))

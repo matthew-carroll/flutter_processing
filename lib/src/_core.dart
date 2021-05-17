@@ -70,6 +70,12 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    widget.sketch._assetBundle = DefaultAssetBundle.of(context);
+  }
+
+  @override
   void didUpdateWidget(Processing oldWidget) {
     super.didUpdateWidget(oldWidget);
 
@@ -84,6 +90,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
         .._noLoop = null;
 
       widget.sketch
+        .._assetBundle = DefaultAssetBundle.of(context)
         .._onSizeChanged = _onSizeChanged
         .._loop = _loop
         .._noLoop = _noLoop;
@@ -105,22 +112,27 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onTick(elapsedTime) {
-    if (!_isDrawing) {
-      _doDrawFrame(elapsedTime);
-    }
+    _doDrawFrame(elapsedTime);
   }
 
   Future<void> _doDrawFrame(Duration elapsedTime) async {
+    if (_isDrawing || (widget.sketch._hasDoneSetup && !widget.sketch._isLooping)) {
+      return;
+    }
+
     _isDrawing = true;
 
     widget.sketch._updateElapsedTime(elapsedTime);
 
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    widget.sketch
-      .._canvas = canvas
-      .._doSetup()
-      .._onDraw();
+    widget.sketch._canvas = canvas;
+
+    // Run Processing setup method.
+    await widget.sketch._doSetup();
+
+    // Run Processing draw method.
+    await widget.sketch._onDraw();
 
     final picture = recorder.endRecording();
 
@@ -303,8 +315,8 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
 class Sketch {
   Sketch.simple({
-    void Function(Sketch)? setup,
-    void Function(Sketch)? draw,
+    Future<void> Function(Sketch)? setup,
+    Future<void> Function(Sketch)? draw,
     void Function(Sketch)? keyPressed,
     void Function(Sketch)? keyTyped,
     void Function(Sketch)? keyReleased,
@@ -328,8 +340,8 @@ class Sketch {
 
   Sketch();
 
-  void Function(Sketch)? _setup;
-  void Function(Sketch)? _draw;
+  Future<void> Function(Sketch)? _setup;
+  Future<void> Function(Sketch)? _draw;
   void Function(Sketch)? _keyPressed;
   void Function(Sketch)? _keyTyped;
   void Function(Sketch)? _keyReleased;
@@ -340,9 +352,13 @@ class Sketch {
   void Function(Sketch)? _mouseMoved;
   void Function(Sketch, double count)? _mouseWheel;
 
+  AssetBundle? _assetBundle;
+
   bool _hasDoneSetup = false;
 
-  void _doSetup() {
+  Future<void> _doSetup() async {
+    assert(_assetBundle != null);
+
     if (_hasDoneSetup) {
       return;
     }
@@ -360,14 +376,14 @@ class Sketch {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
-    setup();
+    await setup();
   }
 
-  void setup() {
-    _setup?.call(this);
+  Future<void> setup() async {
+    await _setup?.call(this);
   }
 
-  void _onDraw() {
+  Future<void> _onDraw() async {
     background(color: _backgroundColor);
 
     // TODO: figure out how to correctly support varying frame rates
@@ -377,7 +393,7 @@ class Sketch {
     //   }
     // }
 
-    draw();
+    await draw();
 
     _frameCount += 1;
     _lastDrawTime = _elapsedTime;
@@ -386,8 +402,8 @@ class Sketch {
     _actualFrameRate = secondsFraction > 0 ? (_frameCount / secondsFraction).round() : _actualFrameRate;
   }
 
-  void draw() {
-    _draw?.call(this);
+  Future<void> draw() async {
+    await _draw?.call(this);
   }
 
   void _onKeyPressed(LogicalKeyboardKey key) {
@@ -580,6 +596,27 @@ class Sketch {
     _strokePaint.color = const Color(0x00000000);
   }
   //------- End Color/Setting -----
+
+  //------- Start Image/Loading & Displaying -----
+  Future<Image> loadImage(String filepath) async {
+    final imageData = await _assetBundle!.load(filepath);
+    final codec = await (await ImageDescriptor.encoded(
+      await ImmutableBuffer.fromUint8List(imageData.buffer.asUint8List()),
+    ))
+        .instantiateCodec();
+
+    final frame = await codec.getNextFrame();
+    return frame.image;
+  }
+
+  void image({
+    required Image image,
+    Offset origin = Offset.zero,
+    Size? displaySize,
+  }) {
+    // TODO: implement displaySize support.
+    _canvas.drawImage(image, origin, Paint());
+  }
 
   //----- Start Shape/2D Primitives ----
   void point({
