@@ -51,12 +51,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: (s.width / 2).round(),
                 height: (s.height / 2).round(),
               );
-              s.image(image: subImage, origin: Offset(s.width / 2, s.height / 2));
+              // s.image(image: subImage, origin: Offset(s.width / 2, s.height / 2));
+
+              await s.loadPixels();
+
+              for (int col = 0; col < 400; ++col) {
+                for (int row = 0; row < 400; ++row) {
+                  s.set(x: col, y: row, color: Color(0xFF00FF00));
+                }
+              }
+              await s.setRegion(image: subImage);
+
+              await s.updatePixels();
 
               final pixelColor = await s.get(s.mouseX, s.mouseY);
-
               s
-                ..noStroke()
+                // ..noStroke()
                 ..fill(color: pixelColor)
                 ..circle(
                   center: Offset(s.mouseX + 50, s.mouseY + 50),

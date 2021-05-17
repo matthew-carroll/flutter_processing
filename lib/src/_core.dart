@@ -337,6 +337,7 @@ class Sketch {
 
   late PictureRecorder _recorder;
   Image? _intermediateImage;
+  ByteData? _pixels;
   bool _hasUnappliedCanvasCommands = false;
   late Image _publishedImage;
 
@@ -711,6 +712,76 @@ class Sketch {
     ).instantiateCodec();
 
     return (await codec.getNextFrame()).image;
+  }
+
+  Future<void> loadPixels() async {
+    await _doIntermediateRasterization();
+
+    final sourceImage = _intermediateImage ?? _publishedImage;
+    _pixels = await sourceImage.toByteData();
+  }
+
+  void set({
+    required int x,
+    required int y,
+    required Color color,
+  }) {
+    if (_pixels == null) {
+      throw Exception('Must call loadPixels() before calling updatePixels()');
+    }
+
+    final pixelIndex = _getBitmapPixelOffset(
+      imageWidth: width,
+      x: x,
+      y: y,
+    );
+
+    final argbColorInt = color.value;
+    final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) | ((argbColorInt & 0x00FFFFFF) << 8);
+    _pixels!.setUint32(pixelIndex, rgbaColorInt);
+  }
+
+  Future<void> setRegion({
+    required Image image,
+    int x = 0,
+    int y = 0,
+  }) async {
+    if (_pixels == null) {
+      throw Exception('Must call loadPixels() before calling updatePixels()');
+    }
+
+    final pixelsCodec = await ImageDescriptor.raw(
+      await ImmutableBuffer.fromUint8List(_pixels!.buffer.asUint8List()),
+      width: width,
+      height: height,
+      pixelFormat: PixelFormat.rgba8888,
+    ).instantiateCodec();
+    final pixelsImage = (await pixelsCodec.getNextFrame()).image;
+
+    final pictureRecorder = PictureRecorder();
+    final canvas = Canvas(pictureRecorder);
+    canvas..drawImage(pixelsImage, Offset.zero, Paint())..drawImage(image, Offset(x.toDouble(), y.toDouble()), Paint());
+    final picture = pictureRecorder.endRecording();
+    final combinedImage = await picture.toImage(width, height);
+
+    _pixels = await combinedImage.toByteData();
+  }
+
+  Future<void> updatePixels() async {
+    if (_pixels == null) {
+      throw Exception('Must call loadPixels() before calling updatePixels()');
+    }
+
+    final pixelsCodec = await ImageDescriptor.raw(
+      await ImmutableBuffer.fromUint8List(_pixels!.buffer.asUint8List()),
+      width: width,
+      height: height,
+      pixelFormat: PixelFormat.rgba8888,
+    ).instantiateCodec();
+
+    final pixelsImage = (await pixelsCodec.getNextFrame()).image;
+
+    image(image: pixelsImage);
   }
 
   int _getBitmapPixelOffset({
