@@ -43,8 +43,25 @@ class _HomeScreenState extends State<HomeScreen> {
             draw: (s) async {
               s.image(
                 image: _loadedImage,
-                origin: Offset(100, 200),
               );
+
+              final subImage = await s.getRegion(
+                x: 0,
+                y: 0,
+                width: (s.width / 2).round(),
+                height: (s.height / 2).round(),
+              );
+              s.image(image: subImage, origin: Offset(s.width / 2, s.height / 2));
+
+              final pixelColor = await s.get(s.mouseX, s.mouseY);
+
+              s
+                ..noStroke()
+                ..fill(color: pixelColor)
+                ..circle(
+                  center: Offset(s.mouseX + 50, s.mouseY + 50),
+                  diameter: 100,
+                );
             },
           ),
         ),

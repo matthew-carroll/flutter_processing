@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
@@ -54,7 +55,6 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   late FocusNode _focusNode;
 
   Image? _currentImage;
-  bool _isDrawing = false;
 
   @override
   void initState() {
@@ -64,6 +64,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     _focusNode = widget.focusNode ?? FocusNode();
 
     widget.sketch
+      .._onFrameAvailable = _onFrameAvailable
       .._onSizeChanged = _onSizeChanged
       .._loop = _loop
       .._noLoop = _noLoop;
@@ -85,11 +86,13 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
     if (widget.sketch != oldWidget.sketch) {
       oldWidget.sketch
+        .._onFrameAvailable = null
         .._onSizeChanged = null
         .._loop = null
         .._noLoop = null;
 
       widget.sketch
+        .._onFrameAvailable = _onFrameAvailable
         .._assetBundle = DefaultAssetBundle.of(context)
         .._onSizeChanged = _onSizeChanged
         .._loop = _loop
@@ -112,37 +115,12 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onTick(elapsedTime) {
-    _doDrawFrame(elapsedTime);
+    widget.sketch._doDrawFrame(elapsedTime);
   }
 
-  Future<void> _doDrawFrame(Duration elapsedTime) async {
-    if (_isDrawing || (widget.sketch._hasDoneSetup && !widget.sketch._isLooping)) {
-      return;
-    }
-
-    _isDrawing = true;
-
-    widget.sketch._updateElapsedTime(elapsedTime);
-
-    final recorder = PictureRecorder();
-    final canvas = Canvas(recorder);
-    widget.sketch._canvas = canvas;
-
-    // Run Processing setup method.
-    await widget.sketch._doSetup();
-
-    // Run Processing draw method.
-    await widget.sketch._onDraw();
-
-    final picture = recorder.endRecording();
-
-    final width = widget.sketch._desiredWidth;
-    final height = widget.sketch._desiredHeight;
-    final image = await picture.toImage(width, height);
-
+  void _onFrameAvailable(Image newFrame) {
     setState(() {
-      _isDrawing = false;
-      _currentImage = image;
+      _currentImage = newFrame;
     });
   }
 
@@ -354,7 +332,62 @@ class Sketch {
 
   AssetBundle? _assetBundle;
 
+  void Function(Image newFrame)? _onFrameAvailable;
+  bool _isDrawing = false;
+
+  late PictureRecorder _recorder;
+  Image? _intermediateImage;
+  bool _hasUnappliedCanvasCommands = false;
+  late Image _publishedImage;
+
   bool _hasDoneSetup = false;
+
+  Future<void> _doDrawFrame(Duration elapsedTime) async {
+    if (_isDrawing || (_hasDoneSetup && !_isLooping)) {
+      return;
+    }
+
+    _isDrawing = true;
+    _intermediateImage = null;
+
+    _updateElapsedTime(elapsedTime);
+
+    _startRecording();
+
+    // Run Processing setup method.
+    await _doSetup();
+
+    // Run Processing draw method.
+    await _onDraw();
+
+    await _finishRecording();
+
+    _onFrameAvailable?.call(_publishedImage);
+    _isDrawing = false;
+  }
+
+  void _startRecording() {
+    _recorder = PictureRecorder();
+    _canvas = Canvas(_recorder);
+  }
+
+  Future<void> _doIntermediateRasterization() async {
+    _intermediateImage = await _rasterize();
+    _startRecording();
+
+    _canvas.drawImage(_intermediateImage!, Offset.zero, Paint());
+
+    _hasUnappliedCanvasCommands = false;
+  }
+
+  Future<void> _finishRecording() async {
+    _publishedImage = await _rasterize();
+  }
+
+  Future<Image> _rasterize() async {
+    final picture = _recorder.endRecording();
+    return await picture.toImage(_desiredWidth, _desiredHeight);
+  }
 
   Future<void> _doSetup() async {
     assert(_assetBundle != null);
@@ -574,6 +607,8 @@ class Sketch {
 
     final paint = Paint()..color = color;
     _canvas.drawRect(Offset.zero & _size, paint);
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void fill({
@@ -616,6 +651,74 @@ class Sketch {
   }) {
     // TODO: implement displaySize support.
     _canvas.drawImage(image, origin, Paint());
+
+    _hasUnappliedCanvasCommands = true;
+  }
+
+  //------- Start Image/Pixels -----
+  Future<Color> get(int x, int y) async {
+    await _doIntermediateRasterization();
+    final sourceImage = _intermediateImage ?? _publishedImage;
+
+    final pixelDataOffset = _getBitmapPixelOffset(
+      imageWidth: sourceImage.width,
+      x: x,
+      y: y,
+    );
+    final imageData = await sourceImage.toByteData();
+    final rgbaColor = imageData!.getUint32(pixelDataOffset);
+    final argbColor = ((rgbaColor & 0x000000FF) << 24) | ((rgbaColor & 0xFFFFFF00) >> 8);
+    return Color(argbColor);
+  }
+
+  Future<Image> getRegion({
+    required int x,
+    required int y,
+    required int width,
+    required int height,
+  }) async {
+    await _doIntermediateRasterization();
+    final sourceImage = _intermediateImage ?? _publishedImage;
+
+    final sourceData = await sourceImage.toByteData();
+    final destinationData = Uint8List(width * height * 4);
+    final rowLength = width * 4;
+
+    for (int row = 0; row < height; row += 1) {
+      final sourceRowOffset = _getBitmapPixelOffset(
+        imageWidth: sourceImage.width,
+        x: x,
+        y: y + row,
+      );
+      final destinationRowOffset = _getBitmapPixelOffset(
+        imageWidth: width,
+        x: 0,
+        y: row,
+      );
+
+      destinationData.setRange(
+        destinationRowOffset,
+        destinationRowOffset + rowLength - 1,
+        Uint8List.view(sourceData!.buffer, sourceRowOffset, rowLength),
+      );
+    }
+
+    final codec = await ImageDescriptor.raw(
+      await ImmutableBuffer.fromUint8List(destinationData),
+      width: width,
+      height: height,
+      pixelFormat: PixelFormat.rgba8888,
+    ).instantiateCodec();
+
+    return (await codec.getNextFrame()).image;
+  }
+
+  int _getBitmapPixelOffset({
+    required int imageWidth,
+    required int x,
+    required int y,
+  }) {
+    return ((y * imageWidth) + x) * 4;
   }
 
   //----- Start Shape/2D Primitives ----
@@ -634,6 +737,8 @@ class Sketch {
       _strokePaint,
     );
     _strokePaint.style = PaintingStyle.stroke;
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void line(Offset p1, Offset p2, [Offset? p3]) {
@@ -642,6 +747,8 @@ class Sketch {
     }
 
     _canvas.drawLine(p1, p2, _strokePaint);
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void circle({
@@ -649,12 +756,16 @@ class Sketch {
     required double diameter,
   }) {
     _canvas..drawCircle(center, diameter / 2, _fillPaint)..drawCircle(center, diameter / 2, _strokePaint);
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void ellipse(Ellipse ellipse) {
     _canvas //
       ..drawOval(ellipse.rect, _fillPaint) //
       ..drawOval(ellipse.rect, _strokePaint);
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void arc({
@@ -689,12 +800,16 @@ class Sketch {
           ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _strokePaint);
         break;
     }
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void square(Square square) {
     _canvas //
       ..drawRect(square.rect, _fillPaint) //
       ..drawRect(square.rect, _strokePaint);
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void rect({
@@ -717,6 +832,8 @@ class Sketch {
         ..drawRRect(rrect, _fillPaint) //
         ..drawRRect(rrect, _strokePaint);
     }
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void triangle(Offset p1, Offset p2, Offset p3) {
@@ -729,6 +846,8 @@ class Sketch {
     _canvas //
       ..drawPath(path, _fillPaint) //
       ..drawPath(path, _strokePaint);
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   void quad(Offset p1, Offset p2, Offset p3, Offset p4) {
@@ -742,6 +861,8 @@ class Sketch {
     _canvas //
       ..drawPath(path, _fillPaint) //
       ..drawPath(path, _strokePaint);
+
+    _hasUnappliedCanvasCommands = true;
   }
   //------- End Shape/2D Primitives -----
 
@@ -801,6 +922,8 @@ class Sketch {
     }
 
     _canvas.translate(x ?? 0, y ?? 0);
+
+    _hasUnappliedCanvasCommands = true;
   }
 
   // TODO: implement all other Processing APIs
