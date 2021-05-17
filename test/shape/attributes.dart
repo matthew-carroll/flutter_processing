@@ -33,11 +33,10 @@ void main() {
       testWidgets('strokeWeight() invalid value', (tester) async {
         configureWindowForSpecTest(tester);
 
-        await expectLater(() {
-          final sketch = Sketch.simple();
-
-          sketch.strokeWeight(-1);
-        }, throwsA(isA<Exception>()));
+        await expectLater(
+          () => Sketch.simple()..strokeWeight(-1),
+          throwsA(isA<Exception>()),
+        );
       });
     });
   });

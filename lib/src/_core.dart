@@ -938,7 +938,7 @@ class Sketch {
   //------- End Shape/2D Primitives -----
 
   //----- Start Shape/Attributes ----
-  void strokeWeight(int newWeight) {
+  void strokeWeight(double newWeight) {
     if (newWeight < 0) {
       throw Exception('Stroke weight must be >= 0');
     }
