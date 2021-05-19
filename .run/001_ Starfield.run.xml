@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="001: Starfield" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/example/lib/the_coding_train/coding_challenges/001_starfield.dart" />
+    <method v="2" />
+  </configuration>
+</component>
