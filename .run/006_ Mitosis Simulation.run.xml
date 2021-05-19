@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="006: Mitosis Simulation" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="filePath" value="$PROJECT_DIR$/example/lib/the_coding_train/coding_challenges/006_mitosis_simulation.dart" />
+    <method v="2" />
+  </configuration>
+</component>
