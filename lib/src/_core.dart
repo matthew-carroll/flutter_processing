@@ -339,7 +339,7 @@ class Sketch {
   Image? _intermediateImage;
   ByteData? _pixels;
   bool _hasUnappliedCanvasCommands = false;
-  late Image _publishedImage;
+  Image? _publishedImage;
 
   bool _hasDoneSetup = false;
 
@@ -363,7 +363,7 @@ class Sketch {
 
     await _finishRecording();
 
-    _onFrameAvailable?.call(_publishedImage);
+    _onFrameAvailable?.call(_publishedImage!);
     _isDrawing = false;
   }
 
@@ -373,6 +373,11 @@ class Sketch {
   }
 
   Future<void> _doIntermediateRasterization() async {
+    if (!_hasUnappliedCanvasCommands) {
+      // There are no commands to rasterize
+      return;
+    }
+
     _intermediateImage = await _rasterize();
     _startRecording();
 
@@ -418,14 +423,16 @@ class Sketch {
   }
 
   Future<void> _onDraw() async {
-    background(color: _backgroundColor);
-
     // TODO: figure out how to correctly support varying frame rates
     // if (_lastDrawTime != null) {
     //   if (_elapsedTime - _lastDrawTime! < _desiredFrameTime) {
     //     return;
     //   }
     // }
+
+    if (_publishedImage != null) {
+      _canvas.drawImage(_publishedImage!, Offset.zero, Paint());
+    }
 
     await draw();
 
@@ -659,7 +666,7 @@ class Sketch {
   //------- Start Image/Pixels -----
   Future<Color> get(int x, int y) async {
     await _doIntermediateRasterization();
-    final sourceImage = _intermediateImage ?? _publishedImage;
+    final sourceImage = (_intermediateImage ?? _publishedImage)!;
 
     final pixelDataOffset = _getBitmapPixelOffset(
       imageWidth: sourceImage.width,
@@ -679,7 +686,7 @@ class Sketch {
     required int height,
   }) async {
     await _doIntermediateRasterization();
-    final sourceImage = _intermediateImage ?? _publishedImage;
+    final sourceImage = (_intermediateImage ?? _publishedImage)!;
 
     final sourceData = await sourceImage.toByteData();
     final destinationData = Uint8List(width * height * 4);
@@ -717,7 +724,7 @@ class Sketch {
   Future<void> loadPixels() async {
     await _doIntermediateRasterization();
 
-    final sourceImage = _intermediateImage ?? _publishedImage;
+    final sourceImage = (_intermediateImage ?? _publishedImage)!;
     _pixels = await sourceImage.toByteData();
   }
 
