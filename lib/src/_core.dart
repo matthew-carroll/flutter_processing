@@ -280,9 +280,17 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
         onPointerSignal: _onPointerSignal,
         child: Center(
           child: _currentImage != null
-              ? RawImage(
-                  key: _sketchCanvasKey,
-                  image: _currentImage,
+              ? OverflowBox(
+                  maxWidth: double.infinity,
+                  maxHeight: double.infinity,
+                  child: SizedBox(
+                    width: _currentImage!.width.toDouble(),
+                    height: _currentImage!.height.toDouble(),
+                    child: RawImage(
+                      key: _sketchCanvasKey,
+                      image: _currentImage,
+                    ),
+                  ),
                 )
               : SizedBox(
                   key: _sketchCanvasKey,
