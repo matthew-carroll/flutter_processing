@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
+import 'package:flutter_processing_example/_processing_sketch_display.dart';
 
 void main() {
   runApp(FlutterProcessingExampleApp());
@@ -25,7 +26,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ProcessingState<HomeScreen> {
   final _droplets = <Droplet>[];
 
   @override
@@ -35,41 +36,41 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Center(
-        child: Processing(
-          sketch: Sketch.simple(
-            setup: (s) async {
-              final width = 640;
-              final height = 360;
+  int get gifFps => 60;
 
-              s
-                ..size(width: width, height: height)
-                ..background(color: Color.fromARGB(255, 200, 175, 220));
+  @override
+  String get gifFilepath => '/Users/matt/Pictures/004_purple_rain.gif';
 
-              for (int i = 0; i < 100; ++i) {
-                _droplets.add(
-                  Droplet(
-                    x: s.random(width),
-                    y: s.random(-height, 0),
-                    z: s.random(1),
-                    length: 20,
-                  ),
-                );
-              }
-            },
-            draw: (s) async {
-              for (final droplet in _droplets) {
-                droplet
-                  ..fall(s)
-                  ..show(s);
-              }
-            },
-          ),
-        ),
-      ),
+  @override
+  Sketch createSketch() {
+    return Sketch.simple(
+      setup: (s) async {
+        s
+          ..size(width: 256, height: 256)
+          ..background(color: Color.fromARGB(255, 200, 175, 220));
+
+        for (int i = 0; i < 100; ++i) {
+          _droplets.add(
+            Droplet(
+              x: s.random(s.width),
+              y: s.random(-s.height, 0),
+              z: s.random(1),
+              length: 20,
+            ),
+          );
+        }
+      },
+      draw: (s) async {
+        s.background(color: Color.fromARGB(255, 200, 175, 220));
+
+        for (final droplet in _droplets) {
+          droplet
+            ..fall(s)
+            ..show(s);
+        }
+
+        await saveGifFrameIfDesired(s);
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
+import 'package:flutter_processing_example/_processing_sketch_display.dart';
 
 void main() {
   runApp(FlutterProcessingExampleApp());
@@ -25,7 +26,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ProcessingState<HomeScreen> {
   final _cells = <Cell>[];
 
   @override
@@ -35,50 +36,53 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Center(
-        child: Processing(
-          sketch: Sketch.simple(
-            setup: (s) async {
-              s.size(width: 700, height: 700);
+  int get gifFps => 60;
 
-              for (int i = 0; i < 10; ++i) {
-                _cells.add(Cell.randomLocationAndColor(s.width, s.height));
-              }
-            },
-            draw: (s) async {
-              s.background(color: Color.fromARGB(255, 200, 200, 200));
+  @override
+  String get gifFilepath => '/Users/matt/Pictures/006_mitosis_simulation.gif';
 
-              for (final cell in _cells) {
-                cell.move();
-                cell.show(s);
-              }
-            },
-            mouseClicked: (s) {
-              final newCells = <Cell>[];
-              final oldCells = <Cell>[];
+  @override
+  Sketch createSketch() {
+    return Sketch.simple(
+      setup: (s) async {
+        s.size(width: 512, height: 512);
 
-              for (final cell in _cells) {
-                if (cell.containsPoint(s.mouseX.toDouble(), s.mouseY.toDouble())) {
-                  cell.containsPoint(s.mouseX.toDouble(), s.mouseY.toDouble());
-                  newCells.add(cell.mitosis());
-                  newCells.add(cell.mitosis());
+        for (int i = 0; i < 10; ++i) {
+          _cells.add(Cell.randomLocationAndColor(s.width, s.height));
+        }
+      },
+      draw: (s) async {
+        s.background(color: Color.fromARGB(255, 200, 200, 200));
 
-                  oldCells.add(cell);
-                }
-              }
+        for (final cell in _cells) {
+          cell.move();
+          cell.show(s);
+        }
 
-              // Remove "dead" cells
-              _cells.removeWhere((element) => oldCells.contains(element));
+        await saveGifFrameIfDesired(s);
+      },
+      mouseClicked: (s) {
+        print('clicked - x: ${s.mouseX}, y: ${s.mouseY}');
+        final newCells = <Cell>[];
+        final oldCells = <Cell>[];
 
-              // Add new cells
-              _cells.addAll(newCells);
-            },
-          ),
-        ),
-      ),
+        for (final cell in _cells) {
+          if (cell.containsPoint(s.mouseX.toDouble(), s.mouseY.toDouble())) {
+            print('Found an intersecting cell');
+            cell.containsPoint(s.mouseX.toDouble(), s.mouseY.toDouble());
+            newCells.add(cell.mitosis());
+            newCells.add(cell.mitosis());
+
+            oldCells.add(cell);
+          }
+        }
+
+        // Remove "dead" cells
+        _cells.removeWhere((element) => oldCells.contains(element));
+
+        // Add new cells
+        _cells.addAll(newCells);
+      },
     );
   }
 }
@@ -105,6 +109,8 @@ class Cell {
 
   bool containsPoint(double x, double y) {
     final distance = (position - Offset(x, y)).distance;
+    print('Cell center: $position, tap location: ${Offset(x, y)}');
+    print('Distance to cell: $distance, radius: $radius');
     return distance <= radius;
   }
 

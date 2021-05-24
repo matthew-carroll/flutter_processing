@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 
+import '../../_processing_sketch_display.dart';
+
 void main() {
   runApp(FlutterProcessingExampleApp());
 }
@@ -11,7 +13,7 @@ class FlutterProcessingExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Processing Example',
+      title: 'Coding Challenge: Starfield',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -25,7 +27,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ProcessingState<HomeScreen> {
   final _stars = <Star>[];
 
   @override
@@ -35,43 +37,43 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Center(
-        child: Processing(
-          sketch: Sketch.simple(
-            setup: (s) async {
-              s
-                ..size(width: 1600, height: 900)
-                ..background(color: Colors.black);
+  String get gifFilepath => '/Users/matt/Pictures/001_starfield.gif';
 
-              for (int i = 0; i < 100; ++i) {
-                _stars.add(
-                  Star(
-                    x: s.random(-s.width / 2, s.width / 2),
-                    y: s.random(-s.height / 2, s.height / 2),
-                    z: s.random(s.width),
-                  ),
-                );
-              }
-            },
-            draw: (s) async {
-              for (final star in _stars) {
-                star.update(s);
-              }
+  @override
+  Sketch createSketch() {
+    return Sketch.simple(
+      setup: (s) async {
+        s
+          ..size(width: 512, height: 256)
+          ..background(color: Colors.black);
 
-              for (final star in _stars) {
-                star.paintStreak(s);
-              }
+        for (int i = 0; i < 100; ++i) {
+          _stars.add(
+            Star(
+              x: s.random(-s.width / 2, s.width / 2),
+              y: s.random(-s.height / 2, s.height / 2),
+              z: s.random(s.width),
+            ),
+          );
+        }
+      },
+      draw: (s) async {
+        s.background(color: Colors.black);
 
-              for (final star in _stars) {
-                star.paintStar(s);
-              }
-            },
-          ),
-        ),
-      ),
+        for (final star in _stars) {
+          star.update(s);
+        }
+
+        for (final star in _stars) {
+          star.paintStreak(s);
+        }
+
+        for (final star in _stars) {
+          star.paintStar(s);
+        }
+
+        await saveGifFrameIfDesired(s);
+      },
     );
   }
 }
@@ -126,7 +128,7 @@ class Star {
       lerpDouble(0, s.width, x / z)!,
       lerpDouble(0, s.height, y / z)!,
     );
-    final diameter = lerpDouble(12, 0, z / s.width)!;
+    final diameter = lerpDouble(4, 0, z / s.width)!;
 
     s
       ..noStroke()

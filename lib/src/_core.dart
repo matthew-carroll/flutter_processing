@@ -119,9 +119,11 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onFrameAvailable(Image newFrame) {
-    setState(() {
-      _currentImage = newFrame;
-    });
+    if (mounted) {
+      setState(() {
+        _currentImage = newFrame;
+      });
+    }
   }
 
   void _onSizeChanged() {
@@ -278,9 +280,17 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
         onPointerSignal: _onPointerSignal,
         child: Center(
           child: _currentImage != null
-              ? RawImage(
-                  key: _sketchCanvasKey,
-                  image: _currentImage,
+              ? OverflowBox(
+                  maxWidth: double.infinity,
+                  maxHeight: double.infinity,
+                  child: SizedBox(
+                    width: _currentImage!.width.toDouble(),
+                    height: _currentImage!.height.toDouble(),
+                    child: RawImage(
+                      key: _sketchCanvasKey,
+                      image: _currentImage,
+                    ),
+                  ),
                 )
               : SizedBox(
                   key: _sketchCanvasKey,
@@ -727,6 +737,8 @@ class Sketch {
     final sourceImage = (_intermediateImage ?? _publishedImage)!;
     _pixels = await sourceImage.toByteData();
   }
+
+  ByteData get pixels => _pixels!;
 
   void set({
     required int x,
