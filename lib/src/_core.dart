@@ -119,9 +119,11 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onFrameAvailable(Image newFrame) {
-    setState(() {
-      _currentImage = newFrame;
-    });
+    if (mounted) {
+      setState(() {
+        _currentImage = newFrame;
+      });
+    }
   }
 
   void _onSizeChanged() {
@@ -727,6 +729,8 @@ class Sketch {
     final sourceImage = (_intermediateImage ?? _publishedImage)!;
     _pixels = await sourceImage.toByteData();
   }
+
+  ByteData get pixels => _pixels!;
 
   void set({
     required int x,
