@@ -11,7 +11,7 @@ class FlutterProcessingExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Circle Packing',
+      title: 'Metaballs',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
