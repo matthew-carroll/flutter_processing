@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 
@@ -27,6 +29,60 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Image _loadedImage;
+
+  File? _fileToSaveImage;
+
+  Directory? _dirToSaveFrames;
+  int _remainingFrames = 0;
+
+  Future<void> _saveImage() async {
+    final imageFormat = ImageFileFormat.targa;
+    late String extension;
+    late String mimeType;
+    switch (imageFormat) {
+      case ImageFileFormat.png:
+        extension = 'png';
+        mimeType = 'image/png';
+        break;
+      case ImageFileFormat.jpeg:
+        extension = 'jpg';
+        mimeType = 'image/jpeg';
+        break;
+      case ImageFileFormat.tiff:
+        extension = 'tif';
+        mimeType = 'image/tiff';
+        break;
+      case ImageFileFormat.targa:
+        extension = 'tga';
+        mimeType = 'image/targa';
+        break;
+    }
+
+    final filePath = await getSavePath(
+      acceptedTypeGroups: [
+        XTypeGroup(
+          extensions: [extension],
+          mimeTypes: [mimeType],
+        )
+      ],
+    );
+    if (filePath == null) {
+      print('User cancelled the file selection');
+      return;
+    }
+    _fileToSaveImage = File(filePath);
+  }
+
+  Future<void> _saveFrameImage() async {
+    final filePath = await getSavePath();
+    if (filePath == null) {
+      print('User cancelled the file selection');
+      return;
+    }
+
+    _dirToSaveFrames = File(filePath).parent;
+    _remainingFrames = 20;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +128,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   center: Offset(s.mouseX + 50, s.mouseY + 50),
                   diameter: 100,
                 );
+
+              await s.loadPixels();
+
+              if (_fileToSaveImage != null) {
+                await s.save(
+                  file: _fileToSaveImage!,
+                );
+
+                _fileToSaveImage = null;
+              } else if (_dirToSaveFrames != null && _remainingFrames > 0) {
+                await s.saveFrame(
+                  directory: _dirToSaveFrames!,
+                  namingPattern: 'test-###.tga',
+                );
+
+                _remainingFrames -= 1;
+
+                if (_remainingFrames == 0) {
+                  _dirToSaveFrames = null;
+                }
+              }
             },
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        // onPressed: _saveImage,
+        onPressed: _saveFrameImage,
+        child: Icon(Icons.save),
       ),
     );
   }
