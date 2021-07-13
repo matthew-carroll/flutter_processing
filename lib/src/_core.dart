@@ -1089,6 +1089,17 @@ class Sketch {
   LogicalKeyboardKey? get key => _key;
 
   //------- Start Output/Image -----
+  /// Saves the current [pixels] buffer data to the given [file].
+  ///
+  /// The [file]'s extension is used to infer the desired image format.
+  /// The extension may be one of ".png", ".jpg", ".tif", or ".tga".
+  ///
+  /// To override the file extension, or use a file name without an
+  /// extension, specify the desired [format].
+  ///
+  /// `save()` does not call [loadPixels]. The caller is responsible
+  /// for ensuring that the [pixels] buffer contains the desired
+  /// pixels to paint to the [file].
   Future<void> save({
     required File file,
     ImageFileFormat? format,
