@@ -214,7 +214,7 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ### Image
 - [x] save()
-- [ ] saveFrame()
+- [x] saveFrame()
 
 ### Files
 - [ ] beginRaw()
