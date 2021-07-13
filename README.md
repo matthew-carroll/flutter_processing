@@ -310,9 +310,9 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] PImage
 
 ### Loading & Displaying
-- [ ] image()
+- [x] image()
 - [ ] imageMode()
-- [ ] loadImage()
+- [x] loadImage()
 - [ ] noTint()
 - [ ] requestImage()
 - [ ] tint()
@@ -326,11 +326,11 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] blend()
 - [ ] copy()
 - [ ] filter()
-- [ ] get()
-- [ ] loadPixels()
-- [ ] pixels[]
-- [ ] set()
-- [ ] updatePixels()
+- [x] get()
+- [x] loadPixels()
+- [x] pixels[]
+- [x] set()
+- [x] updatePixels()
 
 ## Rendering
 - [ ] blendMode()
@@ -400,9 +400,9 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] tan()
 
 ### Random
-- [ ] noise()
-- [ ] noiseDetail()
-- [ ] noiseSeed()
+- [x] noise()
+- [x] noiseDetail()
+- [x] noiseSeed()
 - [x] random()
 - [ ] randomGaussian()
 - [x] randomSeed()
