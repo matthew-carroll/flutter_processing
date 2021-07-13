@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:fast_noise/fast_noise.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -615,6 +616,46 @@ class Sketch {
     }
 
     return _random.nextDouble() * (upperBound - lowerBound) + lowerBound;
+  }
+
+  int _perlinNoiseSeed = 1337;
+  int _perlinNoiseOctaves = 4;
+  double _perlinNoiseFalloff = 0.5;
+  PerlinNoise? _perlinNoise;
+
+  void noiseSeed(int? seed) {
+    _perlinNoiseSeed = seed ?? 1337;
+    _initializePerlinNoise();
+  }
+
+  void noiseDetail({
+    int? octaves,
+    double? falloff,
+  }) {
+    _perlinNoiseOctaves = octaves ?? 4;
+    _perlinNoiseFalloff = falloff ?? 0.5;
+
+    _initializePerlinNoise();
+  }
+
+  double noise({
+    required double x,
+    double y = 0,
+    double z = 0,
+  }) {
+    if (_perlinNoise == null) {
+      _initializePerlinNoise();
+    }
+
+    return _perlinNoise!.getPerlin3(x, y, z);
+  }
+
+  void _initializePerlinNoise() {
+    _perlinNoise = PerlinNoise(
+      seed: _perlinNoiseSeed,
+      octaves: _perlinNoiseOctaves,
+      gain: _perlinNoiseFalloff,
+    );
   }
 
   //------ Start Color/Setting -----
