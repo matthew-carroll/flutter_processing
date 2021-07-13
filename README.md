@@ -213,7 +213,7 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] println()
 
 ### Image
-- [ ] save()
+- [x] save()
 - [ ] saveFrame()
 
 ### Files

@@ -15,7 +15,8 @@ dependencies:
   flutter_processing:
     path: ../
 
-  image: ^3.0.2
+  file_selector: ^0.8.2
+  file_selector_macos: ^0.0.4
 
 dev_dependencies:
   flutter_test:
