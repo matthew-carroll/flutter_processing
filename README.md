@@ -404,7 +404,7 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [x] noiseDetail()
 - [x] noiseSeed()
 - [x] random()
-- [ ] randomGaussian()
+- [x] randomGaussian()
 - [x] randomSeed()
 
 ## Constants

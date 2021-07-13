@@ -673,6 +673,34 @@ class Sketch {
     );
   }
 
+  double? _previousGaussian;
+
+  /// Returns a `double` from a random series of numbers having the given
+  /// [mean] and the given [standardDeviation].
+  ///
+  /// By default, the [mean] is `0.0`, and the [standardDeviation] is `1`.
+  double randomGaussian({
+    double mean = 0.0,
+    int standardDeviation = 1,
+  }) {
+    double y1, x1, x2, w;
+    if (_previousGaussian != null) {
+      y1 = _previousGaussian!;
+      _previousGaussian = null;
+    } else {
+      do {
+        x1 = this.random(2) - 1;
+        x2 = this.random(2) - 1;
+        w = x1 * x1 + x2 * x2;
+      } while (w >= 1);
+      w = sqrt(-2 * log(w) / w);
+      y1 = x1 * w;
+      _previousGaussian = x2 * w;
+    }
+
+    return y1 * standardDeviation + mean;
+  }
+
   //------ Start Color/Setting -----
   void background({
     required Color color,
@@ -1069,6 +1097,11 @@ class Sketch {
 
     _canvas.translate(x ?? 0, y ?? 0);
 
+    _hasUnappliedCanvasCommands = true;
+  }
+
+  void rotate(double angleInRadians) {
+    _canvas.rotate(angleInRadians);
     _hasUnappliedCanvasCommands = true;
   }
 
