@@ -1144,6 +1144,64 @@ class Sketch {
     await file.writeAsBytes(formattedImageData);
   }
 
+  /// Saves a numbered sequence of images, one image each time the
+  /// function is run, saved in the given [dirctory].
+  ///
+  /// By default, the generated file is named "screen-####.png", where
+  /// the "####" is replaced by the index of the new image. The file
+  /// index is the smallest number that doesn't conflict with an existing
+  /// file in the given [directory].
+  ///
+  /// To customize the name of the files, provide the desired naming pattern
+  /// to [namingPattern].
+  ///
+  /// The [namingPattern]'s extension is used to infer the desired image
+  /// format. The extension may be one of ".png", ".jpg", ".tif", or ".tga".
+  ///
+  /// To override the file extension, or use a file name without an
+  /// extension, provide the desired [format].
+  ///
+  /// `saveFrame()` does not call [loadPixels]. The caller is responsible
+  /// for ensuring that the [pixels] buffer contains the desired pixels to
+  /// paint to the file.
+  Future<void> saveFrame({
+    required Directory directory,
+    String namingPattern = 'screen-####.png',
+    ImageFileFormat? format,
+  }) async {
+    late ImageFileFormat imageFormat;
+    if (format != null) {
+      imageFormat = format;
+    } else {
+      final imageFormatFromFile = _getImageFileFormatFromFilePath(namingPattern);
+      if (imageFormatFromFile == null) {
+        throw Exception('Cannot save image to file with invalid extension and no explicit image type: $namingPattern');
+      }
+      imageFormat = imageFormatFromFile;
+    }
+
+    final hashMatcher = RegExp('(#)+');
+    final hashMatches = hashMatcher.allMatches(namingPattern);
+    if (hashMatches.isEmpty) {
+      throw Exception('namingPattern is missing a hash pattern');
+    } else if (hashMatches.length > 1) {
+      throw Exception(
+          'namingPattern has too many hash patterns in it. There must be exactly one series of hashes in namingPattern.');
+    }
+
+    final digitCount = hashMatches.first.end - hashMatches.first.start;
+
+    int index = 0;
+    late File file;
+    do {
+      final fileName = namingPattern.replaceAll(hashMatcher, '$index'.padLeft(digitCount, '0'));
+      file = File('${directory.path}${Platform.pathSeparator}$fileName');
+      index += 1;
+    } while (file.existsSync());
+
+    await save(file: file, format: imageFormat);
+  }
+
   ImageFileFormat? _getImageFileFormatFromFilePath(String filePath) {
     final fileExtension = path.extension(filePath);
     switch (fileExtension) {

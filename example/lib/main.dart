@@ -32,6 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   File? _fileToSaveImage;
 
+  Directory? _dirToSaveFrames;
+  int _remainingFrames = 0;
+
   Future<void> _saveImage() async {
     final imageFormat = ImageFileFormat.targa;
     late String extension;
@@ -69,6 +72,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     _fileToSaveImage = File(filePath);
+  }
+
+  Future<void> _saveImageFrame() async {
+    final filePath = await getSavePath();
+    if (filePath == null) {
+      print('User cancelled the file selection');
+      return;
+    }
+
+    _dirToSaveFrames = File(filePath).parent;
+    _remainingFrames = 10;
   }
 
   @override
@@ -122,13 +136,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 s.save(file: _fileToSaveImage!);
 
                 _fileToSaveImage = null;
+              } else if (_dirToSaveFrames != null && _remainingFrames > 0) {
+                s.saveFrame(
+                  directory: _dirToSaveFrames!,
+                  namingPattern: 'testname_##.jpg',
+                );
+
+                _remainingFrames -= 1;
+                if (_remainingFrames == 0) {
+                  _dirToSaveFrames = null;
+                }
               }
             },
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _saveImage,
+        onPressed: _saveImageFrame,
         child: Icon(Icons.save),
       ),
     );
