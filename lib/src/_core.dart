@@ -8,8 +8,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide Image;
+import 'package:flutter_processing/src/constants/_constants.dart';
+import 'package:flutter_processing/src/math/_trigonometry.dart';
 import 'package:path/path.dart' as path;
 import 'package:image/image.dart' as imageFormats;
+
+import 'math/_calculations.dart';
 
 class Processing extends StatefulWidget {
   const Processing({
@@ -305,7 +309,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 }
 
-class Sketch {
+class Sketch with SketchConstants, SketchCalculations, SketchTrigonometry {
   Sketch.simple({
     Future<void> Function(Sketch)? setup,
     Future<void> Function(Sketch)? draw,
