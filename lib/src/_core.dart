@@ -14,6 +14,7 @@ import 'package:flutter_processing/src/math/_trigonometry.dart';
 import 'package:path/path.dart' as path;
 import 'package:image/image.dart' as imageFormats;
 
+import 'input/time_and_date.dart';
 import 'math/_calculations.dart';
 
 class Processing extends StatefulWidget {
@@ -310,7 +311,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 }
 
-class Sketch with SketchConstants, SketchCalculations, SketchTrigonometry, SketchColor {
+class Sketch with SketchConstants, SketchCalculations, SketchTrigonometry, SketchTimeAndDate, SketchColor {
   Sketch.simple({
     Future<void> Function(Sketch)? setup,
     Future<void> Function(Sketch)? draw,

@@ -198,13 +198,13 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 - [ ] selectInput()
 
 ### Time & Date
-- [ ] day()
-- [ ] hour()
-- [ ] millis()
-- [ ] minute()
-- [ ] month()
-- [ ] second()
-- [ ] year()
+- [x] day()
+- [x] hour()
+- [x] millis()
+- [x] minute()
+- [x] month()
+- [x] second()
+- [x] year()
 
 ## Output
 ### Text Area
