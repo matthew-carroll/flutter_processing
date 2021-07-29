@@ -52,34 +52,34 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ## Data
 ### Composite
-- [ ] Array
-- [ ] ArrayList
-- [ ] FloatDict
-- [ ] FloatList
-- [ ] HashMap
-- [ ] IntDict
-- [ ] IntList
-- [ ] JSONArray
-- [ ] JSONObject
-- [ ] Object
-- [ ] String
-- [ ] StringDict
-- [ ] StringList
+- [ ] ~~Array~~: Use `List`
+- [ ] ~~ArrayList~~: Use `List`
+- [ ] ~~FloatDict~~: Use `Map<String, double>`
+- [ ] ~~FloatList~~: Use `List<double>`
+- [ ] ~~HashMap~~: Use Dart's `HashMap`
+- [ ] ~~IntDict~~: Use `Map<String, int>`
+- [ ] ~~IntList~~: Use `List<int>`
+- [ ] ~~JSONArray~~: Use `List<dynamic>`
+- [ ] ~~JSONObject~~: Use `Map<String, dynamic>`
+- [ ] ~~Object~~: Use Dart's `Object`
+- [ ] ~~String~~: Use Dart's `String`
+- [ ] ~~StringDict~~: Use `Map<String, String>`
+- [ ] ~~StringList~~: use `List<String>`
 - [ ] Table
 - [ ] TableRow
 - [ ] XML
 
 ### Conversion
-- [ ] binary()
-- [ ] boolean()
-- [ ] byte()
-- [ ] char()
-- [ ] float()
-- [ ] hex()
-- [ ] int()
-- [ ] str()
-- [ ] unbinary()
-- [ ] unhex()
+- [x] binary()
+- [x] boolean()
+- [x] ~~byte()~~
+- [x] char()
+- [x] float()
+- [x] hex()
+- [x] int()
+- [x] str()
+- [x] unbinary()
+- [x] unhex()
 
 ### String Functions
 - [ ] join()
@@ -159,18 +159,18 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 
 ## Input
 ### Mouse
-- [ ] mouseButton
-- [ ] mouseClicked()
-- [ ] mouseDragged()
-- [ ] mouseMoved()
-- [ ] mousePressed()
-- [ ] mousePressed
-- [ ] mouseReleased()
-- [ ] mouseWheel()
-- [ ] mouseX
-- [ ] mouseY
-- [ ] pmouseX
-- [ ] pmouseY
+- [x] mouseButton
+- [x] mouseClicked()
+- [x] mouseDragged()
+- [x] mouseMoved()
+- [x] mousePressed()
+- [x] mousePressed: Use `isMousePressed`
+- [x] mouseReleased()
+- [x] mouseWheel()
+- [x] mouseX
+- [x] mouseY
+- [x] pmouseX
+- [x] pmouseY
 
 ### Keyboard
 - [x] key
