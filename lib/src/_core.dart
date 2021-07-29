@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide Image;
+import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing/src/constants/_constants.dart';
 import 'package:flutter_processing/src/math/_trigonometry.dart';
 import 'package:path/path.dart' as path;
@@ -309,7 +310,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 }
 
-class Sketch with SketchConstants, SketchCalculations, SketchTrigonometry {
+class Sketch with SketchConstants, SketchCalculations, SketchTrigonometry, SketchColor {
   Sketch.simple({
     Future<void> Function(Sketch)? setup,
     Future<void> Function(Sketch)? draw,
