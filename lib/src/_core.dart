@@ -14,6 +14,7 @@ import 'package:flutter_processing/src/math/_trigonometry.dart';
 import 'package:path/path.dart' as path;
 import 'package:image/image.dart' as imageFormats;
 
+import 'data/conversion.dart';
 import 'input/time_and_date.dart';
 import 'math/_calculations.dart';
 
@@ -311,7 +312,8 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 }
 
-class Sketch with SketchConstants, SketchCalculations, SketchTrigonometry, SketchTimeAndDate, SketchColor {
+class Sketch
+    with SketchConstants, SketchCalculations, SketchTrigonometry, SketchTimeAndDate, SketchConversion, SketchColor {
   Sketch.simple({
     Future<void> Function(Sketch)? setup,
     Future<void> Function(Sketch)? draw,
