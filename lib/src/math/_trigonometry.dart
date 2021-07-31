@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
 class SketchTrigonometry {
-  double degrees(double angleInRadians) {
+  double degrees(num angleInRadians) {
     return (angleInRadians / math.pi) * 180;
   }
 
-  double radians(double degrees) {
+  double radians(num degrees) {
     return (degrees / 180) * math.pi;
   }
 
