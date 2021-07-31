@@ -19,7 +19,7 @@ class SketchCalculations {
   }
 
   num exp(int n) {
-    return math.pow(math.e, n);
+    return math.exp(n);
   }
 
   int floor(num value) {

@@ -694,6 +694,9 @@ class Sketch
     double mean = 0.0,
     int standardDeviation = 1,
   }) {
+    // The random Gaussian is calculated using the Marsaglia polar method
+    // which generates TWO independent standard normal random variables,
+    // so one is stored and used the next time the function is called.
     double y1, x1, x2, w;
     if (_previousGaussian != null) {
       y1 = _previousGaussian!;
