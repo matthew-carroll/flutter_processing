@@ -18,8 +18,8 @@ class SketchCalculations {
     return (p2 - p1).distance;
   }
 
-  num exp(int n) {
-    return math.pow(math.e, n);
+  num exp(num n) {
+    return math.exp(n);
   }
 
   int floor(num value) {
@@ -39,8 +39,7 @@ class SketchCalculations {
   }
 
   num map(num value, num domainMin, num domainMax, num rangeMin, num rangeMax) {
-    final percent = value / (domainMax - domainMin);
-    return lerp(rangeMin, rangeMax, percent);
+    return (value - domainMin) * (rangeMax - rangeMin) / (domainMax - domainMin) + rangeMin;
   }
 
   num max(num a, num b, [num? c]) {
