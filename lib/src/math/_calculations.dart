@@ -39,8 +39,7 @@ class SketchCalculations {
   }
 
   num map(num value, num domainMin, num domainMax, num rangeMin, num rangeMax) {
-    final percent = value / (domainMax - domainMin);
-    return lerp(rangeMin, rangeMax, percent);
+    return (value - domainMin) * (rangeMax - rangeMin) / (domainMax - domainMin) + rangeMin;
   }
 
   num max(num a, num b, [num? c]) {
