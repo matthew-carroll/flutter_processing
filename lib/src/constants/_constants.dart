@@ -6,5 +6,5 @@ class SketchConstants {
   final PI = pi;
   final HALF_PI = pi / 2;
   final QUARTER_PI = pi / 4;
-  final TAU = 6.2831855;
+  final TAU = pi * 2; // see https://tauday.com/tau-manifesto
 }

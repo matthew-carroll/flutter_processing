@@ -18,8 +18,8 @@ class SketchCalculations {
     return (p2 - p1).distance;
   }
 
-  num exp(num n) {
-    return math.exp(n);
+  num exp(num value) {
+    return math.exp(value);
   }
 
   int floor(num value) {
@@ -30,8 +30,8 @@ class SketchCalculations {
     return lerpDouble(start, end, percent)!;
   }
 
-  num log(num n) {
-    return math.log(n);
+  num log(num value) {
+    return math.log(value);
   }
 
   num mag(int x, int y, [int z = 0]) {

@@ -691,9 +691,12 @@ class Sketch
   ///
   /// By default, the [mean] is `0.0`, and the [standardDeviation] is `1`.
   double randomGaussian({
-    double mean = 0.0,
-    int standardDeviation = 1,
+    num mean = 0.0,
+    num standardDeviation = 1.0,
   }) {
+    // The random Gaussian is calculated using the Marsaglia polar method
+    // which generates TWO independent standard normal random variables,
+    // so one is stored and used the next time the function is called.
     double y1, x1, x2, w;
     if (_previousGaussian != null) {
       y1 = _previousGaussian!;
