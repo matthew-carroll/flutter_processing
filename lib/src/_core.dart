@@ -14,6 +14,7 @@ import 'package:flutter_processing/src/math/_trigonometry.dart';
 import 'package:path/path.dart' as path;
 import 'package:image/image.dart' as imageFormats;
 
+import '_painting_context.dart';
 import 'data/conversion.dart';
 import 'input/time_and_date.dart';
 import 'math/_calculations.dart';
@@ -357,11 +358,7 @@ class Sketch
   void Function(Image newFrame)? _onFrameAvailable;
   bool _isDrawing = false;
 
-  late PictureRecorder _recorder;
-  Image? _intermediateImage;
-  ByteData? _pixels;
-  bool _hasUnappliedCanvasCommands = false;
-  Image? _publishedImage;
+  SketchPaintingContext _paintingContext = SketchPaintingContext();
 
   bool _hasDoneSetup = false;
 
@@ -371,11 +368,10 @@ class Sketch
     }
 
     _isDrawing = true;
-    _intermediateImage = null;
 
     _updateElapsedTime(elapsedTime);
 
-    _startRecording();
+    _paintingContext.startRecording();
 
     // Run Processing setup method.
     await _doSetup();
@@ -383,38 +379,10 @@ class Sketch
     // Run Processing draw method.
     await _onDraw();
 
-    await _finishRecording();
+    await _paintingContext.finishRecording();
 
-    _onFrameAvailable?.call(_publishedImage!);
+    _onFrameAvailable?.call(_paintingContext.publishedImage!);
     _isDrawing = false;
-  }
-
-  void _startRecording() {
-    _recorder = PictureRecorder();
-    _canvas = Canvas(_recorder);
-  }
-
-  Future<void> _doIntermediateRasterization() async {
-    if (!_hasUnappliedCanvasCommands) {
-      // There are no commands to rasterize
-      return;
-    }
-
-    _intermediateImage = await _rasterize();
-    _startRecording();
-
-    _canvas.drawImage(_intermediateImage!, Offset.zero, Paint());
-
-    _hasUnappliedCanvasCommands = false;
-  }
-
-  Future<void> _finishRecording() async {
-    _publishedImage = await _rasterize();
-  }
-
-  Future<Image> _rasterize() async {
-    final picture = _recorder.endRecording();
-    return await picture.toImage(_desiredWidth, _desiredHeight);
   }
 
   Future<void> _doSetup() async {
@@ -427,15 +395,6 @@ class Sketch
 
     // By default fill the background with a light grey.
     background(color: _backgroundColor);
-
-    // By default, the fill color is white and the stroke is 1px black.
-    _fillPaint = Paint()
-      ..color = const Color(0xFFFFFFFF)
-      ..style = PaintingStyle.fill;
-    _strokePaint = Paint()
-      ..color = const Color(0xFF000000)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
 
     await setup();
   }
@@ -452,8 +411,8 @@ class Sketch
     //   }
     // }
 
-    if (_publishedImage != null) {
-      _canvas.drawImage(_publishedImage!, Offset.zero, Paint());
+    if (_paintingContext.publishedImage != null) {
+      _paintingContext.canvas.drawImage(_paintingContext.publishedImage!, Offset.zero, Paint());
     }
 
     await draw();
@@ -547,10 +506,6 @@ class Sketch
     _mouseWheel?.call(this, count);
   }
 
-  late Canvas _canvas;
-  late Size _size = Size(100, 100);
-  late Paint _fillPaint;
-  late Paint _strokePaint;
   Color _backgroundColor = const Color(0xFFC5C5C5);
 
   int _desiredWidth = 100;
@@ -601,7 +556,7 @@ class Sketch
   }) {
     _desiredWidth = width;
     _desiredHeight = height;
-    _size = Size(width.toDouble(), height.toDouble());
+    _paintingContext.size = Size(width.toDouble(), height.toDouble());
     _onSizeChanged?.call();
 
     background(color: _backgroundColor);
@@ -722,29 +677,29 @@ class Sketch
     _backgroundColor = color;
 
     final paint = Paint()..color = color;
-    _canvas.drawRect(Offset.zero & _size, paint);
+    _paintingContext.canvas.drawRect(Offset.zero & _paintingContext.size, paint);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void fill({
     required Color color,
   }) {
-    _fillPaint.color = color;
+    _paintingContext.fillPaint.color = color;
   }
 
   void noFill() {
-    _fillPaint.color = const Color(0x00000000);
+    _paintingContext.fillPaint.color = const Color(0x00000000);
   }
 
   void stroke({
     required Color color,
   }) {
-    _strokePaint.color = color;
+    _paintingContext.strokePaint.color = color;
   }
 
   void noStroke() {
-    _strokePaint.color = const Color(0x00000000);
+    _paintingContext.strokePaint.color = const Color(0x00000000);
   }
   //------- End Color/Setting -----
 
@@ -766,15 +721,15 @@ class Sketch
     Size? displaySize,
   }) {
     // TODO: implement displaySize support.
-    _canvas.drawImage(image, origin, Paint());
+    _paintingContext.canvas.drawImage(image, origin, Paint());
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   //------- Start Image/Pixels -----
   Future<Color> get(int x, int y) async {
-    await _doIntermediateRasterization();
-    final sourceImage = (_intermediateImage ?? _publishedImage)!;
+    await _paintingContext.doIntermediateRasterization();
+    final sourceImage = (_paintingContext.intermediateImage ?? _paintingContext.publishedImage)!;
 
     final pixelDataOffset = _getBitmapPixelOffset(
       imageWidth: sourceImage.width,
@@ -793,8 +748,8 @@ class Sketch
     required int width,
     required int height,
   }) async {
-    await _doIntermediateRasterization();
-    final sourceImage = (_intermediateImage ?? _publishedImage)!;
+    await _paintingContext.doIntermediateRasterization();
+    final sourceImage = (_paintingContext.intermediateImage ?? _paintingContext.publishedImage)!;
 
     final sourceData = await sourceImage.toByteData();
     final destinationData = Uint8List(width * height * 4);
@@ -830,20 +785,17 @@ class Sketch
   }
 
   Future<void> loadPixels() async {
-    await _doIntermediateRasterization();
-
-    final sourceImage = (_intermediateImage ?? _publishedImage)!;
-    _pixels = await sourceImage.toByteData();
+    await _paintingContext.loadPixels();
   }
 
-  ByteData get pixels => _pixels!;
+  ByteData? get pixels => _paintingContext.pixels;
 
   void set({
     required int x,
     required int y,
     required Color color,
   }) {
-    if (_pixels == null) {
+    if (pixels == null) {
       throw Exception('Must call loadPixels() before calling updatePixels()');
     }
 
@@ -855,7 +807,7 @@ class Sketch
 
     final argbColorInt = color.value;
     final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) | ((argbColorInt & 0x00FFFFFF) << 8);
-    _pixels!.setUint32(pixelIndex, rgbaColorInt);
+    pixels!.setUint32(pixelIndex, rgbaColorInt);
   }
 
   Future<void> setRegion({
@@ -863,42 +815,30 @@ class Sketch
     int x = 0,
     int y = 0,
   }) async {
-    if (_pixels == null) {
+    if (pixels == null) {
       throw Exception('Must call loadPixels() before calling updatePixels()');
     }
 
-    final pixelsCodec = await ImageDescriptor.raw(
-      await ImmutableBuffer.fromUint8List(_pixels!.buffer.asUint8List()),
-      width: width,
-      height: height,
-      pixelFormat: PixelFormat.rgba8888,
-    ).instantiateCodec();
-    final pixelsImage = (await pixelsCodec.getNextFrame()).image;
+    // In theory, this method should copy each pixels in the given image
+    // into the pixels buffer. But, it's easier for us to utilize the Canvas
+    // to accomplish the same thing. To use the Canvas, we must first ensure
+    // that any intermediate values in the pixels buffer are applied back to
+    // the intermediate image. For example, if the user called set() on any
+    // pixels but has not yet called updatePixels(), those pixels would be
+    // lost during an intermediate rasterization. Therefore, the first thing
+    // we do is updatePixels().
+    await updatePixels();
 
-    final pictureRecorder = PictureRecorder();
-    final canvas = Canvas(pictureRecorder);
-    canvas..drawImage(pixelsImage, Offset.zero, Paint())..drawImage(image, Offset(x.toDouble(), y.toDouble()), Paint());
-    final picture = pictureRecorder.endRecording();
-    final combinedImage = await picture.toImage(width, height);
+    // Use the Canvas to draw the given image at the desired offset.
+    this.image(image: image, origin: Offset(x.toDouble(), y.toDouble()));
 
-    _pixels = await combinedImage.toByteData();
+    // Rasterize the Canvas image command and load the latest image data
+    // into the pixels buffer.
+    await _paintingContext.loadPixels();
   }
 
   Future<void> updatePixels() async {
-    if (_pixels == null) {
-      throw Exception('Must call loadPixels() before calling updatePixels()');
-    }
-
-    final pixelsCodec = await ImageDescriptor.raw(
-      await ImmutableBuffer.fromUint8List(_pixels!.buffer.asUint8List()),
-      width: width,
-      height: height,
-      pixelFormat: PixelFormat.rgba8888,
-    ).instantiateCodec();
-
-    final pixelsImage = (await pixelsCodec.getNextFrame()).image;
-
-    image(image: pixelsImage);
+    await _paintingContext.updatePixels();
   }
 
   int _getBitmapPixelOffset({
@@ -919,14 +859,14 @@ class Sketch
       throw UnimplementedError('3D point drawing is not yet supported.');
     }
 
-    _strokePaint.style = PaintingStyle.fill;
-    _canvas.drawRect(
+    _paintingContext.strokePaint.style = PaintingStyle.fill;
+    _paintingContext.canvas.drawRect(
       Rect.fromLTWH(x, y, 1, 1),
-      _strokePaint,
+      _paintingContext.strokePaint,
     );
-    _strokePaint.style = PaintingStyle.stroke;
+    _paintingContext.strokePaint.style = PaintingStyle.stroke;
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void line(Offset p1, Offset p2, [Offset? p3]) {
@@ -934,26 +874,28 @@ class Sketch
       throw UnimplementedError('3D line drawing is not yet supported.');
     }
 
-    _canvas.drawLine(p1, p2, _strokePaint);
+    _paintingContext.canvas.drawLine(p1, p2, _paintingContext.strokePaint);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void circle({
     required Offset center,
     required double diameter,
   }) {
-    _canvas..drawCircle(center, diameter / 2, _fillPaint)..drawCircle(center, diameter / 2, _strokePaint);
+    _paintingContext.canvas
+      ..drawCircle(center, diameter / 2, _paintingContext.fillPaint)
+      ..drawCircle(center, diameter / 2, _paintingContext.strokePaint);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void ellipse(Ellipse ellipse) {
-    _canvas //
-      ..drawOval(ellipse.rect, _fillPaint) //
-      ..drawOval(ellipse.rect, _strokePaint);
+    _paintingContext.canvas //
+      ..drawOval(ellipse.rect, _paintingContext.fillPaint) //
+      ..drawOval(ellipse.rect, _paintingContext.strokePaint);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void arc({
@@ -964,40 +906,40 @@ class Sketch
   }) {
     switch (mode) {
       case ArcMode.openStrokePieFill:
-        _canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _fillPaint)
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _paintingContext.fillPaint)
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.strokePaint);
         break;
       case ArcMode.open:
-        _canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _fillPaint)
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.fillPaint)
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.strokePaint);
         break;
       case ArcMode.chord:
         final chordPath = Path()
           ..addArc(ellipse.rect, startAngle, endAngle - startAngle)
           ..close();
 
-        _canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _fillPaint)
-          ..drawPath(chordPath, _strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.fillPaint)
+          ..drawPath(chordPath, _paintingContext.strokePaint);
         break;
       case ArcMode.pie:
-        _canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _fillPaint)
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _paintingContext.fillPaint)
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _paintingContext.strokePaint);
         break;
     }
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void square(Square square) {
-    _canvas //
-      ..drawRect(square.rect, _fillPaint) //
-      ..drawRect(square.rect, _strokePaint);
+    _paintingContext.canvas //
+      ..drawRect(square.rect, _paintingContext.fillPaint) //
+      ..drawRect(square.rect, _paintingContext.strokePaint);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void rect({
@@ -1005,9 +947,9 @@ class Sketch
     BorderRadius? borderRadius,
   }) {
     if (borderRadius == null) {
-      _canvas //
-        ..drawRect(rect, _fillPaint) //
-        ..drawRect(rect, _strokePaint);
+      _paintingContext.canvas //
+        ..drawRect(rect, _paintingContext.fillPaint) //
+        ..drawRect(rect, _paintingContext.strokePaint);
     } else {
       final rrect = RRect.fromRectAndCorners(
         rect,
@@ -1016,12 +958,12 @@ class Sketch
         bottomLeft: borderRadius.bottomLeft,
         bottomRight: borderRadius.bottomRight,
       );
-      _canvas //
-        ..drawRRect(rrect, _fillPaint) //
-        ..drawRRect(rrect, _strokePaint);
+      _paintingContext.canvas //
+        ..drawRRect(rrect, _paintingContext.fillPaint) //
+        ..drawRRect(rrect, _paintingContext.strokePaint);
     }
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void triangle(Offset p1, Offset p2, Offset p3) {
@@ -1031,11 +973,11 @@ class Sketch
       ..lineTo(p3.dx, p3.dy)
       ..close();
 
-    _canvas //
-      ..drawPath(path, _fillPaint) //
-      ..drawPath(path, _strokePaint);
+    _paintingContext.canvas //
+      ..drawPath(path, _paintingContext.fillPaint) //
+      ..drawPath(path, _paintingContext.strokePaint);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void quad(Offset p1, Offset p2, Offset p3, Offset p4) {
@@ -1046,11 +988,11 @@ class Sketch
       ..lineTo(p4.dx, p4.dy)
       ..close();
 
-    _canvas //
-      ..drawPath(path, _fillPaint) //
-      ..drawPath(path, _strokePaint);
+    _paintingContext.canvas //
+      ..drawPath(path, _paintingContext.fillPaint) //
+      ..drawPath(path, _paintingContext.strokePaint);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
   //------- End Shape/2D Primitives -----
 
@@ -1060,7 +1002,7 @@ class Sketch
       throw Exception('Stroke weight must be >= 0');
     }
 
-    _strokePaint.strokeWidth = newWeight.toDouble();
+    _paintingContext.strokePaint.strokeWidth = newWeight.toDouble();
   }
 
   //----- Start Input/Mouse ----
@@ -1115,6 +1057,10 @@ class Sketch
     required File file,
     ImageFileFormat? format,
   }) async {
+    if (pixels == null) {
+      throw Exception('You must call loadPixels() before calling save()');
+    }
+
     late ImageFileFormat imageFormat;
     if (format != null) {
       imageFormat = format;
@@ -1127,7 +1073,7 @@ class Sketch
     }
 
     // Retrieve the pixel data for the current sketch painting.
-    final rawImageData = pixels.buffer.asUint8List();
+    final rawImageData = pixels!.buffer.asUint8List();
 
     // Convert the pixel data to the desired format.
     late List<int> formattedImageData;
@@ -1239,14 +1185,14 @@ class Sketch
       throw UnimplementedError('3D translations are not yet supported.');
     }
 
-    _canvas.translate(x ?? 0, y ?? 0);
+    _paintingContext.canvas.translate(x ?? 0, y ?? 0);
 
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void rotate(double angleInRadians) {
-    _canvas.rotate(angleInRadians);
-    _hasUnappliedCanvasCommands = true;
+    _paintingContext.canvas.rotate(angleInRadians);
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   // TODO: implement all other Processing APIs

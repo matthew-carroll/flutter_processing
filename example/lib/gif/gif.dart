@@ -28,7 +28,7 @@ class GifGenerator {
 
     await sketch.loadPixels();
 
-    final gifFrame = gif.Image.fromBytes(sketch.width, sketch.height, sketch.pixels.buffer.asUint8List());
+    final gifFrame = gif.Image.fromBytes(sketch.width, sketch.height, sketch.pixels!.buffer.asUint8List());
     final timeInHundredths = (_gifFrameRateFps.inMilliseconds / 10).round();
     _gifEncoder.addFrame(gifFrame, duration: timeInHundredths);
     _addedFrameCount += 1;
