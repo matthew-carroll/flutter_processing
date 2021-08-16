@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide Image;
@@ -10,7 +11,6 @@ import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing/src/constants/_constants.dart';
 import 'package:flutter_processing/src/math/_random.dart';
 import 'package:flutter_processing/src/math/_trigonometry.dart';
-import 'package:flutter_processing/src/shape/_two_d_primitives.dart';
 import 'package:image/image.dart' as imageFormats;
 import 'package:path/path.dart' as path;
 
@@ -18,6 +18,10 @@ import '_painting_context.dart';
 import 'data/conversion.dart';
 import 'input/time_and_date.dart';
 import 'math/_calculations.dart';
+import 'shape/shapes.dart';
+
+part 'color/_setting.dart';
+part 'shape/_two_d_primitives.dart';
 
 class Processing extends StatefulWidget {
   const Processing({
@@ -315,9 +319,6 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
 abstract class BaseSketch {
   SketchPaintingContext _paintingContext = SketchPaintingContext();
-
-  @protected
-  SketchPaintingContext get paintingContext => _paintingContext;
 }
 
 class Sketch extends BaseSketch
@@ -329,6 +330,7 @@ class Sketch extends BaseSketch
         SketchInputTimeAndDate,
         SketchDataConversion,
         SketchColor,
+        SketchColorSetting,
         SketchShapeTwoDPrimitives {
   Sketch.simple({
     Future<void> Function(Sketch)? setup,
@@ -519,8 +521,6 @@ class Sketch extends BaseSketch
     _mouseWheel?.call(this, count);
   }
 
-  Color _backgroundColor = const Color(0xFFC5C5C5);
-
   int _desiredWidth = 100;
   int _desiredHeight = 100;
   VoidCallback? _onSizeChanged;
@@ -574,39 +574,6 @@ class Sketch extends BaseSketch
 
     background(color: _backgroundColor);
   }
-
-  //------ Start Color/Setting -----
-  void background({
-    required Color color,
-  }) {
-    _backgroundColor = color;
-
-    final paint = Paint()..color = color;
-    _paintingContext.canvas.drawRect(Offset.zero & _paintingContext.size, paint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
-  }
-
-  void fill({
-    required Color color,
-  }) {
-    _paintingContext.fillPaint.color = color;
-  }
-
-  void noFill() {
-    _paintingContext.fillPaint.color = const Color(0x00000000);
-  }
-
-  void stroke({
-    required Color color,
-  }) {
-    _paintingContext.strokePaint.color = color;
-  }
-
-  void noStroke() {
-    _paintingContext.strokePaint.color = const Color(0x00000000);
-  }
-  //------- End Color/Setting -----
 
   //------- Start Image/Loading & Displaying -----
   Future<Image> loadImage(String filepath) async {
