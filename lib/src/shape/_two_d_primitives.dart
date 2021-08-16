@@ -1,9 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/painting.dart';
-import 'package:flutter_processing/flutter_processing.dart';
-
-import 'shapes.dart';
+part of '../_core.dart';
 
 mixin SketchShapeTwoDPrimitives on BaseSketch {
   void point({
@@ -15,14 +10,14 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
       throw UnimplementedError('3D point drawing is not yet supported.');
     }
 
-    paintingContext.strokePaint.style = PaintingStyle.fill;
-    paintingContext.canvas.drawRect(
+    _paintingContext.strokePaint.style = PaintingStyle.fill;
+    _paintingContext.canvas.drawRect(
       Rect.fromLTWH(x, y, 1, 1),
-      paintingContext.strokePaint,
+      _paintingContext.strokePaint,
     );
-    paintingContext.strokePaint.style = PaintingStyle.stroke;
+    _paintingContext.strokePaint.style = PaintingStyle.stroke;
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void line(Offset p1, Offset p2, [Offset? p3]) {
@@ -30,28 +25,28 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
       throw UnimplementedError('3D line drawing is not yet supported.');
     }
 
-    paintingContext.canvas.drawLine(p1, p2, paintingContext.strokePaint);
+    _paintingContext.canvas.drawLine(p1, p2, _paintingContext.strokePaint);
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void circle({
     required Offset center,
     required double diameter,
   }) {
-    paintingContext.canvas
-      ..drawCircle(center, diameter / 2, paintingContext.fillPaint)
-      ..drawCircle(center, diameter / 2, paintingContext.strokePaint);
+    _paintingContext.canvas
+      ..drawCircle(center, diameter / 2, _paintingContext.fillPaint)
+      ..drawCircle(center, diameter / 2, _paintingContext.strokePaint);
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void ellipse(Ellipse ellipse) {
-    paintingContext.canvas //
-      ..drawOval(ellipse.rect, paintingContext.fillPaint) //
-      ..drawOval(ellipse.rect, paintingContext.strokePaint);
+    _paintingContext.canvas //
+      ..drawOval(ellipse.rect, _paintingContext.fillPaint) //
+      ..drawOval(ellipse.rect, _paintingContext.strokePaint);
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void arc({
@@ -62,40 +57,40 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
   }) {
     switch (mode) {
       case ArcMode.openStrokePieFill:
-        paintingContext.canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, paintingContext.fillPaint)
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, paintingContext.strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _paintingContext.fillPaint)
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.strokePaint);
         break;
       case ArcMode.open:
-        paintingContext.canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, paintingContext.fillPaint)
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, paintingContext.strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.fillPaint)
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.strokePaint);
         break;
       case ArcMode.chord:
         final chordPath = Path()
           ..addArc(ellipse.rect, startAngle, endAngle - startAngle)
           ..close();
 
-        paintingContext.canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, paintingContext.fillPaint)
-          ..drawPath(chordPath, paintingContext.strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, false, _paintingContext.fillPaint)
+          ..drawPath(chordPath, _paintingContext.strokePaint);
         break;
       case ArcMode.pie:
-        paintingContext.canvas
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, paintingContext.fillPaint)
-          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, paintingContext.strokePaint);
+        _paintingContext.canvas
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _paintingContext.fillPaint)
+          ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _paintingContext.strokePaint);
         break;
     }
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void square(Square square) {
-    paintingContext.canvas //
-      ..drawRect(square.rect, paintingContext.fillPaint) //
-      ..drawRect(square.rect, paintingContext.strokePaint);
+    _paintingContext.canvas //
+      ..drawRect(square.rect, _paintingContext.fillPaint) //
+      ..drawRect(square.rect, _paintingContext.strokePaint);
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void rect({
@@ -103,9 +98,9 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
     BorderRadius? borderRadius,
   }) {
     if (borderRadius == null) {
-      paintingContext.canvas //
-        ..drawRect(rect, paintingContext.fillPaint) //
-        ..drawRect(rect, paintingContext.strokePaint);
+      _paintingContext.canvas //
+        ..drawRect(rect, _paintingContext.fillPaint) //
+        ..drawRect(rect, _paintingContext.strokePaint);
     } else {
       final rrect = RRect.fromRectAndCorners(
         rect,
@@ -114,12 +109,12 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
         bottomLeft: borderRadius.bottomLeft,
         bottomRight: borderRadius.bottomRight,
       );
-      paintingContext.canvas //
-        ..drawRRect(rrect, paintingContext.fillPaint) //
-        ..drawRRect(rrect, paintingContext.strokePaint);
+      _paintingContext.canvas //
+        ..drawRRect(rrect, _paintingContext.fillPaint) //
+        ..drawRRect(rrect, _paintingContext.strokePaint);
     }
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void triangle(Offset p1, Offset p2, Offset p3) {
@@ -129,11 +124,11 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
       ..lineTo(p3.dx, p3.dy)
       ..close();
 
-    paintingContext.canvas //
-      ..drawPath(path, paintingContext.fillPaint) //
-      ..drawPath(path, paintingContext.strokePaint);
+    _paintingContext.canvas //
+      ..drawPath(path, _paintingContext.fillPaint) //
+      ..drawPath(path, _paintingContext.strokePaint);
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void quad(Offset p1, Offset p2, Offset p3, Offset p4) {
@@ -144,10 +139,10 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
       ..lineTo(p4.dx, p4.dy)
       ..close();
 
-    paintingContext.canvas //
-      ..drawPath(path, paintingContext.fillPaint) //
-      ..drawPath(path, paintingContext.strokePaint);
+    _paintingContext.canvas //
+      ..drawPath(path, _paintingContext.fillPaint) //
+      ..drawPath(path, _paintingContext.strokePaint);
 
-    paintingContext.markHasUnappliedCanvasCommands();
+    _paintingContext.markHasUnappliedCanvasCommands();
   }
 }
