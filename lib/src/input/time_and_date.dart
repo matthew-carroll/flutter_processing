@@ -1,4 +1,4 @@
-class SketchTimeAndDate {
+mixin SketchInputTimeAndDate {
   final _appStartTime = DateTime.now();
 
   int millis() => DateTime.now().millisecondsSinceEpoch - _appStartTime.millisecondsSinceEpoch;

@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-class SketchTrigonometry {
+mixin SketchMathTrigonometry {
   double degrees(num angleInRadians) {
     return (angleInRadians / math.pi) * 180;
   }

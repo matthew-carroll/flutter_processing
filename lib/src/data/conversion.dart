@@ -1,6 +1,6 @@
 import 'package:flutter/painting.dart';
 
-class SketchConversion {
+mixin SketchDataConversion {
   bool boolean(Object value) {
     if (value is int) {
       return value != 0;

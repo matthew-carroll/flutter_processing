@@ -1,6 +1,6 @@
 import 'package:flutter/painting.dart';
 
-class SketchColor {
+mixin SketchColor {
   ColorMode _colorMode = ColorMode.rgb;
   void colorMode(ColorMode newMode) {
     _colorMode = newMode;
