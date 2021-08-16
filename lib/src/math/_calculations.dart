@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-class SketchCalculations {
+mixin SketchMathCalculations {
   num abs(num value) {
     return value.abs();
   }

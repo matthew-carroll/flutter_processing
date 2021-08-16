@@ -1,7 +1,7 @@
 import 'dart:math';
 
 // ignore_for_file: non_constant_identifier_names
-class SketchConstants {
+mixin SketchConstants {
   final TWO_PI = pi * 2;
   final PI = pi;
   final HALF_PI = pi / 2;
