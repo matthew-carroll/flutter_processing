@@ -27,4 +27,16 @@ mixin SketchInputMouse {
 
   MouseButton? _mouseButton;
   MouseButton? get mouseButton => _mouseButton;
+
+  void mousePressed() {}
+
+  void mouseDragged() {}
+
+  void mouseReleased() {}
+
+  void mouseClicked() {}
+
+  void mouseMoved() {}
+
+  void mouseWheel(double count) {}
 }

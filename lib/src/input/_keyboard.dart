@@ -7,4 +7,10 @@ mixin SketchInputKeyboard {
 
   LogicalKeyboardKey? _key;
   LogicalKeyboardKey? get key => _key;
+
+  void keyPressed() {}
+
+  void keyTyped() {}
+
+  void keyReleased() {}
 }
