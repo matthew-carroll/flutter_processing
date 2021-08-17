@@ -16,16 +16,20 @@ import 'package:path/path.dart' as path;
 
 import '_painting_context.dart';
 import 'data/conversion.dart';
-import 'input/time_and_date.dart';
+import 'input/_time_and_date.dart';
 import 'math/_calculations.dart';
 import 'shape/shapes.dart';
 
 part 'color/_setting.dart';
+part 'environment/_environment.dart';
+part 'input/_keyboard.dart';
+part 'input/_mouse.dart';
 part 'image/_loading_and_displaying.dart';
 part 'image/_pixels.dart';
 part 'output/_image.dart';
 part 'shape/_attributes.dart';
 part 'shape/_two_d_primitives.dart';
+part 'structure/_structure.dart';
 part 'transform/_transform.dart';
 
 class Processing extends StatefulWidget {
@@ -334,6 +338,9 @@ class Sketch extends BaseSketch
         SketchColorSetting,
         SketchConstants,
         SketchDataConversion,
+        SketchEnvironment,
+        SketchInputKeyboard,
+        SketchInputMouse,
         SketchImageLoadingAndDisplaying,
         SketchImagePixels,
         SketchInputTimeAndDate,
@@ -343,6 +350,7 @@ class Sketch extends BaseSketch
         SketchOutputImage,
         SketchShapeAttributes,
         SketchShapeTwoDPrimitives,
+        SketchStructure,
         SketchTransform {
   Sketch.simple({
     Future<void> Function(Sketch)? setup,
@@ -530,107 +538,4 @@ class Sketch extends BaseSketch
   void mouseWheel(double count) {
     _mouseWheel?.call(this, count);
   }
-
-  int _desiredWidth = 100;
-  int _desiredHeight = 100;
-  VoidCallback? _onSizeChanged;
-
-  //------ Start Structure -----
-  bool _isLooping = true;
-  VoidCallback? _loop;
-  VoidCallback? _noLoop;
-
-  void loop() {
-    _isLooping = true;
-    _loop?.call();
-  }
-
-  void noLoop() {
-    _isLooping = false;
-    _noLoop?.call();
-  }
-
-  //------ Start Environment -----
-  Duration _elapsedTime = Duration.zero;
-  void _updateElapsedTime(Duration newElapsedTime) => _elapsedTime = newElapsedTime;
-
-  Duration? _lastDrawTime;
-
-  int _frameCount = 0;
-  int get frameCount => _frameCount;
-
-  int _actualFrameRate = 10;
-  int get frameRate => _actualFrameRate;
-
-  Duration _desiredFrameTime = Duration(milliseconds: (1000.0 / 60).floor());
-  set frameRate(int frameRate) {
-    print('WARNING: non-natural frame rates are very buggy at this time');
-
-    _desiredFrameTime = Duration(milliseconds: (1000.0 / frameRate).floor());
-  }
-
-  int get width => _desiredWidth;
-
-  int get height => _desiredHeight;
-
-  void size({
-    required int width,
-    required int height,
-  }) {
-    _desiredWidth = width;
-    _desiredHeight = height;
-    _paintingContext.size = Size(width.toDouble(), height.toDouble());
-    _onSizeChanged?.call();
-
-    background(color: _backgroundColor);
-  }
-
-  //----- Start Input/Mouse ----
-  int _mouseX = 0;
-  int get mouseX => _mouseX;
-
-  int _mouseY = 0;
-  int get mouseY => _mouseY;
-
-  int _pmouseX = 0;
-  int get pmouseX => _pmouseX;
-
-  int _pmouseY = 0;
-  int get pmouseY => _pmouseY;
-
-  void _updateMousePosition(Offset newPosition) {
-    _pmouseX = _mouseX;
-    _pmouseY = _mouseY;
-
-    _mouseX = newPosition.dx.round();
-    _mouseY = newPosition.dy.round();
-  }
-
-  Set<MouseButton> _pressedMouseButtons = {};
-
-  bool get isMousePressed => _pressedMouseButtons.isNotEmpty;
-
-  MouseButton? _mouseButton;
-  MouseButton? get mouseButton => _mouseButton;
-
-  //----- Start Input/Keyboard ----
-  Set<LogicalKeyboardKey> _pressedKeys = {};
-
-  bool get isKeyPressed => _pressedKeys.isNotEmpty;
-
-  LogicalKeyboardKey? _key;
-  LogicalKeyboardKey? get key => _key;
-}
-
-enum MouseButton {
-  left,
-  center,
-  right,
-}
-
-enum ImageFileFormat {
-  png,
-  jpeg,
-  tiff,
-  targa,
 }

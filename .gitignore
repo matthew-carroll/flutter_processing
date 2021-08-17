@@ -1,3 +1,6 @@
+# Golden failures
+failures/
+
 # Miscellaneous
 *.class
 *.log
