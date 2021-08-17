@@ -21,7 +21,12 @@ import 'math/_calculations.dart';
 import 'shape/shapes.dart';
 
 part 'color/_setting.dart';
+part 'image/_loading_and_displaying.dart';
+part 'image/_pixels.dart';
+part 'output/_image.dart';
+part 'shape/_attributes.dart';
 part 'shape/_two_d_primitives.dart';
+part 'transform/_transform.dart';
 
 class Processing extends StatefulWidget {
   const Processing({
@@ -319,19 +324,26 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
 abstract class BaseSketch {
   SketchPaintingContext _paintingContext = SketchPaintingContext();
+
+  AssetBundle? _assetBundle;
 }
 
 class Sketch extends BaseSketch
     with
+        SketchColor,
+        SketchColorSetting,
         SketchConstants,
+        SketchDataConversion,
+        SketchImageLoadingAndDisplaying,
+        SketchImagePixels,
+        SketchInputTimeAndDate,
         SketchMathCalculations,
         SketchMathTrigonometry,
         SketchMathRandom,
-        SketchInputTimeAndDate,
-        SketchDataConversion,
-        SketchColor,
-        SketchColorSetting,
-        SketchShapeTwoDPrimitives {
+        SketchOutputImage,
+        SketchShapeAttributes,
+        SketchShapeTwoDPrimitives,
+        SketchTransform {
   Sketch.simple({
     Future<void> Function(Sketch)? setup,
     Future<void> Function(Sketch)? draw,
@@ -369,8 +381,6 @@ class Sketch extends BaseSketch
   void Function(Sketch)? _mouseClicked;
   void Function(Sketch)? _mouseMoved;
   void Function(Sketch, double count)? _mouseWheel;
-
-  AssetBundle? _assetBundle;
 
   void Function(Image newFrame)? _onFrameAvailable;
   bool _isDrawing = false;
@@ -575,161 +585,6 @@ class Sketch extends BaseSketch
     background(color: _backgroundColor);
   }
 
-  //------- Start Image/Loading & Displaying -----
-  Future<Image> loadImage(String filepath) async {
-    final imageData = await _assetBundle!.load(filepath);
-    final codec = await (await ImageDescriptor.encoded(
-      await ImmutableBuffer.fromUint8List(imageData.buffer.asUint8List()),
-    ))
-        .instantiateCodec();
-
-    final frame = await codec.getNextFrame();
-    return frame.image;
-  }
-
-  void image({
-    required Image image,
-    Offset origin = Offset.zero,
-    Size? displaySize,
-  }) {
-    // TODO: implement displaySize support.
-    _paintingContext.canvas.drawImage(image, origin, Paint());
-
-    _paintingContext.markHasUnappliedCanvasCommands();
-  }
-
-  //------- Start Image/Pixels -----
-  Future<Color> get(int x, int y) async {
-    await _paintingContext.doIntermediateRasterization();
-    final sourceImage = (_paintingContext.intermediateImage ?? _paintingContext.publishedImage)!;
-
-    final pixelDataOffset = _getBitmapPixelOffset(
-      imageWidth: sourceImage.width,
-      x: x,
-      y: y,
-    );
-    final imageData = await sourceImage.toByteData();
-    final rgbaColor = imageData!.getUint32(pixelDataOffset);
-    final argbColor = ((rgbaColor & 0x000000FF) << 24) | ((rgbaColor & 0xFFFFFF00) >> 8);
-    return Color(argbColor);
-  }
-
-  Future<Image> getRegion({
-    required int x,
-    required int y,
-    required int width,
-    required int height,
-  }) async {
-    await _paintingContext.doIntermediateRasterization();
-    final sourceImage = (_paintingContext.intermediateImage ?? _paintingContext.publishedImage)!;
-
-    final sourceData = await sourceImage.toByteData();
-    final destinationData = Uint8List(width * height * 4);
-    final rowLength = width * 4;
-
-    for (int row = 0; row < height; row += 1) {
-      final sourceRowOffset = _getBitmapPixelOffset(
-        imageWidth: sourceImage.width,
-        x: x,
-        y: y + row,
-      );
-      final destinationRowOffset = _getBitmapPixelOffset(
-        imageWidth: width,
-        x: 0,
-        y: row,
-      );
-
-      destinationData.setRange(
-        destinationRowOffset,
-        destinationRowOffset + rowLength - 1,
-        Uint8List.view(sourceData!.buffer, sourceRowOffset, rowLength),
-      );
-    }
-
-    final codec = await ImageDescriptor.raw(
-      await ImmutableBuffer.fromUint8List(destinationData),
-      width: width,
-      height: height,
-      pixelFormat: PixelFormat.rgba8888,
-    ).instantiateCodec();
-
-    return (await codec.getNextFrame()).image;
-  }
-
-  Future<void> loadPixels() async {
-    await _paintingContext.loadPixels();
-  }
-
-  ByteData? get pixels => _paintingContext.pixels;
-
-  void set({
-    required int x,
-    required int y,
-    required Color color,
-  }) {
-    if (pixels == null) {
-      throw Exception('Must call loadPixels() before calling updatePixels()');
-    }
-
-    final pixelIndex = _getBitmapPixelOffset(
-      imageWidth: width,
-      x: x,
-      y: y,
-    );
-
-    final argbColorInt = color.value;
-    final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) | ((argbColorInt & 0x00FFFFFF) << 8);
-    pixels!.setUint32(pixelIndex, rgbaColorInt);
-  }
-
-  Future<void> setRegion({
-    required Image image,
-    int x = 0,
-    int y = 0,
-  }) async {
-    if (pixels == null) {
-      throw Exception('Must call loadPixels() before calling updatePixels()');
-    }
-
-    // In theory, this method should copy each pixels in the given image
-    // into the pixels buffer. But, it's easier for us to utilize the Canvas
-    // to accomplish the same thing. To use the Canvas, we must first ensure
-    // that any intermediate values in the pixels buffer are applied back to
-    // the intermediate image. For example, if the user called set() on any
-    // pixels but has not yet called updatePixels(), those pixels would be
-    // lost during an intermediate rasterization. Therefore, the first thing
-    // we do is updatePixels().
-    await updatePixels();
-
-    // Use the Canvas to draw the given image at the desired offset.
-    this.image(image: image, origin: Offset(x.toDouble(), y.toDouble()));
-
-    // Rasterize the Canvas image command and load the latest image data
-    // into the pixels buffer.
-    await _paintingContext.loadPixels();
-  }
-
-  Future<void> updatePixels() async {
-    await _paintingContext.updatePixels();
-  }
-
-  int _getBitmapPixelOffset({
-    required int imageWidth,
-    required int x,
-    required int y,
-  }) {
-    return ((y * imageWidth) + x) * 4;
-  }
-
-  //----- Start Shape/Attributes ----
-  void strokeWeight(double newWeight) {
-    if (newWeight < 0) {
-      throw Exception('Stroke weight must be >= 0');
-    }
-
-    _paintingContext.strokePaint.strokeWidth = newWeight.toDouble();
-  }
-
   //----- Start Input/Mouse ----
   int _mouseX = 0;
   int get mouseX => _mouseX;
@@ -765,162 +620,6 @@ class Sketch extends BaseSketch
 
   LogicalKeyboardKey? _key;
   LogicalKeyboardKey? get key => _key;
-
-  //------- Start Output/Image -----
-  /// Saves the current [pixels] buffer data to the given [file].
-  ///
-  /// The [file]'s extension is used to infer the desired image format.
-  /// The extension may be one of ".png", ".jpg", ".tif", or ".tga".
-  ///
-  /// To override the file extension, or use a file name without an
-  /// extension, specify the desired [format].
-  ///
-  /// `save()` does not call [loadPixels]. The caller is responsible
-  /// for ensuring that the [pixels] buffer contains the desired
-  /// pixels to paint to the [file].
-  Future<void> save({
-    required File file,
-    ImageFileFormat? format,
-  }) async {
-    if (pixels == null) {
-      throw Exception('You must call loadPixels() before calling save()');
-    }
-
-    late ImageFileFormat imageFormat;
-    if (format != null) {
-      imageFormat = format;
-    } else {
-      final imageFormatFromFile = _getImageFileFormatFromFilePath(file.path);
-      if (imageFormatFromFile == null) {
-        throw Exception('Cannot save image to file with invalid extension and no explicit image type: ${file.path}');
-      }
-      imageFormat = imageFormatFromFile;
-    }
-
-    // Retrieve the pixel data for the current sketch painting.
-    final rawImageData = pixels!.buffer.asUint8List();
-
-    // Convert the pixel data to the desired format.
-    late List<int> formattedImageData;
-    switch (imageFormat) {
-      case ImageFileFormat.png:
-        formattedImageData = imageFormats.encodePng(
-          imageFormats.Image.fromBytes(width, height, rawImageData),
-        );
-        break;
-      case ImageFileFormat.jpeg:
-        formattedImageData = imageFormats.encodeJpg(
-          imageFormats.Image.fromBytes(width, height, rawImageData),
-        );
-        break;
-      case ImageFileFormat.tiff:
-        throw UnimplementedError('Tiff images are not supported in save()');
-      case ImageFileFormat.targa:
-        formattedImageData = imageFormats.encodeTga(
-          imageFormats.Image.fromBytes(width, height, rawImageData),
-        );
-        break;
-    }
-
-    // Write the formatted pixels to the given file.
-    await file.writeAsBytes(formattedImageData);
-  }
-
-  /// Saves a numbered sequence of images, one image each time the
-  /// function is run, saved in the given [dirctory].
-  ///
-  /// By default, the generated file is named "screen-####.png", where
-  /// the "####" is replaced by the index of the new image. The file
-  /// index is the smallest number that doesn't conflict with an existing
-  /// file in the given [directory].
-  ///
-  /// To customize the name of the files, provide the desired naming pattern
-  /// to [namingPattern].
-  ///
-  /// The [namingPattern]'s extension is used to infer the desired image
-  /// format. The extension may be one of ".png", ".jpg", ".tif", or ".tga".
-  ///
-  /// To override the file extension, or use a file name without an
-  /// extension, provide the desired [format].
-  ///
-  /// `saveFrame()` does not call [loadPixels]. The caller is responsible
-  /// for ensuring that the [pixels] buffer contains the desired pixels to
-  /// paint to the file.
-  Future<void> saveFrame({
-    required Directory directory,
-    String namingPattern = 'screen-####.png',
-    ImageFileFormat? format,
-  }) async {
-    late ImageFileFormat imageFormat;
-    if (format != null) {
-      imageFormat = format;
-    } else {
-      final imageFormatFromFile = _getImageFileFormatFromFilePath(namingPattern);
-      if (imageFormatFromFile == null) {
-        throw Exception('Cannot save image to file with invalid extension and no explicit image type: $namingPattern');
-      }
-      imageFormat = imageFormatFromFile;
-    }
-
-    final hashMatcher = RegExp('(#)+');
-    final hashMatches = hashMatcher.allMatches(namingPattern);
-    if (hashMatches.isEmpty) {
-      throw Exception('namingPattern is missing a hash pattern');
-    } else if (hashMatches.length > 1) {
-      throw Exception(
-          'namingPattern has too many hash patterns in it. There must be exactly one series of hashes in namingPattern.');
-    }
-
-    final digitCount = hashMatches.first.end - hashMatches.first.start;
-
-    int index = 0;
-    late File file;
-    do {
-      final fileName = namingPattern.replaceAll(hashMatcher, '$index'.padLeft(digitCount, '0'));
-      file = File('${directory.path}${Platform.pathSeparator}$fileName');
-      index += 1;
-    } while (file.existsSync());
-
-    await save(file: file, format: imageFormat);
-  }
-
-  ImageFileFormat? _getImageFileFormatFromFilePath(String filePath) {
-    final fileExtension = path.extension(filePath);
-    switch (fileExtension) {
-      case '.png':
-        return ImageFileFormat.png;
-      case '.jpg':
-        return ImageFileFormat.jpeg;
-      case '.tif':
-        return ImageFileFormat.tiff;
-      case '.tga':
-        return ImageFileFormat.targa;
-      default:
-        return null;
-    }
-  }
-
-  //------- Start Transform ------
-  void translate({
-    double? x,
-    double? y,
-    double? z,
-  }) {
-    if (z != null) {
-      throw UnimplementedError('3D translations are not yet supported.');
-    }
-
-    _paintingContext.canvas.translate(x ?? 0, y ?? 0);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
-  }
-
-  void rotate(double angleInRadians) {
-    _paintingContext.canvas.rotate(angleInRadians);
-    _paintingContext.markHasUnappliedCanvasCommands();
-  }
-
-  // TODO: implement all other Processing APIs
 }
 
 enum MouseButton {
