@@ -14,8 +14,6 @@ mixin SketchEnvironment on BaseSketch, SketchColorSetting {
 
   Duration _desiredFrameTime = Duration(milliseconds: (1000.0 / 60).floor());
   set frameRate(int frameRate) {
-    print('WARNING: non-natural frame rates are very buggy at this time');
-
     _desiredFrameTime = Duration(milliseconds: (1000.0 / frameRate).floor());
   }
 
