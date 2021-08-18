@@ -86,6 +86,8 @@ Bugs are typically pretty simple to fix. If you find a bug ticket that you'd lik
 
 To avoid duplicated work, don't work on an issue until it's assigned to you.
 
+When writing code, please use `dart_fmt` with a line length 120.
+
 All bug fixes should include effective tests.
 
 ## Working on new features
@@ -95,6 +97,8 @@ Simple and obvious implementations don't require any proposals. You can implemen
 
 Features that touch multiple areas and/or require API changes should begin with a proposal for how you plan to implement it. Upon approval, you can implement that proposal and submit a pull request.
 
+When writing code, please use `dart_fmt` with a line length 120.
+
 All new features should include effective tests.
 
 ## Pull requests
@@ -103,6 +107,8 @@ To merge your changes into flutter_processing, submit a pull request.
 Request a review by @matthew-carroll.
 
 A PR that does not have an associated issue ticket will not be accepted.
+
+A PR that does not use `dart_fmt` with a 120 character line length will not be accepted.
 
 A PR without tests will not be accepted (with rare exceptions).
 
