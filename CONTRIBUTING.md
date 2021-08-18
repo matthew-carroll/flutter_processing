@@ -60,6 +60,7 @@ Example of a bug ticket:
 > ```
 > 
 > Expected result: a 50x50 square is drawn at the top left corner
+> 
 > Actual result: a 50x50 circle is drawn at the top left corner
 
 Developers who triage these issues should apply the "bug" tag.
