@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
+import 'package:flutter_processing_example/_processing_sketch_display.dart';
 
 void main() {
   runApp(FlutterProcessingExampleApp());
@@ -15,26 +16,27 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PerlinNoisePrototype(),
+      home: PerlinNoiseScreen(),
     );
   }
 }
 
-class PerlinNoisePrototype extends StatefulWidget {
+class PerlinNoiseScreen extends StatefulWidget {
   @override
-  _PerlinNoisePrototypeState createState() => _PerlinNoisePrototypeState();
+  _PerlinNoiseScreenState createState() => _PerlinNoiseScreenState();
 }
 
-class _PerlinNoisePrototypeState extends State<PerlinNoisePrototype> {
+class _PerlinNoiseScreenState extends ProcessingState<PerlinNoiseScreen> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Center(
-        child: Processing(
-          sketch: PerlinNoiseDemoSketch(width: 200, height: 200),
-        ),
-      ),
+  // TODO: implement gifFilepath
+  String get gifFilepath => throw UnimplementedError();
+
+  @override
+  Sketch createSketch() {
+    return PerlinNoiseDemoSketch(
+      width: 200,
+      height: 200,
+      animateZIndex: true,
     );
   }
 }

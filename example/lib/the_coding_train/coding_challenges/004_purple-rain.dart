@@ -16,24 +16,18 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: CodingTrainPurpleRainScreen(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
+class CodingTrainPurpleRainScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _CodingTrainPurpleRainScreenState createState() => _CodingTrainPurpleRainScreenState();
 }
 
-class _HomeScreenState extends ProcessingState<HomeScreen> {
+class _CodingTrainPurpleRainScreenState extends ProcessingState<CodingTrainPurpleRainScreen> {
   final _droplets = <Droplet>[];
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    _droplets.clear();
-  }
 
   @override
   int get gifFps => 60;

@@ -78,6 +78,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     }
 
     if (widget.sketch != oldWidget.sketch) {
+      print('Changing sketch from ${oldWidget.sketch} to ${widget.sketch}');
       oldWidget.sketch
         .._onFrameAvailable = null
         .._onSizeChanged = null

@@ -6,6 +6,10 @@ import 'package:flutter_processing/flutter_processing.dart';
 import 'gif/gif.dart';
 
 abstract class ProcessingState<T extends StatefulWidget> extends State<T> {
+  Sketch? _sketch;
+
+  Color _backgroundColor = const Color(0xFF222222);
+
   GifGenerator? _gifGenerator;
 
   @protected
@@ -51,22 +55,65 @@ abstract class ProcessingState<T extends StatefulWidget> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Colors.orange,
-          foregroundColor: Colors.black,
-        ),
+    _sketch ??= createSketch();
+
+    return Scaffold(
+      backgroundColor: _backgroundColor,
+      body: Stack(
+        children: [
+          Center(
+            child: Processing(
+              sketch: _sketch!,
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: _buildBackgroundColorChooser(),
+          ),
+        ],
       ),
-      child: Scaffold(
-        backgroundColor: Colors.yellow,
-        floatingActionButton: FloatingActionButton(
-          onPressed: startRecordingGif,
-          child: Icon(Icons.image),
-        ),
-        body: Center(
-          child: Processing(
-            sketch: createSketch(),
+    );
+  }
+
+  Widget _buildBackgroundColorChooser() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildColorDot(const Color(0xFF222222)),
+          SizedBox(width: 24),
+          _buildColorDot(const Color(0xFFFFFFFF)),
+          SizedBox(width: 24),
+          _buildColorDot(const Color(0xFFFFFF00)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColorDot(Color color) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _backgroundColor = color;
+          });
+        },
+        child: Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+            border: Border.all(color: Colors.white, width: 3),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.4),
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
           ),
         ),
       ),
