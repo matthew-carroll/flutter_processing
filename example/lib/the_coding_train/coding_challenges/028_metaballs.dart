@@ -15,17 +15,17 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CodingTrainMetaballsDemo(),
+      home: CodingTrainMetaballsScreen(),
     );
   }
 }
 
-class CodingTrainMetaballsDemo extends StatefulWidget {
+class CodingTrainMetaballsScreen extends StatefulWidget {
   @override
-  _CodingTrainMetaballsDemoState createState() => _CodingTrainMetaballsDemoState();
+  _CodingTrainMetaballsScreenState createState() => _CodingTrainMetaballsScreenState();
 }
 
-class _CodingTrainMetaballsDemoState extends State<CodingTrainMetaballsDemo> {
+class _CodingTrainMetaballsScreenState extends State<CodingTrainMetaballsScreen> {
   Sketch _sketch = MetaBallsSketch();
 
   @override

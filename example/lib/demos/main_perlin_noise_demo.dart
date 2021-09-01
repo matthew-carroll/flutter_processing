@@ -2,19 +2,41 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
+import 'package:flutter_processing_example/_processing_sketch_display.dart';
 
-class PerlinNoiseDemo extends StatefulWidget {
-  @override
-  _PerlinNoiseDemoState createState() => _PerlinNoiseDemoState();
+void main() {
+  runApp(FlutterProcessingExampleApp());
 }
 
-class _PerlinNoiseDemoState extends State<PerlinNoiseDemo> {
+class FlutterProcessingExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Processing(
-        sketch: PerlinNoiseDemoSketch(width: 200, height: 200),
+    return MaterialApp(
+      title: 'Perlin Noise Prototype',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: PerlinNoiseScreen(),
+    );
+  }
+}
+
+class PerlinNoiseScreen extends StatefulWidget {
+  @override
+  _PerlinNoiseScreenState createState() => _PerlinNoiseScreenState();
+}
+
+class _PerlinNoiseScreenState extends ProcessingState<PerlinNoiseScreen> {
+  @override
+  // TODO: implement gifFilepath
+  String get gifFilepath => throw UnimplementedError();
+
+  @override
+  Sketch createSketch() {
+    return PerlinNoiseDemoSketch(
+      width: 200,
+      height: 200,
+      animateZIndex: true,
     );
   }
 }
@@ -23,7 +45,7 @@ class PerlinNoiseDemoSketch extends Sketch {
   PerlinNoiseDemoSketch({
     required this.width,
     required this.height,
-    this.animateZIndex = true,
+    this.animateZIndex = false,
   });
 
   final int width;

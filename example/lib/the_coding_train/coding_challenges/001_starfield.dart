@@ -17,30 +17,25 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CodingTrainStarfieldDemo(),
+      home: CodingTrainStarfieldScreen(),
     );
   }
 }
 
-class CodingTrainStarfieldDemo extends StatefulWidget {
+class CodingTrainStarfieldScreen extends StatefulWidget {
   @override
-  _CodingTrainStarfieldDemoState createState() => _CodingTrainStarfieldDemoState();
+  _CodingTrainStarfieldScreenState createState() => _CodingTrainStarfieldScreenState();
 }
 
-class _CodingTrainStarfieldDemoState extends ProcessingState<CodingTrainStarfieldDemo> {
+class _CodingTrainStarfieldScreenState extends ProcessingState<CodingTrainStarfieldScreen> {
   final _stars = <Star>[];
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    _stars.clear();
-  }
 
   @override
   String get gifFilepath => '/Users/matt/Pictures/001_starfield.gif';
 
   @override
   Sketch createSketch() {
+    print('Creating Starfield sketch');
     return Sketch.simple(
       setup: (s) async {
         s

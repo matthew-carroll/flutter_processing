@@ -16,17 +16,17 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CodingTrainRandomWalker(),
+      home: CodingTrainRandomWalkerScreen(),
     );
   }
 }
 
-class CodingTrainRandomWalker extends StatefulWidget {
+class CodingTrainRandomWalkerScreen extends StatefulWidget {
   @override
-  _CodingTrainRandomWalkerState createState() => _CodingTrainRandomWalkerState();
+  _CodingTrainRandomWalkerScreenState createState() => _CodingTrainRandomWalkerScreenState();
 }
 
-class _CodingTrainRandomWalkerState extends ProcessingState<CodingTrainRandomWalker> {
+class _CodingTrainRandomWalkerScreenState extends ProcessingState<CodingTrainRandomWalkerScreen> {
   late int x;
   late int y;
 
