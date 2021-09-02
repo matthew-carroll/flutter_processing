@@ -7,9 +7,7 @@ import '../test_infra.dart';
 void main() {
   group('Shape', () {
     group('Attributes', () {
-      testGoldens('strokeWeight(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('strokeWeight(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -31,8 +29,6 @@ void main() {
       });
 
       testWidgets('strokeWeight() invalid value', (tester) async {
-        configureWindowForSpecTest(tester);
-
         await expectLater(
           () => Sketch.simple()..strokeWeight(-1),
           throwsA(isA<Exception>()),

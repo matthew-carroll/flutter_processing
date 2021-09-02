@@ -5,6 +5,17 @@ import 'dart:typed_data';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
+
+void processingSpecTest(String description, Future<void> Function(WidgetTester) test) {
+  testGoldens(description, (tester) async {
+    configureWindowForSpecTest(tester);
+
+    await test(tester);
+
+    tester.binding.window.clearAllTestValues();
+  });
+}
 
 void configureWindowForSpecTest(WidgetTester tester) {
   tester.binding.window

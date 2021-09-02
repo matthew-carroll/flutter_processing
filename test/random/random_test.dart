@@ -37,9 +37,7 @@ void main() {
       );
     });
 
-    testGoldens('randomGaussian() - vertical distribution', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingSpecTest('randomGaussian() - vertical distribution', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
@@ -60,9 +58,7 @@ void main() {
       await screenMatchesGolden(tester, 'random_gaussian_example-1');
     });
 
-    testGoldens('randomGaussian() - radial distribution', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingSpecTest('randomGaussian() - radial distribution', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(

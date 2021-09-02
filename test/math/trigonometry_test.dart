@@ -10,9 +10,7 @@ import '../test_infra.dart';
 void main() {
   group('Math', () {
     group('trigonometry', () {
-      testGoldens('sin()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('sin()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -37,9 +35,7 @@ void main() {
         );
       });
 
-      testGoldens('cos()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('cos()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -64,9 +60,7 @@ void main() {
         );
       });
 
-      testGoldens('tan()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('tan()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(

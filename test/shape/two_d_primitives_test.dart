@@ -10,9 +10,7 @@ import '../test_infra.dart';
 void main() {
   group('Shape', () {
     group('2D primitives', () {
-      testGoldens('circle(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('circle(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -34,9 +32,7 @@ void main() {
             '-1');
       });
 
-      testGoldens('square(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('square(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -56,9 +52,7 @@ void main() {
         });
       });
 
-      testGoldens('rect(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('rect(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -76,9 +70,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_rect-example-1');
       });
 
-      testGoldens('rect(): example 2', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('rect(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -97,9 +89,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_rect-example-2');
       });
 
-      testGoldens('rect(): example 3', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('rect(): example 3', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -123,9 +113,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_rect-example-3');
       });
 
-      testGoldens('triangle(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('triangle(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -145,9 +133,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_triangle-example-1');
       });
 
-      testGoldens('quad(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('quad(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -168,9 +154,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_quad-example-1');
       });
 
-      testGoldens('line(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('line(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -189,9 +173,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_line-example-1');
       });
 
-      testGoldens('line(): example 2', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('line(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -220,9 +202,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_line-example-2');
       });
 
-      testGoldens('point(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('point(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -241,9 +221,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_point-example-1');
       });
 
-      testGoldens('ellipse(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('ellipse(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -265,9 +243,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_ellipse-example-1');
       });
 
-      testGoldens('ellipse(): example 2', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('ellipse(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -298,9 +274,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_ellipse-example-2');
       });
 
-      testGoldens('ellipse(): example 3', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('ellipse(): example 3', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -330,9 +304,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_ellipse-example-3');
       });
 
-      testGoldens('arc(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('arc(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -368,9 +340,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_arc-example-1');
       });
 
-      testGoldens('arc(): example 2', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('arc(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -391,9 +361,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_arc-example-2');
       });
 
-      testGoldens('arc(): example 3', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('arc(): example 3', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -414,9 +382,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_arc-example-3');
       });
 
-      testGoldens('arc(): example 4', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('arc(): example 4', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
