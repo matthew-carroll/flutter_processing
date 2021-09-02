@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-import 'package:flutter_processing_example/main_perlin_noise_demo.dart';
+import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
 
 import '../../_processing_sketch_display.dart';
 

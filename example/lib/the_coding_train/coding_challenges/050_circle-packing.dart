@@ -13,17 +13,17 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: CodingTrainCirclePackingDemo(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
+class CodingTrainCirclePackingDemo extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _CodingTrainCirclePackingDemoState createState() => _CodingTrainCirclePackingDemoState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CodingTrainCirclePackingDemoState extends State<CodingTrainCirclePackingDemo> {
   Sketch _sketch = CirclePackingSketch();
 
   @override
