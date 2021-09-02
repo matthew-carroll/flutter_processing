@@ -7,9 +7,7 @@ import '../test_infra.dart';
 
 void main() {
   group('Transform', () {
-    testGoldens('translate(): example 1', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingSpecTest('translate(): example 1', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
@@ -29,9 +27,7 @@ void main() {
       );
     });
 
-    testGoldens('translate(): example 2', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingSpecTest('translate(): example 2', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(

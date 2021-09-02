@@ -7,7 +7,7 @@ import '../test_infra.dart';
 
 void main() {
   group('Environment', () {
-    testGoldens('width', (tester) async {
+    processingSpecTest('width', (tester) async {
       configureWindowForSpecTest(tester);
 
       await tester.pumpWidget(
@@ -28,7 +28,7 @@ void main() {
       await screenMatchesGolden(tester, 'environment_width-example-1');
     });
 
-    testGoldens('height', (tester) async {
+    processingSpecTest('height', (tester) async {
       configureWindowForSpecTest(tester);
 
       await tester.pumpWidget(
@@ -49,7 +49,7 @@ void main() {
       await screenMatchesGolden(tester, 'environment_height-example-1');
     });
 
-    testGoldens('size()', (tester) async {
+    processingSpecTest('size()', (tester) async {
       configureWindowForSpecTest(tester);
 
       // Expand the canvas to leave enough space for

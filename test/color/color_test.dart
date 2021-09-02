@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,9 +8,7 @@ import '../test_infra.dart';
 void main() {
   group('Color', () {
     group('Creating and Reading', () {
-      testGoldens('alpha()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('alpha()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -37,9 +33,7 @@ void main() {
         );
       });
 
-      testGoldens('red()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('red()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -64,9 +58,7 @@ void main() {
         );
       });
 
-      testGoldens('green()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('green()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -91,9 +83,7 @@ void main() {
         );
       });
 
-      testGoldens('blue()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('blue()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -118,9 +108,7 @@ void main() {
         );
       });
 
-      testGoldens('hue()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('hue()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -146,9 +134,7 @@ void main() {
         );
       });
 
-      testGoldens('saturation()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('saturation()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -174,9 +160,7 @@ void main() {
         );
       });
 
-      testGoldens('brightness()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('brightness()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -202,9 +186,7 @@ void main() {
         );
       });
 
-      testGoldens('lerpColor()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingSpecTest('lerpColor()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(

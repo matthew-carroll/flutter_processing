@@ -14,7 +14,7 @@ import '../test_infra.dart';
 void main() async {
   group('Image', () {
     group('Loading and Displaying', () {
-      testGoldens('loads and displays image asset', (tester) async {
+      processingSpecTest('loads and displays image asset', (tester) async {
         late FrameInfo frame;
 
         await tester.runAsync(() async {

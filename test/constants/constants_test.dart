@@ -6,9 +6,7 @@ import '../test_infra.dart';
 
 void main() {
   group('Constants', () {
-    testGoldens('constants', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingSpecTest('constants', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(

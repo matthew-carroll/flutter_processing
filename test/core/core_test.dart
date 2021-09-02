@@ -6,9 +6,7 @@ import '../test_infra.dart';
 
 void main() {
   group('core', () {
-    testGoldens('setup() paints light grey background by default', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingSpecTest('setup() paints light grey background by default', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(setup: (s) async {
