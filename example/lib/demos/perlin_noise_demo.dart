@@ -3,29 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
+class PerlinNoiseDemo extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Perlin Noise Prototype',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: PerlinNoisePrototype(),
-    );
-  }
+  _PerlinNoiseDemoState createState() => _PerlinNoiseDemoState();
 }
 
-class PerlinNoisePrototype extends StatefulWidget {
-  @override
-  _PerlinNoisePrototypeState createState() => _PerlinNoisePrototypeState();
-}
-
-class _PerlinNoisePrototypeState extends State<PerlinNoisePrototype> {
+class _PerlinNoiseDemoState extends State<PerlinNoiseDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +26,7 @@ class PerlinNoiseDemoSketch extends Sketch {
   PerlinNoiseDemoSketch({
     required this.width,
     required this.height,
-    this.animateZIndex = false,
+    this.animateZIndex = true,
   });
 
   final int width;

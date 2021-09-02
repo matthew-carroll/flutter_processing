@@ -17,6 +17,7 @@ dependencies:
 
   file_selector: ^0.8.2
   file_selector_macos: ^0.0.4
+  patterns_canvas: ^0.3.5
 
 dev_dependencies:
   flutter_test:

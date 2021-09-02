@@ -16,17 +16,17 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: CodingTrainMitosisSimulationDemo(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
+class CodingTrainMitosisSimulationDemo extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _CodingTrainMitosisSimulationDemoState createState() => _CodingTrainMitosisSimulationDemoState();
 }
 
-class _HomeScreenState extends ProcessingState<HomeScreen> {
+class _CodingTrainMitosisSimulationDemoState extends ProcessingState<CodingTrainMitosisSimulationDemo> {
   final _cells = <Cell>[];
 
   @override
