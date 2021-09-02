@@ -11,12 +11,9 @@ class PerlinNoiseDemo extends StatefulWidget {
 class _PerlinNoiseDemoState extends State<PerlinNoiseDemo> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Center(
-        child: Processing(
-          sketch: PerlinNoiseDemoSketch(width: 200, height: 200),
-        ),
+    return Center(
+      child: Processing(
+        sketch: PerlinNoiseDemoSketch(width: 200, height: 200),
       ),
     );
   }

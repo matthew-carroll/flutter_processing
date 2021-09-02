@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:patterns_canvas/patterns_canvas.dart';
 
@@ -22,6 +23,8 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
   final _drawerOverhangColor = const Color(0xFF333333);
   final _drawerOverhangWidth = 48.0;
   final _drawerWidth = 250.0;
+
+  Color _backgroundColor = const Color(0xFF111111);
 
   late AnimationController _animationController;
   late CurvedAnimation _drawerAnimation;
@@ -48,6 +51,14 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  void _setBackgroundColor(Color newColor) {
+    if (newColor != _backgroundColor) {
+      setState(() {
+        _backgroundColor = newColor;
+      });
+    }
   }
 
   void _toggleDrawer() {
@@ -78,12 +89,72 @@ class _AppScreenState extends State<AppScreen> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _activeMenuItem.pageBuilder(context),
-        _buildDrawerTapToClose(),
-        _buildDrawer(),
-      ],
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: _backgroundColor,
+      ),
+      child: Stack(
+        children: [
+          _activeMenuItem.pageBuilder(context),
+          _buildBackgroundColorChooser(),
+          _buildDrawerTapToClose(),
+          _buildDrawer(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBackgroundColorChooser() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildBackgroundColorDot(
+              color: const Color(0xFF111111),
+            ),
+            SizedBox(width: 24),
+            _buildBackgroundColorDot(
+              color: const Color(0xFFFFFFFF),
+            ),
+            SizedBox(width: 24),
+            _buildBackgroundColorDot(
+              color: const Color(0xFFFFFF00),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBackgroundColorDot({
+    required Color color,
+  }) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          _setBackgroundColor(color);
+        },
+        child: Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+            border: Border.all(color: Colors.white, width: 3),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.4),
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

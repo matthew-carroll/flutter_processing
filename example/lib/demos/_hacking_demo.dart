@@ -70,73 +70,66 @@ class _HackingDemoState extends State<HackingDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      body: Center(
-        child: Processing(
-          sketch: Sketch.simple(
-            setup: (s) async {
-              s.size(width: 500, height: 500);
+    return Center(
+      child: Processing(
+        sketch: Sketch.simple(
+          setup: (s) async {
+            s.size(width: 500, height: 500);
 
-              _loadedImage = await s.loadImage('assets/audio-mixer.png');
-            },
-            draw: (s) async {
-              s.image(
-                image: _loadedImage,
+            _loadedImage = await s.loadImage('assets/audio-mixer.png');
+          },
+          draw: (s) async {
+            s.image(
+              image: _loadedImage,
+            );
+
+            final subImage = await s.getRegion(
+              x: 0,
+              y: 0,
+              width: (s.width / 2).round(),
+              height: (s.height / 2).round(),
+            );
+            // s.image(image: subImage, origin: Offset(s.width / 2, s.height / 2));
+
+            await s.loadPixels();
+
+            for (int col = 0; col < 400; ++col) {
+              for (int row = 0; row < 400; ++row) {
+                s.set(x: col, y: row, color: Color(0xFF00FF00));
+              }
+            }
+            await s.setRegion(image: subImage);
+
+            await s.updatePixels();
+
+            final pixelColor = await s.get(s.mouseX, s.mouseY);
+            s
+              // ..noStroke()
+              ..fill(color: pixelColor)
+              ..circle(
+                center: Offset(s.mouseX + 50, s.mouseY + 50),
+                diameter: 100,
               );
 
-              final subImage = await s.getRegion(
-                x: 0,
-                y: 0,
-                width: (s.width / 2).round(),
-                height: (s.height / 2).round(),
+            await s.loadPixels();
+
+            if (_fileToSaveImage != null) {
+              s.save(file: _fileToSaveImage!);
+
+              _fileToSaveImage = null;
+            } else if (_dirToSaveFrames != null && _remainingFrames > 0) {
+              s.saveFrame(
+                directory: _dirToSaveFrames!,
+                namingPattern: 'testname_##.jpg',
               );
-              // s.image(image: subImage, origin: Offset(s.width / 2, s.height / 2));
 
-              await s.loadPixels();
-
-              for (int col = 0; col < 400; ++col) {
-                for (int row = 0; row < 400; ++row) {
-                  s.set(x: col, y: row, color: Color(0xFF00FF00));
-                }
+              _remainingFrames -= 1;
+              if (_remainingFrames == 0) {
+                _dirToSaveFrames = null;
               }
-              await s.setRegion(image: subImage);
-
-              await s.updatePixels();
-
-              final pixelColor = await s.get(s.mouseX, s.mouseY);
-              s
-                // ..noStroke()
-                ..fill(color: pixelColor)
-                ..circle(
-                  center: Offset(s.mouseX + 50, s.mouseY + 50),
-                  diameter: 100,
-                );
-
-              await s.loadPixels();
-
-              if (_fileToSaveImage != null) {
-                s.save(file: _fileToSaveImage!);
-
-                _fileToSaveImage = null;
-              } else if (_dirToSaveFrames != null && _remainingFrames > 0) {
-                s.saveFrame(
-                  directory: _dirToSaveFrames!,
-                  namingPattern: 'testname_##.jpg',
-                );
-
-                _remainingFrames -= 1;
-                if (_remainingFrames == 0) {
-                  _dirToSaveFrames = null;
-                }
-              }
-            },
-          ),
+            }
+          },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _saveImageFrame,
-        child: Icon(Icons.save),
       ),
     );
   }

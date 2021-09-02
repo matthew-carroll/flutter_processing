@@ -51,24 +51,9 @@ abstract class ProcessingState<T extends StatefulWidget> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Colors.orange,
-          foregroundColor: Colors.black,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.yellow,
-        floatingActionButton: FloatingActionButton(
-          onPressed: startRecordingGif,
-          child: Icon(Icons.image),
-        ),
-        body: Center(
-          child: Processing(
-            sketch: createSketch(),
-          ),
-        ),
+    return Center(
+      child: Processing(
+        sketch: createSketch(),
       ),
     );
   }
