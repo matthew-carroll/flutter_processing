@@ -2,46 +2,23 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-import 'package:flutter_processing_example/_processing_sketch_display.dart';
-
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mitosis Simulation',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainMitosisScreen(),
-    );
-  }
-}
+import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
 class CodingTrainMitosisScreen extends StatefulWidget {
+  const CodingTrainMitosisScreen({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
+
+  final SketchDemoController sketchDemoController;
+
   @override
   _CodingTrainMitosisScreenState createState() => _CodingTrainMitosisScreenState();
 }
 
-class _CodingTrainMitosisScreenState extends ProcessingState<CodingTrainMitosisScreen> {
+class _CodingTrainMitosisScreenState extends State<CodingTrainMitosisScreen> {
   final _cells = <Cell>[];
 
-  @override
-  void reassemble() {
-    super.reassemble();
-    _cells.clear();
-  }
-
-  @override
-  int get gifFps => 60;
-
-  @override
-  String get gifFilepath => '/Users/matt/Pictures/006_mitosis_simulation.gif';
-
-  @override
   Sketch createSketch() {
     return Sketch.simple(
       setup: (s) async {
@@ -58,8 +35,6 @@ class _CodingTrainMitosisScreenState extends ProcessingState<CodingTrainMitosisS
           cell.move();
           cell.show(s);
         }
-
-        await saveGifFrameIfDesired(s);
       },
       mouseClicked: (s) {
         print('clicked - x: ${s.mouseX}, y: ${s.mouseY}');
@@ -83,6 +58,14 @@ class _CodingTrainMitosisScreenState extends ProcessingState<CodingTrainMitosisS
         // Add new cells
         _cells.addAll(newCells);
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProcessingDemo(
+      createSketch: createSketch,
+      sketchDemoController: widget.sketchDemoController,
     );
   }
 }

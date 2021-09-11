@@ -57,7 +57,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     _focusNode = widget.focusNode ?? FocusNode();
 
     widget.sketch
-      .._onFrameAvailable = _onFrameAvailable
+      ..addOnFrameAvailableCallback(_onFrameAvailable)
       .._onSizeChanged = _onSizeChanged
       .._loop = _loop
       .._noLoop = _noLoop;
@@ -78,15 +78,14 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     }
 
     if (widget.sketch != oldWidget.sketch) {
-      print('Changing sketch from ${oldWidget.sketch} to ${widget.sketch}');
       oldWidget.sketch
-        .._onFrameAvailable = null
+        ..removeOnFrameAvailableCallback(_onFrameAvailable)
         .._onSizeChanged = null
         .._loop = null
         .._noLoop = null;
 
       widget.sketch
-        .._onFrameAvailable = _onFrameAvailable
+        ..addOnFrameAvailableCallback(_onFrameAvailable)
         .._assetBundle = DefaultAssetBundle.of(context)
         .._onSizeChanged = _onSizeChanged
         .._loop = _loop

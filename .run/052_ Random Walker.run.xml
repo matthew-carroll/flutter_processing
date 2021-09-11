@@ -1,6 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="052: Random Walker" type="FlutterRunConfigurationType" factoryName="Flutter">
-    <option name="filePath" value="$PROJECT_DIR$/example/lib/the_coding_train/coding_challenges/052_random_walker.dart" />
-    <method v="2" />
-  </configuration>
-</component>

@@ -3,45 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/services.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Circle Packing',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainCirclePackingTextDemo(),
-    );
-  }
-}
-
-class CodingTrainCirclePackingTextDemo extends StatefulWidget {
-  @override
-  _CodingTrainCirclePackingTextDemoState createState() => _CodingTrainCirclePackingTextDemoState();
-}
-
-class _CodingTrainCirclePackingTextDemoState extends State<CodingTrainCirclePackingTextDemo> {
-  Sketch _sketch = CirclePackingWithTextSketch();
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    _sketch = CirclePackingWithTextSketch();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Processing(
-      sketch: _sketch,
-    );
-  }
-}
+import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
 class CirclePackingWithTextSketch extends Sketch {
   final _newCirclesPerFrame = 5;

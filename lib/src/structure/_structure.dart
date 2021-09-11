@@ -2,6 +2,8 @@ part of '../_core.dart';
 
 mixin SketchStructure {
   bool _isLooping = true;
+  bool get isLooping => _isLooping;
+
   VoidCallback? _loop;
   VoidCallback? _noLoop;
 

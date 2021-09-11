@@ -3,39 +3,24 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 
-import '../../_processing_sketch_display.dart';
-
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Coding Challenge: Starfield',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainStarfieldScreen(),
-    );
-  }
-}
+import '../../_processing_demo_sketch_display.dart';
 
 class CodingTrainStarfieldScreen extends StatefulWidget {
+  const CodingTrainStarfieldScreen({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
+
+  final SketchDemoController sketchDemoController;
+
   @override
   _CodingTrainStarfieldScreenState createState() => _CodingTrainStarfieldScreenState();
 }
 
-class _CodingTrainStarfieldScreenState extends ProcessingState<CodingTrainStarfieldScreen> {
+class _CodingTrainStarfieldScreenState extends State<CodingTrainStarfieldScreen> {
   final _stars = <Star>[];
 
-  @override
-  String get gifFilepath => '/Users/matt/Pictures/001_starfield.gif';
-
-  @override
   Sketch createSketch() {
-    print('Creating Starfield sketch');
     return Sketch.simple(
       setup: (s) async {
         s
@@ -66,9 +51,15 @@ class _CodingTrainStarfieldScreenState extends ProcessingState<CodingTrainStarfi
         for (final star in _stars) {
           star.paintStar(s);
         }
-
-        await saveGifFrameIfDesired(s);
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProcessingDemo(
+      createSketch: createSketch,
+      sketchDemoController: widget.sketchDemoController,
     );
   }
 }

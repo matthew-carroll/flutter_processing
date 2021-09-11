@@ -2,44 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
-import 'package:flutter_processing_example/_processing_sketch_display.dart';
-
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Perlin Noise Prototype',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: PerlinNoiseScreen(),
-    );
-  }
-}
-
-class PerlinNoiseScreen extends StatefulWidget {
-  @override
-  _PerlinNoiseScreenState createState() => _PerlinNoiseScreenState();
-}
-
-class _PerlinNoiseScreenState extends ProcessingState<PerlinNoiseScreen> {
-  @override
-  // TODO: implement gifFilepath
-  String get gifFilepath => throw UnimplementedError();
-
-  @override
-  Sketch createSketch() {
-    return PerlinNoiseDemoSketch(
-      width: 200,
-      height: 200,
-      animateZIndex: true,
-    );
-  }
-}
+import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
 class PerlinNoiseDemoSketch extends Sketch {
   PerlinNoiseDemoSketch({
