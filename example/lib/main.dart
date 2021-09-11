@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart' hide Image;
+import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
-import 'package:flutter_processing_example/demos/main_perlin_noise_demo.dart';
+import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/004_purple-rain.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/006_mitosis_simulation.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/028_metaballs.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/030_phyllotaxis.dart';
+import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing-with-text.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/052_random_walker.dart';
 
@@ -30,7 +32,7 @@ class FlutterProcessingExampleApp extends StatelessWidget {
               title: 'Hacking Demo',
               builder: (context, sketchController) {
                 return HackingDemo(
-                  sketchDemoController: SketchDemoController(),
+                  sketchDemoController: sketchController,
                 );
               },
             ),
@@ -40,8 +42,15 @@ class FlutterProcessingExampleApp extends StatelessWidget {
             items: [
               DemoMenuItem(
                 title: 'Perlin Noise',
-                builder: (_, __) {
-                  return PerlinNoiseScreen();
+                builder: (_, sketchController) {
+                  return ProcessingDemo(
+                    createSketch: () => PerlinNoiseDemoSketch(
+                      width: 200,
+                      height: 200,
+                      animateZIndex: true,
+                    ),
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
             ],
@@ -51,56 +60,70 @@ class FlutterProcessingExampleApp extends StatelessWidget {
             items: [
               DemoMenuItem(
                 title: '001: Starfield',
-                builder: (_, __) {
-                  return CodingTrainStarfieldScreen();
+                builder: (_, sketchController) {
+                  return CodingTrainStarfieldScreen(
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
               DemoMenuItem(
                 title: '004: Purple Rain',
-                builder: (_, __) {
-                  return CodingTrainPurpleRainScreen();
+                builder: (_, sketchController) {
+                  return CodingTrainPurpleRainScreen(
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
               DemoMenuItem(
                 title: '006: Mitosis Simulation',
-                builder: (_, __) {
-                  return CodingTrainMitosisScreen();
+                builder: (_, sketchController) {
+                  return CodingTrainMitosisScreen(
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
               DemoMenuItem(
                 title: '028: Metaballs',
-                builder: (_, __) {
-                  return CodingTrainMetaballsScreen();
+                builder: (_, sketchController) {
+                  return ProcessingDemo(
+                    createSketch: () => MetaBallsSketch(),
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
               DemoMenuItem(
                 title: '030: Phyllotaxis',
-                builder: (_, __) {
-                  return CodingTrainPhyllotaxisScreen();
+                builder: (_, sketchController) {
+                  return ProcessingDemo(
+                    createSketch: () => PhyllotaxisSketch(),
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
               DemoMenuItem(
                 title: '050: Circle Packing',
-                builder: (_, __) {
-                  return CodingTrainCirclePackingScreen();
+                builder: (_, sketchController) {
+                  return ProcessingDemo(
+                    createSketch: () => CirclePackingSketch(),
+                    sketchDemoController: sketchController,
+                  );
+                },
+              ),
+              DemoMenuItem(
+                title: '050: Circle Packing with Text',
+                builder: (_, sketchController) {
+                  return ProcessingDemo(
+                    createSketch: () => CirclePackingWithTextSketch(),
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
               DemoMenuItem(
                 title: '052: Random Walker',
-                builder: (_, __) {
-                  return CodingTrainRandomWalkerScreen();
-                },
-              ),
-              DemoMenuItem(
-                title: '052: Random Walker',
-                builder: (_, __) {
-                  return CodingTrainRandomWalkerScreen();
-                },
-              ),
-              DemoMenuItem(
-                title: '052: Random Walker',
-                builder: (_, __) {
-                  return CodingTrainRandomWalkerScreen();
+                builder: (_, sketchController) {
+                  return CodingTrainRandomWalkerScreen(
+                    sketchDemoController: sketchController,
+                  );
                 },
               ),
             ],

@@ -46,6 +46,10 @@ class Sketch extends BaseSketch
 
   Sketch();
 
+  void dispose() {
+    clearOnFrameAvailableCallbacks();
+  }
+
   Future<void> Function(Sketch)? _setup;
   Future<void> Function(Sketch)? _draw;
   void Function(Sketch)? _keyPressed;
@@ -58,7 +62,22 @@ class Sketch extends BaseSketch
   void Function(Sketch)? _mouseMoved;
   void Function(Sketch, double count)? _mouseWheel;
 
-  void Function(Image newFrame)? _onFrameAvailable;
+  Image? get publishedFrame => _paintingContext.publishedImage;
+
+  final _onFrameAvailableCallbacks = <FrameCallback>{};
+
+  void addOnFrameAvailableCallback(FrameCallback callback) {
+    _onFrameAvailableCallbacks.add(callback);
+  }
+
+  void removeOnFrameAvailableCallback(FrameCallback callback) {
+    _onFrameAvailableCallbacks.remove(callback);
+  }
+
+  void clearOnFrameAvailableCallbacks() {
+    _onFrameAvailableCallbacks.clear();
+  }
+
   bool _isDrawing = false;
 
   bool _hasDoneSetup = false;
@@ -85,7 +104,11 @@ class Sketch extends BaseSketch
 
     await _paintingContext.finishRecording();
 
-    _onFrameAvailable?.call(_paintingContext.publishedImage!);
+    // Let all interested listeners know that we've produced a new frame.
+    for (final callback in _onFrameAvailableCallbacks) {
+      await callback(_paintingContext.publishedImage!);
+    }
+
     _isDrawing = false;
   }
 
@@ -170,3 +193,5 @@ class Sketch extends BaseSketch
     _mouseWheel?.call(this, count);
   }
 }
+
+typedef FrameCallback = FutureOr<void> Function(Image);

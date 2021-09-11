@@ -1,9 +1,16 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:file_selector/file_selector.dart';
+import 'package:flutter/cupertino.dart' hide Image;
 import 'package:flutter/material.dart' hide Image;
+import 'package:flutter_processing/flutter_processing.dart';
+import 'package:flutter_processing_example/io/_files.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:patterns_canvas/patterns_canvas.dart';
 import 'package:popover/popover.dart';
+
+import '_processing_demo_sketch_display.dart';
 
 /// Screen that displays all example app demos.
 class ProcessingDemosScreen extends StatefulWidget {
@@ -21,8 +28,8 @@ class ProcessingDemosScreen extends StatefulWidget {
 class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with SingleTickerProviderStateMixin {
   final _exampleDemoListItem = DemoMenuItem(
       title: 'Example',
-      builder: (_, __) {
-        return HackingDemo(sketchDemoController: SketchDemoController());
+      builder: (_, sketchController) {
+        return HackingDemo(sketchDemoController: sketchController);
       });
 
   final _saveScreenshotButtonKey = GlobalKey();
@@ -43,9 +50,7 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
     _drawerController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),
-    )..addListener(() {
-        setState(() {});
-      });
+    );
     _drawerAnimation = CurvedAnimation(
       parent: _drawerController,
       curve: Curves.easeOut,
@@ -76,18 +81,8 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
       direction: PopoverDirection.right,
       width: 200,
       bodyBuilder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Save a screenshot'),
-              TextButton(
-                onPressed: () {},
-                child: Text('Save Image'),
-              ),
-            ],
-          ),
+        return _TakeScreenshotPrompt(
+          sketchDemoController: _sketchDemoController,
         );
       },
     );
@@ -99,18 +94,8 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
       direction: PopoverDirection.right,
       width: 200,
       bodyBuilder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Save GIF'),
-              TextButton(
-                onPressed: () {},
-                child: Text('Save GIF'),
-              ),
-            ],
-          ),
+        return _GenerateGifPrompt(
+          sketchDemoController: _sketchDemoController,
         );
       },
     );
@@ -122,18 +107,8 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
       direction: PopoverDirection.right,
       width: 200,
       bodyBuilder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Save Frames'),
-              TextButton(
-                onPressed: () {},
-                child: Text('Save Frames'),
-              ),
-            ],
-          ),
+        return _GenerateScreenshotFramesPrompt(
+          sketchDemoController: _sketchDemoController,
         );
       },
     );
@@ -144,81 +119,85 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
     return Stack(
       children: [
         _menuItem.builder(context, _sketchDemoController),
-        ..._buildDrawer(),
+        _buildDrawer(),
         _buildLeftToolbar(),
         _buildRightToolbar(),
       ],
     );
   }
 
-  List<Widget> _buildDrawer() {
-    return [
-      if (_drawerAnimation.value > 0)
-        GestureDetector(
-          onTap: _closeDemoDrawer,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.transparent,
-          ),
-        ),
-      Positioned(
-        top: 0,
-        bottom: 0,
-        left: (1 - _drawerAnimation.value) * -_drawerWidth,
-        child: Theme(
-          data: ThemeData.dark(),
-          child: Material(
-            child: CustomPaint(
-              painter: _DrawerPatternPainter(),
-              child: Container(
-                width: _drawerWidth,
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (final group in widget.demos) ...[
-                          _menuGroupHeader(title: group.title),
-                          for (var i = 0; i < group.items.length; i += 1) ...[
-                            Container(
-                              color: const Color(0xFF303030),
-                              child: ListTile(
-                                title: Text(
-                                  group.items[i].title,
-                                  style: TextStyle(
-                                    fontSize: 14,
+  Widget _buildDrawer() {
+    return AnimatedBuilder(
+        animation: _drawerController,
+        builder: (context, child) {
+          return Stack(children: [
+            if (_drawerAnimation.value > 0)
+              GestureDetector(
+                onTap: _closeDemoDrawer,
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.transparent,
+                ),
+              ),
+            Positioned(
+              top: 0,
+              bottom: 0,
+              left: (1 - _drawerAnimation.value) * -_drawerWidth,
+              child: Theme(
+                data: ThemeData.dark(),
+                child: Material(
+                  child: CustomPaint(
+                    painter: _DrawerPatternPainter(),
+                    child: Container(
+                      width: _drawerWidth,
+                      child: Center(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              for (final group in widget.demos) ...[
+                                _menuGroupHeader(title: group.title),
+                                for (var i = 0; i < group.items.length; i += 1) ...[
+                                  Container(
+                                    color: const Color(0xFF303030),
+                                    child: ListTile(
+                                      title: Text(
+                                        group.items[i].title,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          _menuItem = group.items[i];
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    _menuItem = group.items[i];
-                                  });
-                                },
-                              ),
-                            ),
-                            Divider(
-                              height: 1,
-                              color: const Color(0xFF2A2A2A),
-                            ),
-                            if (i == group.items.length - 1)
-                              Container(
-                                height: 24,
-                                color: const Color(0xFF303030),
-                              ),
-                          ],
-                        ],
-                      ],
+                                  Divider(
+                                    height: 1,
+                                    color: const Color(0xFF2A2A2A),
+                                  ),
+                                  if (i == group.items.length - 1)
+                                    Container(
+                                      height: 24,
+                                      color: const Color(0xFF303030),
+                                    ),
+                                ],
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-      ),
-    ];
+          ]);
+        });
   }
 
   Widget _menuGroupHeader({
@@ -239,76 +218,523 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
   }
 
   Widget _buildLeftToolbar() {
-    return Positioned(
-      top: 0,
-      bottom: 0,
-      left: _drawerAnimation.value * _drawerWidth,
-      child: IconTheme(
-        data: IconThemeData(
-          color: Colors.white,
-        ),
-        child: Material(
-          color: Color(0xFF333333),
-          child: SizedBox(
-            width: 54,
-            child: Column(
-              children: [
-                Spacer(),
-                IconButton(
-                  onPressed: _drawerAnimation.value > 0 ? _closeDemoDrawer : _openDemoDrawer,
-                  icon: Icon(_drawerAnimation.value > 0 ? Icons.arrow_back_ios : Icons.arrow_forward_ios),
+    return AnimatedBuilder(
+        animation: _drawerController,
+        builder: (context, child) {
+          return Positioned(
+            top: 0,
+            bottom: 0,
+            left: _drawerAnimation.value * _drawerWidth,
+            child: IconTheme(
+              data: IconThemeData(
+                color: Colors.white,
+              ),
+              child: Material(
+                color: Color(0xFF333333),
+                child: SizedBox(
+                  width: 54,
+                  child: Column(
+                    children: [
+                      Spacer(),
+                      IconButton(
+                        onPressed: _drawerAnimation.value > 0 ? _closeDemoDrawer : _openDemoDrawer,
+                        icon: Icon(_drawerAnimation.value > 0 ? Icons.arrow_back_ios : Icons.arrow_forward_ios),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
                 ),
-                Spacer(),
-              ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget _buildRightToolbar() {
+    return AnimatedBuilder(
+        animation: _sketchDemoController,
+        builder: (context, child) {
+          return Positioned(
+            top: 0,
+            bottom: 0,
+            right: 0,
+            child: IconTheme(
+              data: IconThemeData(
+                color: Colors.white,
+              ),
+              child: Material(
+                color: Color(0xFF333333),
+                child: SizedBox(
+                  width: 54,
+                  child: Column(
+                    children: [
+                      Spacer(flex: 10),
+                      IconButton(
+                        key: _saveScreenshotButtonKey,
+                        onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveScreenshot : null,
+                        icon: Icon(Icons.image),
+                        tooltip: 'Screenshot',
+                      ),
+                      Spacer(flex: 2),
+                      IconButton(
+                        key: _saveGifButtonKey,
+                        onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveGif : null,
+                        icon: Icon(Icons.videocam),
+                        tooltip: 'GIF',
+                      ),
+                      Spacer(flex: 2),
+                      IconButton(
+                        key: _saveFramesButtonKey,
+                        onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveFrames : null,
+                        icon: Icon(Icons.style),
+                        tooltip: 'Image Frames',
+                      ),
+                      Spacer(flex: 10),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+}
+
+class _TakeScreenshotPrompt extends StatefulWidget {
+  const _TakeScreenshotPrompt({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
+
+  final SketchDemoController sketchDemoController;
+
+  @override
+  _TakeScreenshotPromptState createState() => _TakeScreenshotPromptState();
+}
+
+class _TakeScreenshotPromptState extends State<_TakeScreenshotPrompt> {
+  ImageFileFormat _imageFormat = ImageFileFormat.png;
+  String? _selectedPath;
+
+  Future<void> _selectFilePath() async {
+    final filePath = await getSavePath(
+      acceptedTypeGroups: [
+        XTypeGroup(
+          extensions: [_imageFormat.extension],
+          mimeTypes: [_imageFormat.mimeType],
+        ),
+      ],
+      suggestedName: 'screenshot',
+      confirmButtonText: 'Select',
+    );
+
+    if (mounted) {
+      setState(() {
+        _selectedPath = filePath;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Screenshot',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: _ImageFormatSelector(
+              imageFormat: _imageFormat,
+              onFormatSelected: (format) {
+                setState(() {
+                  _imageFormat = format;
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Text(
+              _selectedPath == null ? 'No file path selected' : _selectedPath!,
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.5),
+                fontSize: 12,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _selectFilePath,
+              child: Text('Select Destination'),
+            ),
+          ),
+          SizedBox(height: 16),
+          TextButton(
+            onPressed: _selectedPath != null
+                ? () {
+                    widget.sketchDemoController.client?.takeScreenshot(
+                      File(_selectedPath!),
+                    );
+                  }
+                : null,
+            child: Text('Take Screenshot'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GenerateGifPrompt extends StatefulWidget {
+  const _GenerateGifPrompt({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
+
+  final SketchDemoController sketchDemoController;
+
+  @override
+  _GenerateGifPromptState createState() => _GenerateGifPromptState();
+}
+
+class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
+  String? _selectedPath;
+  int _durationInSeconds = 10;
+  int _fps = 30;
+
+  Future<void> _selectFilePath() async {
+    final filePath = await getSavePath(
+      acceptedTypeGroups: [
+        XTypeGroup(
+          extensions: ['gif'],
+          mimeTypes: ['image/gif'],
+        ),
+      ],
+      suggestedName: 'demo',
+      confirmButtonText: 'Select',
+    );
+
+    if (mounted) {
+      setState(() {
+        _selectedPath = filePath;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'GIF',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                _selectedPath == null ? 'No file path selected' : _selectedPath!,
+                style: TextStyle(
+                  color: Colors.black.withOpacity(0.5),
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _selectFilePath,
+                child: Text('Select Destination'),
+              ),
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Text(
+                  'Duration',
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  '${_durationInSeconds}s',
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+            Slider.adaptive(
+              value: _durationInSeconds.toDouble(),
+              min: 1.0,
+              max: 60.0,
+              onChanged: (newValue) {
+                setState(() {
+                  _durationInSeconds = newValue.round();
+                });
+              },
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Text(
+                  'Frame Rate',
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  '$_fps FPS',
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+            Slider.adaptive(
+              value: _fps.toDouble(),
+              min: 1,
+              max: 120,
+              onChanged: (newValue) {
+                setState(() {
+                  _fps = newValue.round();
+                });
+              },
+            ),
+            SizedBox(height: 16),
+            TextButton(
+              onPressed: _selectedPath != null
+                  ? () {
+                      widget.sketchDemoController.client?.createGif(
+                        file: File(_selectedPath!),
+                        duration: Duration(seconds: _durationInSeconds),
+                        fps: _fps,
+                      );
+                    }
+                  : null,
+              child: Text('Generate GIF'),
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildRightToolbar() {
-    return Positioned(
-      top: 0,
-      bottom: 0,
-      right: 0,
-      child: IconTheme(
-        data: IconThemeData(
-          color: Colors.white,
+class _GenerateScreenshotFramesPrompt extends StatefulWidget {
+  const _GenerateScreenshotFramesPrompt({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
+
+  final SketchDemoController sketchDemoController;
+
+  @override
+  _GenerateScreenshotFramesPromptState createState() => _GenerateScreenshotFramesPromptState();
+}
+
+class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFramesPrompt> {
+  ImageFileFormat _imageFormat = ImageFileFormat.png;
+  Directory? _selectedDirectory;
+  String _titleTemplate = 'frame_###';
+  String? _templatePath;
+  int _frameCount = 10;
+
+  Future<void> _selectFilePath() async {
+    final filePath = await getSavePath(
+      acceptedTypeGroups: [
+        XTypeGroup(
+          extensions: [_imageFormat.extension],
+          mimeTypes: [_imageFormat.mimeType],
         ),
-        child: Material(
-          color: Color(0xFF333333),
-          child: SizedBox(
-            width: 54,
-            child: Column(
+      ],
+      suggestedName: _titleTemplate,
+      confirmButtonText: 'Select',
+    );
+
+    if (mounted) {
+      setState(() {
+        _selectedDirectory = filePath != null ? File(filePath).parent : null;
+
+        if (filePath != null) {
+          final fileName = FileName.fromFilePath(filePath);
+          _titleTemplate = fileName.name.endsWith('#') ? fileName.name : fileName.name + '_###';
+          _templatePath = filePath;
+        } else {
+          _titleTemplate = 'frame_###';
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Frames',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: _ImageFormatSelector(
+                imageFormat: _imageFormat,
+                onFormatSelected: (format) {
+                  setState(() {
+                    _imageFormat = format;
+                  });
+                },
+              ),
+            ),
+            SizedBox(height: 32),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                _templatePath == null ? 'No file path selected' : _templatePath!,
+                style: TextStyle(
+                  color: Colors.black.withOpacity(0.5),
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _selectFilePath,
+                child: Text('Select Destination'),
+              ),
+            ),
+            SizedBox(height: 16),
+            Row(
               children: [
-                Spacer(flex: 10),
-                IconButton(
-                  key: _saveScreenshotButtonKey,
-                  onPressed: _promptToSaveScreenshot,
-                  icon: Icon(Icons.image),
-                  tooltip: 'Screenshot',
+                Text(
+                  'Frames',
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
                 ),
-                Spacer(flex: 2),
-                IconButton(
-                  key: _saveGifButtonKey,
-                  onPressed: _promptToSaveGif,
-                  icon: Icon(Icons.videocam),
-                  tooltip: 'GIF',
+                Spacer(),
+                Text(
+                  '$_frameCount',
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
                 ),
-                Spacer(flex: 2),
-                IconButton(
-                  key: _saveFramesButtonKey,
-                  onPressed: _promptToSaveFrames,
-                  icon: Icon(Icons.style),
-                  tooltip: 'Image Frames',
-                ),
-                Spacer(flex: 10),
               ],
             ),
-          ),
+            Slider.adaptive(
+              value: _frameCount.toDouble(),
+              min: 1,
+              max: 60,
+              onChanged: (newValue) {
+                setState(() {
+                  _frameCount = newValue.round();
+                });
+              },
+            ),
+            SizedBox(height: 16),
+            TextButton(
+              onPressed: _templatePath != null
+                  ? () {
+                      widget.sketchDemoController.client?.startTakingScreenshotFrames(
+                        directory: _selectedDirectory!,
+                        nameTemplate: _titleTemplate,
+                        format: _imageFormat,
+                        frameCount: _frameCount,
+                      );
+                    }
+                  : null,
+              child: Text('Generate Frames'),
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class _ImageFormatSelector extends StatelessWidget {
+  const _ImageFormatSelector({
+    Key? key,
+    required this.imageFormat,
+    required this.onFormatSelected,
+  }) : super(key: key);
+
+  final ImageFileFormat imageFormat;
+  final void Function(ImageFileFormat) onFormatSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoSegmentedControl(
+      padding: EdgeInsets.zero,
+      groupValue: imageFormat,
+      onValueChanged: onFormatSelected,
+      children: {
+        ImageFileFormat.png: Text(
+          'PNG',
+          style: const TextStyle(
+            fontSize: 8,
+          ),
+        ),
+        ImageFileFormat.jpeg: Text(
+          'JPEG',
+          style: const TextStyle(
+            fontSize: 8,
+          ),
+        ),
+        ImageFileFormat.tiff: Text(
+          'TIFF',
+          style: const TextStyle(
+            fontSize: 8,
+          ),
+        ),
+        ImageFileFormat.targa: Text(
+          'TARGA',
+          style: const TextStyle(
+            fontSize: 8,
+          ),
+        ),
+      },
     );
   }
 }
@@ -357,30 +783,3 @@ class DemoMenuItem {
   final String? subtitle;
   final Widget Function(BuildContext, SketchDemoController) builder;
 }
-
-/// Controller that connects [ProcessingDemosScreen] to a [SketchDemo]
-/// so that the screen can request that the demo take screenshots.
-class SketchDemoController with ChangeNotifier {
-  bool get hasDemoClient => _client != null;
-
-  SketchDemo? _client;
-  SketchDemo? get client => _client;
-  set client(SketchDemo? demo) {
-    if (demo != _client) {
-      _client = demo;
-      notifyListeners();
-    }
-  }
-}
-
-/// A Processing sketch demo, which is capable of generating various
-/// screenshots.
-abstract class SketchDemo {
-  Future<Image> takeScreenshot();
-
-  Future<List<int>> createGif();
-
-  Stream<Image> startTakingScreenshotFrames();
-}
-
-class ScreenshotsInProgressException {}

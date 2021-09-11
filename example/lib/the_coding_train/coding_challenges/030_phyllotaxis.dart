@@ -3,45 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Phyllotaxis',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainPhyllotaxisScreen(),
-    );
-  }
-}
-
-class CodingTrainPhyllotaxisScreen extends StatefulWidget {
-  @override
-  _CodingTrainPhyllotaxisScreenState createState() => _CodingTrainPhyllotaxisScreenState();
-}
-
-class _CodingTrainPhyllotaxisScreenState extends State<CodingTrainPhyllotaxisScreen> {
-  Sketch _sketch = PhyllotaxisSketch();
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    _sketch = PhyllotaxisSketch();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Processing(
-      sketch: _sketch,
-    );
-  }
-}
-
 class PhyllotaxisSketch extends Sketch {
   final _dotRadius = 3;
   final _dotDistanceMultiplier = 6;
