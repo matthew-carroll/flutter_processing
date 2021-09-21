@@ -6,11 +6,11 @@ import 'package:flutter/cupertino.dart' hide Image;
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing_example/io/_files.dart';
-import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:patterns_canvas/patterns_canvas.dart';
 import 'package:popover/popover.dart';
 
 import '_processing_demo_sketch_display.dart';
+import 'demos/_empty_sketch.dart';
 
 /// Screen that displays all example app demos.
 class ProcessingDemosScreen extends StatefulWidget {
@@ -27,10 +27,13 @@ class ProcessingDemosScreen extends StatefulWidget {
 
 class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with SingleTickerProviderStateMixin {
   final _exampleDemoListItem = DemoMenuItem(
-      title: 'Example',
-      builder: (_, sketchController) {
-        return HackingDemo(sketchDemoController: sketchController);
-      });
+    title: 'Empty Sketch',
+    builder: (context, sketchController) {
+      return EmptySketchDemo(
+        sketchDemoController: sketchController,
+      );
+    },
+  );
 
   final _saveScreenshotButtonKey = GlobalKey();
   final _saveGifButtonKey = GlobalKey();
