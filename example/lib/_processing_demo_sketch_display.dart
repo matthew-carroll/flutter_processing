@@ -20,9 +20,21 @@ class SketchDemoController with ChangeNotifier {
   SketchDemo? get client => _client;
   set client(SketchDemo? demo) {
     if (demo != _client) {
-      print('Setting sketch demo to $demo');
       _client = demo;
       notifyListeners();
+    }
+  }
+
+  // This method was added to deal with an issue in AnimatedBuilder.
+  // The `client` is set in various widget methods, e.g., initState(),
+  // didUpdateWidget(), and dispose(). AnimatedBuilder immediately invokes
+  // setState() without checking whether that's a legal call, and it's
+  // not a legal call during lifecycle methods, which results in an
+  // error. Therefore, this method allows setting the client without
+  // notifying listeners so that this error doesn't come up.
+  void setClientWithoutNotifications(SketchDemo? demo) {
+    if (demo != _client) {
+      _client = demo;
     }
   }
 }
@@ -87,7 +99,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
     super.initState();
     _initSketch();
 
-    widget.sketchDemoController.client = this;
+    widget.sketchDemoController.setClientWithoutNotifications(this);
 
     _screenshotCountdown = _CountdownController(vsync: this);
   }
@@ -97,8 +109,8 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
     super.didUpdateWidget(oldWidget);
 
     if (widget.sketchDemoController != oldWidget.sketchDemoController) {
-      oldWidget.sketchDemoController.client = null;
-      widget.sketchDemoController.client = this;
+      oldWidget.sketchDemoController.setClientWithoutNotifications(null);
+      widget.sketchDemoController.setClientWithoutNotifications(this);
     }
   }
 
@@ -108,7 +120,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
     // still the client so that we don't inadvertently interfere with
     // another sketch demo.
     if (widget.sketchDemoController.client == this) {
-      widget.sketchDemoController.client = null;
+      widget.sketchDemoController.setClientWithoutNotifications(null);
     }
 
     _screenshotCountdown.dispose();
