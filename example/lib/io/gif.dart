@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:image/image.dart' as gif;
@@ -21,7 +22,7 @@ class GifGenerator {
   bool _hasSavedToFile = false;
   bool get hasSavedToFile => _hasSavedToFile;
 
-  Future<void> addFrame(Sketch sketch) async {
+  Future<void> addFrameFromSketch(Sketch sketch) async {
     if (isDoneAddingFrames) {
       return;
     }
@@ -36,11 +37,25 @@ class GifGenerator {
     print('${(100 * _addedFrameCount / _totalDesiredFrameCount).round()}% gif frames generated');
   }
 
+  Future<void> addFrame(Image frame) async {
+    if (isDoneAddingFrames) {
+      return;
+    }
+
+    final frameBytes = await frame.toByteData();
+    final gifFrame = gif.Image.fromBytes(frame.width, frame.height, frameBytes!.buffer.asUint8List());
+    final timeInHundredths = (_gifFrameRateFps.inMilliseconds / 10).round();
+    _gifEncoder.addFrame(gifFrame, duration: timeInHundredths);
+    _addedFrameCount += 1;
+
+    print('${(100 * _addedFrameCount / _totalDesiredFrameCount).round()}% gif frames generated');
+  }
+
   Future<void> saveGif(File file) async {
     print('Writing gif to file');
+    _hasSavedToFile = true;
     final gifData = _gifEncoder.finish();
     await file.writeAsBytes(gifData!);
-    _hasSavedToFile = true;
     print('Done writing gif');
   }
 }

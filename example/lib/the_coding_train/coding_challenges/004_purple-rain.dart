@@ -2,46 +2,23 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-import 'package:flutter_processing_example/_processing_sketch_display.dart';
+import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
+class CodingTrainPurpleRainScreen extends StatefulWidget {
+  const CodingTrainPurpleRainScreen({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
 
-class FlutterProcessingExampleApp extends StatelessWidget {
+  final SketchDemoController sketchDemoController;
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Processing Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainPurpleRainDemo(),
-    );
-  }
+  _CodingTrainPurpleRainScreenState createState() => _CodingTrainPurpleRainScreenState();
 }
 
-class CodingTrainPurpleRainDemo extends StatefulWidget {
-  @override
-  _CodingTrainPurpleRainDemoState createState() => _CodingTrainPurpleRainDemoState();
-}
-
-class _CodingTrainPurpleRainDemoState extends ProcessingState<CodingTrainPurpleRainDemo> {
+class _CodingTrainPurpleRainScreenState extends State<CodingTrainPurpleRainScreen> {
   final _droplets = <Droplet>[];
 
-  @override
-  void reassemble() {
-    super.reassemble();
-    _droplets.clear();
-  }
-
-  @override
-  int get gifFps => 60;
-
-  @override
-  String get gifFilepath => '/Users/matt/Pictures/004_purple_rain.gif';
-
-  @override
   Sketch createSketch() {
     return Sketch.simple(
       setup: (s) async {
@@ -68,9 +45,15 @@ class _CodingTrainPurpleRainDemoState extends ProcessingState<CodingTrainPurpleR
             ..fall(s)
             ..show(s);
         }
-
-        await saveGifFrameIfDesired(s);
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProcessingDemo(
+      createSketch: createSketch,
+      sketchDemoController: widget.sketchDemoController,
     );
   }
 }

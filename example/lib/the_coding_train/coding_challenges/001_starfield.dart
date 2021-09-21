@@ -3,43 +3,23 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 
-import '../../_processing_sketch_display.dart';
+import '../../_processing_demo_sketch_display.dart';
 
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
+class CodingTrainStarfieldScreen extends StatefulWidget {
+  const CodingTrainStarfieldScreen({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
 
-class FlutterProcessingExampleApp extends StatelessWidget {
+  final SketchDemoController sketchDemoController;
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Coding Challenge: Starfield',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainStarfieldDemo(),
-    );
-  }
+  _CodingTrainStarfieldScreenState createState() => _CodingTrainStarfieldScreenState();
 }
 
-class CodingTrainStarfieldDemo extends StatefulWidget {
-  @override
-  _CodingTrainStarfieldDemoState createState() => _CodingTrainStarfieldDemoState();
-}
-
-class _CodingTrainStarfieldDemoState extends ProcessingState<CodingTrainStarfieldDemo> {
+class _CodingTrainStarfieldScreenState extends State<CodingTrainStarfieldScreen> {
   final _stars = <Star>[];
 
-  @override
-  void reassemble() {
-    super.reassemble();
-    _stars.clear();
-  }
-
-  @override
-  String get gifFilepath => '/Users/matt/Pictures/001_starfield.gif';
-
-  @override
   Sketch createSketch() {
     return Sketch.simple(
       setup: (s) async {
@@ -71,9 +51,15 @@ class _CodingTrainStarfieldDemoState extends ProcessingState<CodingTrainStarfiel
         for (final star in _stars) {
           star.paintStar(s);
         }
-
-        await saveGifFrameIfDesired(s);
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProcessingDemo(
+      createSketch: createSketch,
+      sketchDemoController: widget.sketchDemoController,
     );
   }
 }

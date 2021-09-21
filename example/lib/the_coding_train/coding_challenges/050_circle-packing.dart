@@ -1,45 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Circle Packing',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainCirclePackingDemo(),
-    );
-  }
-}
-
-class CodingTrainCirclePackingDemo extends StatefulWidget {
-  @override
-  _CodingTrainCirclePackingDemoState createState() => _CodingTrainCirclePackingDemoState();
-}
-
-class _CodingTrainCirclePackingDemoState extends State<CodingTrainCirclePackingDemo> {
-  Sketch _sketch = CirclePackingSketch();
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    _sketch = CirclePackingSketch();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Processing(
-      sketch: _sketch,
-    );
-  }
-}
-
 class CirclePackingSketch extends Sketch {
   final _newCirclesPerFrame = 100;
   final _maxNewCircleAttempts = 100;

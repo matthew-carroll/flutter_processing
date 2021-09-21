@@ -2,41 +2,24 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-import 'package:flutter_processing_example/_processing_sketch_display.dart';
+import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
+class CodingTrainRandomWalkerScreen extends StatefulWidget {
+  const CodingTrainRandomWalkerScreen({
+    Key? key,
+    required this.sketchDemoController,
+  }) : super(key: key);
 
-class FlutterProcessingExampleApp extends StatelessWidget {
+  final SketchDemoController sketchDemoController;
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Random Walker',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainRandomWalker(),
-    );
-  }
+  _CodingTrainRandomWalkerScreenState createState() => _CodingTrainRandomWalkerScreenState();
 }
 
-class CodingTrainRandomWalker extends StatefulWidget {
-  @override
-  _CodingTrainRandomWalkerState createState() => _CodingTrainRandomWalkerState();
-}
-
-class _CodingTrainRandomWalkerState extends ProcessingState<CodingTrainRandomWalker> {
+class _CodingTrainRandomWalkerScreenState extends State<CodingTrainRandomWalkerScreen> {
   late int x;
   late int y;
 
-  @override
-  int get gifFps => 30;
-
-  @override
-  String get gifFilepath => '/Users/matt/Pictures/052_random_walker.gif';
-
-  @override
   Sketch createSketch() {
     return Sketch.simple(
       setup: (s) async {
@@ -68,9 +51,15 @@ class _CodingTrainRandomWalkerState extends ProcessingState<CodingTrainRandomWal
             y -= 1;
             break;
         }
-
-        await saveGifFrameIfDesired(s);
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProcessingDemo(
+      createSketch: createSketch,
+      sketchDemoController: widget.sketchDemoController,
     );
   }
 }

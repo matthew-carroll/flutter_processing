@@ -2,45 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-
-void main() {
-  runApp(FlutterProcessingExampleApp());
-}
-
-class FlutterProcessingExampleApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Metaballs',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: CodingTrainMetaballsDemo(),
-    );
-  }
-}
-
-class CodingTrainMetaballsDemo extends StatefulWidget {
-  @override
-  _CodingTrainMetaballsDemoState createState() => _CodingTrainMetaballsDemoState();
-}
-
-class _CodingTrainMetaballsDemoState extends State<CodingTrainMetaballsDemo> {
-  Sketch _sketch = MetaBallsSketch();
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    _sketch = MetaBallsSketch();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Processing(
-      sketch: _sketch,
-    );
-  }
-}
+import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
 class MetaBallsSketch extends Sketch {
   final _blobCount = 6;
