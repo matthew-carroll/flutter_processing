@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
+import 'package:flutter_processing_example/demos/_empty_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
@@ -28,6 +29,14 @@ class FlutterProcessingExampleApp extends StatelessWidget {
       home: ProcessingDemosScreen(
         demos: [
           DemoMenuGroup(title: 'Example', items: [
+            DemoMenuItem(
+              title: 'Empty Sketch',
+              builder: (context, sketchController) {
+                return EmptySketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
             DemoMenuItem(
               title: 'Hacking Demo',
               builder: (context, sketchController) {
