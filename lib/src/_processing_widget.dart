@@ -121,7 +121,9 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
   void _onSizeChanged() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -138,6 +140,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onKey(RawKeyEvent event) {
+    print('_onKey: $event');
     if (event is RawKeyDownEvent) {
       final key = event.logicalKey;
       widget.sketch
@@ -149,6 +152,26 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
         widget.sketch.keyTyped();
       }
     } else if (event is RawKeyUpEvent) {
+      final key = event.logicalKey;
+      widget.sketch
+        .._pressedKeys.remove(key)
+        .._key = key
+        ..keyReleased();
+    }
+  }
+
+  void _onKeyEvent(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      final key = event.logicalKey;
+      widget.sketch
+        .._pressedKeys.add(key)
+        .._key = key
+        ..keyPressed();
+
+      if (!_controlKeys.contains(event.logicalKey)) {
+        widget.sketch.keyTyped();
+      }
+    } else if (event is KeyUpEvent) {
       final key = event.logicalKey;
       widget.sketch
         .._pressedKeys.remove(key)
@@ -269,9 +292,13 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
+    return Focus(
       focusNode: _focusNode,
-      onKey: _onKey,
+      autofocus: true,
+      onKeyEvent: (focusNode, keyEvent) {
+        _onKeyEvent(keyEvent);
+        return KeyEventResult.handled;
+      },
       child: Listener(
         onPointerDown: _onPointerDown,
         onPointerMove: _onPointerMove,

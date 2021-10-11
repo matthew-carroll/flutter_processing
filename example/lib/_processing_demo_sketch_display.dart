@@ -63,10 +63,12 @@ class ScreenshotsInProgressException {}
 class ProcessingDemo extends StatefulWidget {
   ProcessingDemo({
     Key? key,
+    this.sketchFocusNode,
     required this.createSketch,
     required this.sketchDemoController,
   }) : super(key: key ?? ObjectKey(createSketch));
 
+  final FocusNode? sketchFocusNode;
   final SketchFactory createSketch;
   final SketchDemoController sketchDemoController;
 
@@ -304,7 +306,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
       }
     } else if (_gifCompleter != null) {
       print('Adding GIF frame');
-      await _gifGenerator!.addFrame(frame);
+      _gifGenerator!.addFrame(frame);
 
       // Note: If the sketch is no longer looping then we won't get
       // another opportunity to add to the GIF. We need to complete it early.
@@ -439,6 +441,9 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
       }
 
       _initSketch();
+
+      // Immediately return focus to the sketch.
+      widget.sketchFocusNode?.requestFocus();
     });
   }
 
@@ -454,6 +459,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
         children: [
           Center(
             child: Processing(
+              focusNode: widget.sketchFocusNode,
               sketch: _sketch!,
             ),
           ),
