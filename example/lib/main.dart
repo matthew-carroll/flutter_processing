@@ -9,6 +9,7 @@ import 'package:flutter_processing_example/the_coding_train/coding_challenges/00
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/006_mitosis_simulation.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/028_metaballs.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/030_phyllotaxis.dart';
+import 'package:flutter_processing_example/the_coding_train/coding_challenges/031_flappy_bird.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing-with-text.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/052_random_walker.dart';
@@ -115,6 +116,14 @@ class FlutterProcessingExampleApp extends StatelessWidget {
                 builder: (_, sketchController) {
                   return ProcessingDemo(
                     createSketch: () => PhyllotaxisSketch(),
+                    sketchDemoController: sketchController,
+                  );
+                },
+              ),
+              DemoMenuItem(
+                title: '031: Flappy Bird',
+                builder: (_, sketchController) {
+                  return CodingTrainFlappyBirdScreen(
                     sketchDemoController: sketchController,
                   );
                 },
