@@ -33,3 +33,4 @@ flutter:
   assets:
     - assets/
     - assets/coding-train/
+    - assets/coding-train/031_flappy_bird/
