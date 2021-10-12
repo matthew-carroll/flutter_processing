@@ -15,10 +15,18 @@ mixin SketchImageLoadingAndDisplaying on BaseSketch {
   void image({
     required Image image,
     Offset origin = Offset.zero,
-    Size? displaySize,
+    double? width,
+    double? height,
   }) {
-    // TODO: implement displaySize support.
-    _paintingContext.canvas.drawImage(image, origin, Paint());
+    final horizontalScale = width != null ? width / image.width : 1.0;
+    final verticalScale = height != null ? height / image.height : 1.0;
+
+    _paintingContext.canvas
+      ..save()
+      ..translate(origin.dx, origin.dy)
+      ..scale(horizontalScale, verticalScale)
+      ..drawImage(image, Offset.zero, Paint())
+      ..restore();
 
     _paintingContext.markHasUnappliedCanvasCommands();
   }
