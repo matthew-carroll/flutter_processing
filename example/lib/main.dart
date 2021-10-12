@@ -11,6 +11,7 @@ import 'package:flutter_processing_example/the_coding_train/coding_challenges/03
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing-with-text.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/052_random_walker.dart';
+import 'package:flutter_processing_example/the_coding_train/coding_challenges/085_game_of_life.dart';
 
 import '_demos_screen.dart';
 
@@ -131,6 +132,14 @@ class FlutterProcessingExampleApp extends StatelessWidget {
                 title: '052: Random Walker',
                 builder: (_, sketchController) {
                   return CodingTrainRandomWalkerScreen(
+                    sketchDemoController: sketchController,
+                  );
+                },
+              ),
+              DemoMenuItem(
+                title: '085: Game of Life',
+                builder: (_, sketchController) {
+                  return CodingTrainGameOfLifeScreen(
                     sketchDemoController: sketchController,
                   );
                 },
