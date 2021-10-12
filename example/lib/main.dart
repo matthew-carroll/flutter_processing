@@ -4,6 +4,7 @@ import 'package:flutter_processing_example/demos/_empty_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
+import 'package:flutter_processing_example/the_coding_train/coding_challenges/003_snake_game.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/004_purple-rain.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/006_mitosis_simulation.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/028_metaballs.dart';
@@ -72,6 +73,14 @@ class FlutterProcessingExampleApp extends StatelessWidget {
                 title: '001: Starfield',
                 builder: (_, sketchController) {
                   return CodingTrainStarfieldScreen(
+                    sketchDemoController: sketchController,
+                  );
+                },
+              ),
+              DemoMenuItem(
+                title: '003: Snake Game',
+                builder: (_, sketchController) {
+                  return CodingTrainSnakeGameScreen(
                     sketchDemoController: sketchController,
                   );
                 },
