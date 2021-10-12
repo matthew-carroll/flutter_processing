@@ -63,10 +63,12 @@ class ScreenshotsInProgressException {}
 class ProcessingDemo extends StatefulWidget {
   ProcessingDemo({
     Key? key,
+    this.sketchFocusNode,
     required this.createSketch,
     required this.sketchDemoController,
   }) : super(key: key ?? ObjectKey(createSketch));
 
+  final FocusNode? sketchFocusNode;
   final SketchFactory createSketch;
   final SketchDemoController sketchDemoController;
 
@@ -429,6 +431,9 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
       _sketch = widget.createSketch();
       _sketch!.addOnFrameAvailableCallback(_onSketchFrameAvailable);
     }
+
+    // Give focus to the sketch so that keyboard keys flow to it.
+    widget.sketchFocusNode?.requestFocus();
   }
 
   void restartSketch() {
@@ -454,6 +459,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
         children: [
           Center(
             child: Processing(
+              focusNode: widget.sketchFocusNode,
               sketch: _sketch!,
             ),
           ),

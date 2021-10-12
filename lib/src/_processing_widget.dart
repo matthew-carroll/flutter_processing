@@ -137,8 +137,8 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     }
   }
 
-  void _onKey(RawKeyEvent event) {
-    if (event is RawKeyDownEvent) {
+  void _onKeyEvent(KeyEvent event) {
+    if (event is KeyDownEvent) {
       final key = event.logicalKey;
       widget.sketch
         .._pressedKeys.add(key)
@@ -148,7 +148,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
       if (!_controlKeys.contains(event.logicalKey)) {
         widget.sketch.keyTyped();
       }
-    } else if (event is RawKeyUpEvent) {
+    } else if (event is KeyUpEvent) {
       final key = event.logicalKey;
       widget.sketch
         .._pressedKeys.remove(key)
@@ -269,9 +269,13 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
+    return Focus(
       focusNode: _focusNode,
-      onKey: _onKey,
+      autofocus: true,
+      onKeyEvent: (focusNode, keyEvent) {
+        _onKeyEvent(keyEvent);
+        return KeyEventResult.handled;
+      },
       child: Listener(
         onPointerDown: _onPointerDown,
         onPointerMove: _onPointerMove,
