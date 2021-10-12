@@ -121,7 +121,9 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
   void _onSizeChanged() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
