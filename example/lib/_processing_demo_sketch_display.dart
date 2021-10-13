@@ -498,13 +498,14 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildColorDot(const Color(0xFF222222)),
+          _buildColorDot(const Color(0xFF222222), 'Dark grey'),
           SizedBox(width: 24),
-          _buildColorDot(const Color(0xFFFFFFFF)),
+          _buildColorDot(const Color(0xFFFFFFFF), 'White'),
           SizedBox(width: 24),
-          _buildColorDot(const Color(0xFFFFFF00)),
+          _buildColorDot(const Color(0xFFFFFF00), 'Yellow'),
           SizedBox(width: 48),
           FloatingActionButton(
+            tooltip: 'Restart Sketch',
             onPressed: restartSketch,
             mini: true,
             backgroundColor: const Color(0xFF333333),
@@ -515,7 +516,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
     );
   }
 
-  Widget _buildColorDot(Color color) {
+  Widget _buildColorDot(Color color, String colorDescription) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -524,20 +525,23 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
             _backgroundColor = color;
           });
         },
-        child: Container(
-          width: 24,
-          height: 24,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-            border: Border.all(color: Colors.white, width: 3),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.4),
-                blurRadius: 5,
-                offset: const Offset(0, 3),
-              ),
-            ],
+        child: Tooltip(
+          message: colorDescription,
+          child: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+              border: Border.all(color: Colors.white, width: 3),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.4),
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
           ),
         ),
       ),
