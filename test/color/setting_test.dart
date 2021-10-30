@@ -8,9 +8,7 @@ import '../test_infra.dart';
 void main() {
   group('Color', () {
     group('setting', () {
-      testGoldens('background(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('background(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -26,9 +24,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_background-example-1');
       });
 
-      testGoldens('background(): example 2', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('background(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -44,9 +40,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_background-example-2');
       });
 
-      testGoldens('user can paint background in setup()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('user can paint background in setup()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -62,9 +56,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_background-in-setup');
       });
 
-      testGoldens('background in draw() replaces background in setup()', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('background in draw() replaces background in setup()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -86,9 +78,7 @@ void main() {
             '-draw');
       });
 
-      testGoldens('fill(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('fill(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -105,9 +95,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_fill-example-1');
       });
 
-      testGoldens('fill(): example 2', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('fill(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -124,9 +112,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_fill-example-2');
       });
 
-      testGoldens('noFill(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('noFill(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -144,9 +130,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_nofill-example-1');
       });
 
-      testGoldens('stroke(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('stroke(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -163,9 +147,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_stroke-example-1');
       });
 
-      testGoldens('stroke(): example 2', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('stroke(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -182,9 +164,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_stroke-example-2');
       });
 
-      testGoldens('noStroke(): example 1', (tester) async {
-        configureWindowForSpecTest(tester);
-
+      processingLegacySpecTest('noStroke(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(

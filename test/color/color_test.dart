@@ -8,7 +8,7 @@ import '../test_infra.dart';
 void main() {
   group('Color', () {
     group('Creating and Reading', () {
-      processingSpecTest('alpha()', (tester) async {
+      processingLegacySpecTest('alpha()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -33,7 +33,7 @@ void main() {
         );
       });
 
-      processingSpecTest('red()', (tester) async {
+      processingLegacySpecTest('red()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -58,7 +58,7 @@ void main() {
         );
       });
 
-      processingSpecTest('green()', (tester) async {
+      processingLegacySpecTest('green()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -83,7 +83,7 @@ void main() {
         );
       });
 
-      processingSpecTest('blue()', (tester) async {
+      processingLegacySpecTest('blue()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -108,7 +108,7 @@ void main() {
         );
       });
 
-      processingSpecTest('hue()', (tester) async {
+      processingLegacySpecTest('hue()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -134,7 +134,7 @@ void main() {
         );
       });
 
-      processingSpecTest('saturation()', (tester) async {
+      processingLegacySpecTest('saturation()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -160,7 +160,7 @@ void main() {
         );
       });
 
-      processingSpecTest('brightness()', (tester) async {
+      processingLegacySpecTest('brightness()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -186,7 +186,7 @@ void main() {
         );
       });
 
-      processingSpecTest('lerpColor()', (tester) async {
+      processingLegacySpecTest('lerpColor()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(

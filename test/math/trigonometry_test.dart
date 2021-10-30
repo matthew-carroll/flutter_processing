@@ -10,7 +10,7 @@ import '../test_infra.dart';
 void main() {
   group('Math', () {
     group('trigonometry', () {
-      processingSpecTest('sin()', (tester) async {
+      processingLegacySpecTest('sin()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -35,7 +35,7 @@ void main() {
         );
       });
 
-      processingSpecTest('cos()', (tester) async {
+      processingLegacySpecTest('cos()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -60,7 +60,7 @@ void main() {
         );
       });
 
-      processingSpecTest('tan()', (tester) async {
+      processingLegacySpecTest('tan()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(

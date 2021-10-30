@@ -32,6 +32,7 @@ part 'image/_pixels.dart';
 part 'output/_image.dart';
 part 'shape/_attributes.dart';
 part 'shape/_two_d_primitives.dart';
+part 'shape/_vertex.dart';
 part 'structure/_structure.dart';
 part 'transform/_transform.dart';
 

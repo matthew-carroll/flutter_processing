@@ -7,9 +7,7 @@ import '../test_infra.dart';
 
 void main() {
   group('Environment', () {
-    processingSpecTest('width', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingLegacySpecTest('width', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
@@ -28,9 +26,7 @@ void main() {
       await screenMatchesGolden(tester, 'environment_width-example-1');
     });
 
-    processingSpecTest('height', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingLegacySpecTest('height', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
@@ -49,9 +45,7 @@ void main() {
       await screenMatchesGolden(tester, 'environment_height-example-1');
     });
 
-    processingSpecTest('size()', (tester) async {
-      configureWindowForSpecTest(tester);
-
+    processingLegacySpecTest('size()', (tester) async {
       // Expand the canvas to leave enough space for
       // a larger Processing sketch.
       tester.binding.window.physicalSizeTestValue = Size(250, 250);

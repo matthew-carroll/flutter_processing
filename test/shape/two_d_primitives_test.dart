@@ -10,7 +10,7 @@ import '../test_infra.dart';
 void main() {
   group('Shape', () {
     group('2D primitives', () {
-      processingSpecTest('circle(): example 1', (tester) async {
+      processingLegacySpecTest('circle(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -32,7 +32,7 @@ void main() {
             '-1');
       });
 
-      processingSpecTest('square(): example 1', (tester) async {
+      processingLegacySpecTest('square(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -52,7 +52,7 @@ void main() {
         });
       });
 
-      processingSpecTest('rect(): example 1', (tester) async {
+      processingLegacySpecTest('rect(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -70,7 +70,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_rect-example-1');
       });
 
-      processingSpecTest('rect(): example 2', (tester) async {
+      processingLegacySpecTest('rect(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -89,7 +89,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_rect-example-2');
       });
 
-      processingSpecTest('rect(): example 3', (tester) async {
+      processingLegacySpecTest('rect(): example 3', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -113,7 +113,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_rect-example-3');
       });
 
-      processingSpecTest('triangle(): example 1', (tester) async {
+      processingLegacySpecTest('triangle(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -133,7 +133,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_triangle-example-1');
       });
 
-      processingSpecTest('quad(): example 1', (tester) async {
+      processingLegacySpecTest('quad(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -154,7 +154,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_quad-example-1');
       });
 
-      processingSpecTest('line(): example 1', (tester) async {
+      processingLegacySpecTest('line(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -173,7 +173,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_line-example-1');
       });
 
-      processingSpecTest('line(): example 2', (tester) async {
+      processingLegacySpecTest('line(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -202,7 +202,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_line-example-2');
       });
 
-      processingSpecTest('point(): example 1', (tester) async {
+      processingLegacySpecTest('point(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -221,7 +221,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_point-example-1');
       });
 
-      processingSpecTest('ellipse(): example 1', (tester) async {
+      processingLegacySpecTest('ellipse(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -243,7 +243,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_ellipse-example-1');
       });
 
-      processingSpecTest('ellipse(): example 2', (tester) async {
+      processingLegacySpecTest('ellipse(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -274,7 +274,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_ellipse-example-2');
       });
 
-      processingSpecTest('ellipse(): example 3', (tester) async {
+      processingLegacySpecTest('ellipse(): example 3', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -304,7 +304,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_ellipse-example-3');
       });
 
-      processingSpecTest('arc(): example 1', (tester) async {
+      processingLegacySpecTest('arc(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -340,7 +340,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_arc-example-1');
       });
 
-      processingSpecTest('arc(): example 2', (tester) async {
+      processingLegacySpecTest('arc(): example 2', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -361,7 +361,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_arc-example-2');
       });
 
-      processingSpecTest('arc(): example 3', (tester) async {
+      processingLegacySpecTest('arc(): example 3', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -382,7 +382,7 @@ void main() {
         await screenMatchesGolden(tester, 'shape_2d-primitives_arc-example-3');
       });
 
-      processingSpecTest('arc(): example 4', (tester) async {
+      processingLegacySpecTest('arc(): example 4', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(

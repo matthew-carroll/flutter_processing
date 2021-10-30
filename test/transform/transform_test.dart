@@ -7,7 +7,35 @@ import '../test_infra.dart';
 
 void main() {
   group('Transform', () {
-    processingSpecTest('translate(): example 1', (tester) async {
+    processingSpecTest('pushMatrix(): example 1', (tester) async {
+      await tester.pumpWidget(
+        Processing(
+          sketch: Sketch.simple(
+            draw: (s) async {
+              s
+                ..size(width: 400, height: 400)
+                ..noLoop()
+                ..fill(color: Colors.white)
+                ..rect(rect: Rect.fromLTWH(0, 0, 200, 200))
+                ..pushMatrix()
+                ..translate(x: 120, y: 80)
+                ..fill(color: Colors.black)
+                ..rect(rect: Rect.fromLTWH(0, 0, 200, 200))
+                ..popMatrix()
+                ..fill(color: Color.fromARGB(255, 100, 100, 100))
+                ..rect(rect: Rect.fromLTWH(60, 40, 200, 200));
+            },
+          ),
+        ),
+      );
+
+      await screenMatchesGolden(
+        tester,
+        'transform_pushMatrix_1',
+      );
+    });
+
+    processingLegacySpecTest('translate(): example 1', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
@@ -27,7 +55,7 @@ void main() {
       );
     });
 
-    processingSpecTest('translate(): example 2', (tester) async {
+    processingLegacySpecTest('translate(): example 2', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(

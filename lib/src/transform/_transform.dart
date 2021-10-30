@@ -1,6 +1,14 @@
 part of '../_core.dart';
 
 mixin SketchTransform on BaseSketch {
+  void pushMatrix() {
+    _paintingContext.canvas.save();
+  }
+
+  void popMatrix() {
+    _paintingContext.canvas.restore();
+  }
+
   void translate({
     double? x,
     double? y,
