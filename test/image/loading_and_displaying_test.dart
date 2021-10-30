@@ -14,7 +14,7 @@ import '../test_infra.dart';
 void main() async {
   group('Image', () {
     group('Loading and Displaying', () {
-      processingSpecTest('loads and displays image asset', (tester) async {
+      processingLegacySpecTest('loads and displays image asset', (tester) async {
         late FrameInfo frame;
 
         await tester.runAsync(() async {
@@ -31,8 +31,6 @@ void main() async {
           frame = await codec.getNextFrame();
         });
         //----- end image prep ------
-
-        configureWindowForSpecTest(tester);
 
         Image loadedImage = frame.image;
 

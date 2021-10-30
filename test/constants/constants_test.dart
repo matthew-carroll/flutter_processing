@@ -6,7 +6,7 @@ import '../test_infra.dart';
 
 void main() {
   group('Constants', () {
-    processingSpecTest('constants', (tester) async {
+    processingLegacySpecTest('constants', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(

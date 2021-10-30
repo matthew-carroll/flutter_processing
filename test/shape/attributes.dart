@@ -7,7 +7,7 @@ import '../test_infra.dart';
 void main() {
   group('Shape', () {
     group('Attributes', () {
-      processingSpecTest('strokeWeight(): example 1', (tester) async {
+      processingLegacySpecTest('strokeWeight(): example 1', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(

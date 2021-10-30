@@ -7,9 +7,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
+/// Golden test that paints to a 400x400 px canvas, just like
+/// images in the official Processing reference from after
+/// Aug, 2021.
+///
+/// See [processingLegacySpecTest] for testing reference images
+/// from before Aug, 2021.
 void processingSpecTest(String description, Future<void> Function(WidgetTester) test) {
   testGoldens(description, (tester) async {
-    configureWindowForSpecTest(tester);
+    tester.binding.window
+      ..physicalSizeTestValue = Size(400, 400)
+      ..devicePixelRatioTestValue = 1.0;
 
     await test(tester);
 
@@ -17,10 +25,24 @@ void processingSpecTest(String description, Future<void> Function(WidgetTester) 
   });
 }
 
-void configureWindowForSpecTest(WidgetTester tester) {
-  tester.binding.window
-    ..physicalSizeTestValue = Size(100, 100)
-    ..devicePixelRatioTestValue = 1.0;
+/// Golden test that paints to a 100x100 px canvas, just like
+/// images in the official Processing reference from before
+/// Aug, 2021.
+///
+/// See [processingSpecTest] for testing reference images from
+/// after Aug, 2021.
+void processingLegacySpecTest(String description, Future<void> Function(WidgetTester) test) {
+  testGoldens(description, (tester) async {
+    // All the legacy Processing reference examples (before Aug 2021)
+    // were 100x100 px.
+    tester.binding.window
+      ..physicalSizeTestValue = Size(100, 100)
+      ..devicePixelRatioTestValue = 1.0;
+
+    await test(tester);
+
+    tester.binding.window.clearAllTestValues();
+  });
 }
 
 class TestAssetBundle implements AssetBundle {

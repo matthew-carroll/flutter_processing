@@ -18,6 +18,7 @@ class Sketch extends BaseSketch
         SketchOutputImage,
         SketchShapeAttributes,
         SketchShapeTwoDPrimitives,
+        SketchShapeVertex,
         SketchStructure,
         SketchTransform {
   Sketch.simple({

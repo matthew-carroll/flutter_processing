@@ -37,7 +37,7 @@ void main() {
       );
     });
 
-    processingSpecTest('randomGaussian() - vertical distribution', (tester) async {
+    processingLegacySpecTest('randomGaussian() - vertical distribution', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
@@ -58,7 +58,7 @@ void main() {
       await screenMatchesGolden(tester, 'random_gaussian_example-1');
     });
 
-    processingSpecTest('randomGaussian() - radial distribution', (tester) async {
+    processingLegacySpecTest('randomGaussian() - radial distribution', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(

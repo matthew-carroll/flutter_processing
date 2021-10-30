@@ -6,7 +6,7 @@ import '../test_infra.dart';
 
 void main() {
   group('core', () {
-    processingSpecTest('setup() paints light grey background by default', (tester) async {
+    processingLegacySpecTest('setup() paints light grey background by default', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(setup: (s) async {
