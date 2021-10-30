@@ -10,15 +10,15 @@ mixin SketchTransform on BaseSketch {
   }
 
   void translate({
-    double? x,
-    double? y,
-    double? z,
+    num? x,
+    num? y,
+    num? z,
   }) {
     if (z != null) {
       throw UnimplementedError('3D translations are not yet supported.');
     }
 
-    _paintingContext.canvas.translate(x ?? 0, y ?? 0);
+    _paintingContext.canvas.translate(x?.toDouble() ?? 0, y?.toDouble() ?? 0);
 
     _paintingContext.markHasUnappliedCanvasCommands();
   }
