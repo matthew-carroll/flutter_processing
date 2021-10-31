@@ -107,12 +107,6 @@ class _SnakeGameSketch extends Sketch {
 
     // Check for game over condition
     if (!_snake.isInBounds(width: colCount, height: rowCount) || _snake.isOverlapping) {
-      if (!_snake.isInBounds(width: colCount, height: rowCount)) {
-        print('Game over out of bounds');
-      }
-      if (_snake.isOverlapping) {
-        print('Game over snake overlap');
-      }
       _isGameOver = true;
     }
 

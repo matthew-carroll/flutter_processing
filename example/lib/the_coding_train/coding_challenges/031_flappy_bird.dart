@@ -109,7 +109,6 @@ class _FlappyBirdSketch extends Sketch {
     if (frameCount % 100 == 0) {
       _pipes.add(_createPipe());
     }
-    print('${_pipes.length} pipes');
 
     if (isKeyPressed && key == LogicalKeyboardKey.space) {
       _bird.lift();

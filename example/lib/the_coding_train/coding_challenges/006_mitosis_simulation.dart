@@ -37,13 +37,11 @@ class _CodingTrainMitosisScreenState extends State<CodingTrainMitosisScreen> {
         }
       },
       mouseClicked: (s) {
-        print('clicked - x: ${s.mouseX}, y: ${s.mouseY}');
         final newCells = <Cell>[];
         final oldCells = <Cell>[];
 
         for (final cell in _cells) {
           if (cell.containsPoint(s.mouseX.toDouble(), s.mouseY.toDouble())) {
-            print('Found an intersecting cell');
             cell.containsPoint(s.mouseX.toDouble(), s.mouseY.toDouble());
             newCells.add(cell.mitosis());
             newCells.add(cell.mitosis());
@@ -92,8 +90,6 @@ class Cell {
 
   bool containsPoint(double x, double y) {
     final distance = (position - Offset(x, y)).distance;
-    print('Cell center: $position, tap location: ${Offset(x, y)}');
-    print('Distance to cell: $distance, radius: $radius');
     return distance <= radius;
   }
 
