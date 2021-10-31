@@ -35,7 +35,7 @@ class _GameOfLifeSketch extends Sketch {
   late List<List<bool>> _grid;
 
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 500, height: 500);
 
     colCount = (width / _pixelsPerCell).floor();
@@ -53,7 +53,7 @@ class _GameOfLifeSketch extends Sketch {
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     background(color: Colors.black);
 
     fill(color: Colors.white);

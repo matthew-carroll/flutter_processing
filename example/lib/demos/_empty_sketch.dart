@@ -17,12 +17,12 @@ class EmptySketchDemo extends StatefulWidget {
 class _EmptySketchDemoState extends State<EmptySketchDemo> {
   Sketch createSketch() {
     return Sketch.simple(
-      setup: (s) async {
+      setup: (s) {
         s.size(width: 500, height: 500);
         s.background(color: const Color(0xFFFFFFFF));
         // TODO: add your setup code here
       },
-      draw: (s) async {
+      draw: (s) {
         // TODO: add your draw code here
       },
     );

@@ -9,12 +9,12 @@ class PhyllotaxisSketch extends Sketch {
   int _n = 0;
 
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 400, height: 400);
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     background(color: Colors.black);
 
     translate(x: width / 2, y: height / 2);

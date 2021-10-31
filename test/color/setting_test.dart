@@ -12,7 +12,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..background(color: const Color(0xFF404040));
@@ -28,7 +28,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..background(color: const Color(0xFFFFCC00));
@@ -44,7 +44,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              setup: (s) async {
+              setup: (s) {
                 s
                   ..noLoop()
                   ..background(color: const Color(0xFF404040));
@@ -60,12 +60,12 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              setup: (s) async {
+              setup: (s) {
                 s
                   ..noLoop()
                   ..background(color: const Color(0xFFFF0000));
               },
-              draw: (s) async {
+              draw: (s) {
                 s.background(color: const Color(0xFF404040));
               },
             ),
@@ -82,7 +82,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..fill(color: const Color(0xFF969696))
@@ -99,7 +99,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..fill(color: const Color(0xFFCC6600))
@@ -116,7 +116,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..rect(rect: Rect.fromLTWH(15, 10, 55, 55))
@@ -134,7 +134,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..stroke(color: const Color(0xFFAAAAAA))
@@ -151,7 +151,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..stroke(color: const Color(0xFFCC6600))
@@ -168,7 +168,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s
                   ..noLoop()
                   ..noStroke()

@@ -10,7 +10,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            draw: (s) async {
+            draw: (s) {
               s.noLoop();
 
               final x = s.width / 2;

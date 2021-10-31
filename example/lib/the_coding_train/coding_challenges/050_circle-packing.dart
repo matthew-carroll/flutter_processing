@@ -8,14 +8,14 @@ class CirclePackingSketch extends Sketch {
   final _circles = <Circle>[];
 
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 800, height: 400);
 
     _circles.add(Circle(offset: Offset(400, 200), radius: 1));
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     background(color: Colors.black);
 
     final didFindRoom = _generateNewCircles();

@@ -39,13 +39,13 @@ void main() async {
             bundle: TestAssetBundle(),
             child: Processing(
               sketch: Sketch.simple(
-                setup: (s) async {
+                setup: (s) {
                   s.noLoop();
 
                   // TODO: load the image here when we figure out how
                   // loadedImage = await s.loadImage('space_100x.png');
                 },
-                draw: (s) async {
+                draw: (s) {
                   s.image(
                     image: loadedImage,
                   );

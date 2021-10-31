@@ -21,7 +21,7 @@ class _CodingTrainPurpleRainScreenState extends State<CodingTrainPurpleRainScree
 
   Sketch createSketch() {
     return Sketch.simple(
-      setup: (s) async {
+      setup: (s) {
         s
           ..size(width: 256, height: 256)
           ..background(color: Color.fromARGB(255, 200, 175, 220));
@@ -37,7 +37,7 @@ class _CodingTrainPurpleRainScreenState extends State<CodingTrainPurpleRainScree
           );
         }
       },
-      draw: (s) async {
+      draw: (s) {
         s.background(color: Color.fromARGB(255, 200, 175, 220));
 
         for (final droplet in _droplets) {

@@ -11,7 +11,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            draw: (s) async {
+            draw: (s) {
               s
                 ..noLoop()
                 ..noStroke()
@@ -30,7 +30,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            draw: (s) async {
+            draw: (s) {
               s
                 ..noLoop()
                 ..noStroke()
@@ -53,12 +53,12 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            setup: (s) async {
+            setup: (s) {
               s
                 ..noLoop()
                 ..size(width: 200, height: 200);
             },
-            draw: (s) async {
+            draw: (s) {
               s.circle(center: Offset(100, 100), diameter: 50);
             },
           ),
