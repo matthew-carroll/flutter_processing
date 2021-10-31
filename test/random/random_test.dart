@@ -14,7 +14,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            draw: (s) async {
+            draw: (s) {
               s
                 ..noLoop()
                 ..randomSeed(0);
@@ -41,7 +41,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            draw: (s) async {
+            draw: (s) {
               s
                 ..noLoop()
                 ..randomSeed(0);
@@ -62,8 +62,7 @@ void main() {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
-            setup: (s) async {},
-            draw: (s) async {
+            draw: (s) {
               s
                 ..noLoop()
                 ..randomSeed(0)

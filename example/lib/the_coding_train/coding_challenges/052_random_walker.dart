@@ -22,7 +22,7 @@ class _CodingTrainRandomWalkerScreenState extends State<CodingTrainRandomWalkerS
 
   Sketch createSketch() {
     return Sketch.simple(
-      setup: (s) async {
+      setup: (s) {
         s
           ..size(width: 400, height: 400)
           ..background(color: Color(0xFF444444));
@@ -30,7 +30,7 @@ class _CodingTrainRandomWalkerScreenState extends State<CodingTrainRandomWalkerS
         x = (s.width / 2).round();
         y = (s.height / 2).round();
       },
-      draw: (s) async {
+      draw: (s) {
         s
           ..noStroke()
           ..fill(color: Colors.white)

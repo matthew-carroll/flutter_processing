@@ -43,12 +43,12 @@ void main() {
 /// Adapted from: https://processing.org/examples/star.html
 class StarsSketch extends Sketch {
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 640, height: 360);
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     noLoop();
 
     pushMatrix();
@@ -87,12 +87,12 @@ class StarsSketch extends Sketch {
 /// Adapted from: https://processing.org/examples/trianglestrip.html
 class TriangleStripCircleSketch extends Sketch {
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 640, height: 360);
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     noLoop();
 
     final x = width / 2;

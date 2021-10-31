@@ -22,8 +22,8 @@ class Sketch extends BaseSketch
         SketchStructure,
         SketchTransform {
   Sketch.simple({
-    Future<void> Function(Sketch)? setup,
-    Future<void> Function(Sketch)? draw,
+    FutureOr<void> Function(Sketch)? setup,
+    FutureOr<void> Function(Sketch)? draw,
     void Function(Sketch)? keyPressed,
     void Function(Sketch)? keyTyped,
     void Function(Sketch)? keyReleased,
@@ -51,8 +51,8 @@ class Sketch extends BaseSketch
     clearOnFrameAvailableCallbacks();
   }
 
-  Future<void> Function(Sketch)? _setup;
-  Future<void> Function(Sketch)? _draw;
+  FutureOr<void> Function(Sketch)? _setup;
+  FutureOr<void> Function(Sketch)? _draw;
   void Function(Sketch)? _keyPressed;
   void Function(Sketch)? _keyTyped;
   void Function(Sketch)? _keyReleased;
@@ -127,7 +127,7 @@ class Sketch extends BaseSketch
     await setup();
   }
 
-  Future<void> setup() async {
+  FutureOr<void> setup() async {
     await _setup?.call(this);
   }
 
@@ -145,7 +145,7 @@ class Sketch extends BaseSketch
     _actualFrameRate = secondsFraction > 0 ? (_frameCount / secondsFraction).round() : _actualFrameRate;
   }
 
-  Future<void> draw() async {
+  FutureOr<void> draw() async {
     await _draw?.call(this);
   }
 

@@ -22,7 +22,7 @@ class _CodingTrainStarfieldScreenState extends State<CodingTrainStarfieldScreen>
 
   Sketch createSketch() {
     return Sketch.simple(
-      setup: (s) async {
+      setup: (s) {
         s
           ..size(width: 512, height: 256)
           ..background(color: Colors.black);
@@ -37,7 +37,7 @@ class _CodingTrainStarfieldScreenState extends State<CodingTrainStarfieldScreen>
           );
         }
       },
-      draw: (s) async {
+      draw: (s) {
         s.background(color: Colors.black);
 
         for (final star in _stars) {

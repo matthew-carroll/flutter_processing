@@ -90,7 +90,7 @@ class _FlappyBirdSketch extends Sketch {
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     // Update the game loop
     _bird.update();
 

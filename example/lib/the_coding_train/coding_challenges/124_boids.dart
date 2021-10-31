@@ -32,7 +32,7 @@ class _BoidsSketch extends Sketch {
   late _Flock _flock;
 
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 640, height: 360);
 
     _flock = _Flock();
@@ -45,7 +45,7 @@ class _BoidsSketch extends Sketch {
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     background(color: Color.fromARGB(255, 50, 50, 50));
     _flock.update(this);
   }

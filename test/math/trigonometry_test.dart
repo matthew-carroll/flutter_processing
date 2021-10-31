@@ -14,7 +14,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 double angleInRadians = 0.0;
@@ -39,7 +39,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 double angle = 0.0;
@@ -64,7 +64,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 double angleInRadians = 0.0;

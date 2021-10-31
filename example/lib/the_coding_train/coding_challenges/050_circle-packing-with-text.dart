@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/services.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
 class CirclePackingWithTextSketch extends Sketch {
   final _newCirclesPerFrame = 5;
@@ -33,7 +32,7 @@ class CirclePackingWithTextSketch extends Sketch {
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     background(color: Colors.black);
 
     // image(image: _textImage);

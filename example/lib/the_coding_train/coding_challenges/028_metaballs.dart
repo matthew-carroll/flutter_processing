@@ -12,7 +12,7 @@ class MetaBallsSketch extends Sketch {
   final _blobs = <Blob>[];
 
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 400, height: 400);
 
     for (int i = 0; i < _blobCount; i += 1) {

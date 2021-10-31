@@ -18,7 +18,7 @@ class PerlinNoiseDemoSketch extends Sketch {
   double z = 0;
 
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: width, height: height);
   }
 

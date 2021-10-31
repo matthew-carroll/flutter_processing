@@ -12,7 +12,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 s.noStroke();
@@ -37,7 +37,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 final c = s.color(comp1: 255, comp2: 204, comp3: 0);
@@ -62,7 +62,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 final color = s.color(comp1: 20, comp2: 75, comp3: 200);
@@ -87,7 +87,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 final color = s.color(comp1: 175, comp2: 110, comp3: 220);
@@ -112,7 +112,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 s.noStroke();
@@ -138,7 +138,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 s.noStroke();
@@ -164,7 +164,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 s.noStroke();
@@ -190,7 +190,7 @@ void main() {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              draw: (s) async {
+              draw: (s) {
                 s.noLoop();
 
                 s.stroke(color: s.color(grey: 255));

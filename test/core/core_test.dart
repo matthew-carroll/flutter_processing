@@ -9,7 +9,7 @@ void main() {
     processingLegacySpecTest('setup() paints light grey background by default', (tester) async {
       await tester.pumpWidget(
         Processing(
-          sketch: Sketch.simple(setup: (s) async {
+          sketch: Sketch.simple(setup: (s) {
             s.noLoop();
           }),
         ),

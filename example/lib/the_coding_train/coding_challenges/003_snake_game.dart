@@ -56,7 +56,7 @@ class _SnakeGameSketch extends Sketch {
   bool _isGameOver = false;
 
   @override
-  Future<void> setup() async {
+  void setup() {
     size(width: 500, height: 500);
     frameRate = 10;
 
@@ -67,7 +67,7 @@ class _SnakeGameSketch extends Sketch {
   }
 
   @override
-  Future<void> draw() async {
+  void draw() {
     background(color: const Color.fromARGB(255, 51, 51, 51));
 
     if (_isGameOver) {

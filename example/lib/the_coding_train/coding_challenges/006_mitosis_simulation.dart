@@ -21,14 +21,14 @@ class _CodingTrainMitosisScreenState extends State<CodingTrainMitosisScreen> {
 
   Sketch createSketch() {
     return Sketch.simple(
-      setup: (s) async {
+      setup: (s) {
         s.size(width: 512, height: 512);
 
         for (int i = 0; i < 10; ++i) {
           _cells.add(Cell.randomLocationAndColor(s.width, s.height));
         }
       },
-      draw: (s) async {
+      draw: (s) {
         s.background(color: Color.fromARGB(255, 200, 200, 200));
 
         for (final cell in _cells) {
