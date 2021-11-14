@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing/src/constants/_constants.dart';
+import 'package:flutter_processing/src/image/_pimage.dart';
 import 'package:flutter_processing/src/math/_random.dart';
 import 'package:flutter_processing/src/math/_trigonometry.dart';
 import 'package:image/image.dart' as imageFormats;

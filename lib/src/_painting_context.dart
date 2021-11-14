@@ -20,8 +20,12 @@ import 'dart:ui';
 /// **Produce the final frame image:**
 /// [finishRecording()], which produces the final [publishedImage].
 class SketchPaintingContext {
+  SketchPaintingContext({
+    this.size = const Size(100, 100),
+  });
+
   /// The size of the painting region.
-  late Size size = Size(100, 100);
+  Size size;
 
   late PictureRecorder _recorder;
   late Canvas _canvas;
