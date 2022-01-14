@@ -4,13 +4,11 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing/src/constants/_constants.dart';
-import 'package:flutter_processing/src/image/_pimage.dart';
 import 'package:flutter_processing/src/math/_random.dart';
 import 'package:flutter_processing/src/math/_trigonometry.dart';
 import 'package:image/image.dart' as imageFormats;
@@ -20,7 +18,6 @@ import '_painting_context.dart';
 import 'data/conversion.dart';
 import 'input/_time_and_date.dart';
 import 'math/_calculations.dart';
-import 'shape/shapes.dart';
 
 part '_processing_widget.dart';
 part '_sketch.dart';

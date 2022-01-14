@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
@@ -13,7 +11,8 @@ class PImageFiltersSketchDemo extends StatefulWidget {
   final SketchDemoController sketchDemoController;
 
   @override
-  _PImageFiltersSketchDemoState createState() => _PImageFiltersSketchDemoState();
+  _PImageFiltersSketchDemoState createState() =>
+      _PImageFiltersSketchDemoState();
 }
 
 class _PImageFiltersSketchDemoState extends State<PImageFiltersSketchDemo> {
@@ -38,7 +37,7 @@ class _PImageFiltersSketchDemoState extends State<PImageFiltersSketchDemo> {
 
         _canvasImage = PImage.empty(800, 400, ImageFileFormat.png);
 
-        _baseImage = await s.loadPImage("assets/coffee.png");
+        _baseImage = await s.loadImage("assets/coffee.png");
         // _baseImage.filter(ImageFilter.gray);
 
         _thresholdImage = _baseImage.copy()..filter(ImageFilter.threshold, 0.5);

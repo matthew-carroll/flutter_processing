@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
@@ -13,10 +11,12 @@ class PImageBlendModesSketchDemo extends StatefulWidget {
   final SketchDemoController sketchDemoController;
 
   @override
-  _PImageBlendModesSketchDemoState createState() => _PImageBlendModesSketchDemoState();
+  _PImageBlendModesSketchDemoState createState() =>
+      _PImageBlendModesSketchDemoState();
 }
 
-class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo> {
+class _PImageBlendModesSketchDemoState
+    extends State<PImageBlendModesSketchDemo> {
   late PImage _canvasImage;
 
   late PImage _bottomImage;
@@ -40,13 +40,15 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
   Sketch createSketch() {
     return Sketch.simple(
       setup: (s) async {
-        s.size(width: 800, height: 800);
+        s.size(width: 1400, height: 400);
         s.background(color: const Color(0xFFFFFFFF));
 
-        _canvasImage = PImage.empty(800, 800, ImageFileFormat.png);
+        _canvasImage = PImage.empty(1400, 400, ImageFileFormat.png);
 
-        _bottomImage = (await s.loadPImage("assets/coffee.png")).copy(Rect.fromLTWH(0, 0, 200, 200));
-        _topImage = (await s.loadPImage("assets/audio-mixer.png")).copy(Rect.fromLTWH(0, 300, 200, 200));
+        _bottomImage = (await s.loadImage("assets/coffee.png"))
+            .copy(Rect.fromLTWH(0, 0, 200, 200));
+        _topImage = (await s.loadImage("assets/gradient.png"))
+            .copy(Rect.fromLTWH(0, 0, 200, 200));
 
         final copyRect = Rect.fromLTWH(0, 0, 200, 200);
 
@@ -112,7 +114,20 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _lightestImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(0, 200, 200, 200),
+          destRect: Rect.fromLTWH(800, 0, 200, 200),
+        );
+
+        _differenceImage = _bottomImage.copy()
+          ..blend(
+            _topImage,
+            sourceRect: copyRect,
+            destRect: copyRect,
+            mode: SketchBlendMode.difference,
+          );
+        _canvasImage.copyFrom(
+          source: _differenceImage,
+          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
+          destRect: Rect.fromLTWH(1000, 0, 200, 200),
         );
 
         _exclusionImage = _bottomImage.copy()
@@ -125,7 +140,7 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _exclusionImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(200, 200, 200, 200),
+          destRect: Rect.fromLTWH(1200, 0, 200, 200),
         );
 
         _multiplyImage = _bottomImage.copy()
@@ -138,7 +153,7 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _multiplyImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(400, 200, 200, 200),
+          destRect: Rect.fromLTWH(0, 200, 200, 200),
         );
 
         _screenImage = _bottomImage.copy()
@@ -151,7 +166,7 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _screenImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(600, 200, 200, 200),
+          destRect: Rect.fromLTWH(200, 200, 200, 200),
         );
 
         _overlayImage = _bottomImage.copy()
@@ -164,7 +179,7 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _overlayImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(0, 400, 200, 200),
+          destRect: Rect.fromLTWH(400, 200, 200, 200),
         );
 
         _hardLightImage = _bottomImage.copy()
@@ -177,7 +192,7 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _hardLightImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(200, 400, 200, 200),
+          destRect: Rect.fromLTWH(600, 200, 200, 200),
         );
 
         _softLightImage = _bottomImage.copy()
@@ -190,7 +205,7 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _softLightImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(400, 400, 200, 200),
+          destRect: Rect.fromLTWH(800, 200, 200, 200),
         );
 
         _dodgeImage = _bottomImage.copy()
@@ -203,7 +218,7 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _dodgeImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(600, 400, 200, 200),
+          destRect: Rect.fromLTWH(1000, 200, 200, 200),
         );
 
         _burnImage = _bottomImage.copy()
@@ -216,13 +231,13 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
         _canvasImage.copyFrom(
           source: _burnImage,
           sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(0, 600, 200, 200),
+          destRect: Rect.fromLTWH(1200, 200, 200, 200),
         );
       },
       draw: (s) async {
         await s.pImage(image: _canvasImage);
 
-        // await s.pImage(image: _opaqueImage);
+        s.noLoop();
       },
     );
   }

@@ -17,8 +17,7 @@ class PImage {
     // https://en.wikipedia.org/wiki/Blend_modes
     switch (mode) {
       case SketchBlendMode.blend:
-        // TODO: Handle this case.
-        return const Color(0xFF000000);
+        return Color.lerp(c1, c2, 0.5)!;
       case SketchBlendMode.add:
         return _colorFromPercentARGB(
           1.0,
@@ -68,7 +67,9 @@ class PImage {
       case SketchBlendMode.overlay:
         return _colorFromPercentARGB(
           1.0,
-          c1.redPercent < 0.5 ? 2 * c1.redPercent * c2.redPercent : 1 - (2 * (1 - c1.redPercent) * (1 - c2.redPercent)),
+          c1.redPercent < 0.5
+              ? 2 * c1.redPercent * c2.redPercent
+              : 1 - (2 * (1 - c1.redPercent) * (1 - c2.redPercent)),
           c1.greenPercent < 0.5
               ? 2 * c1.greenPercent * c2.greenPercent
               : 1 - (2 * (1 - c1.greenPercent) * (1 - c2.greenPercent)),
@@ -80,27 +81,40 @@ class PImage {
         // This is the same as Overlay but with the c1 and c2's switched
         return _colorFromPercentARGB(
           1.0,
-          c2.redPercent < 0.5 ? 2 * c2.redPercent * c1.redPercent : 1 - (2 * (1 - c2.redPercent) * (1 - c1.redPercent)),
+          c2.redPercent < 0.5
+              ? 2 * c2.redPercent * c1.redPercent
+              : 1 - (2 * (1 - c2.redPercent) * (1 - c1.redPercent)),
           c2.greenPercent < 0.5
               ? 2 * c2.greenPercent * c1.greenPercent
-              : 1 - (2 * (1 - c1.greenPercent) * (1 - c1.greenPercent)),
-          c1.bluePercent < 0.5
+              : 1 - (2 * (1 - c2.greenPercent) * (1 - c1.greenPercent)),
+          c2.bluePercent < 0.5
               ? 2 * c2.bluePercent * c1.bluePercent
               : 1 - (2 * (1 - c2.bluePercent) * (1 - c1.bluePercent)),
         );
       case SketchBlendMode.softLight:
         return _colorFromPercentARGB(
           1.0,
-          (1 - (2 * c2.redPercent)) * (pow(c1.redPercent, 2)) + (2 * c2.redPercent * c1.redPercent),
-          (1 - (2 * c2.greenPercent)) * (pow(c1.greenPercent, 2)) + (2 * c2.greenPercent * c1.greenPercent),
-          (1 - (2 * c2.bluePercent)) * (pow(c1.bluePercent, 2)) + (2 * c2.bluePercent * c1.bluePercent),
+          (1 - (2 * c2.redPercent)) * (pow(c1.redPercent, 2)) +
+              (2 * c2.redPercent * c1.redPercent),
+          (1 - (2 * c2.greenPercent)) * (pow(c1.greenPercent, 2)) +
+              (2 * c2.greenPercent * c1.greenPercent),
+          (1 - (2 * c2.bluePercent)) * (pow(c1.bluePercent, 2)) +
+              (2 * c2.bluePercent * c1.bluePercent),
         );
       case SketchBlendMode.dodge:
-        // TODO: Handle this case.
-        return const Color(0xFF000000);
+        return _colorFromPercentARGB(
+          1.0,
+          (c1.redPercent / (1 - c2.redPercent)).clamp(0, 1),
+          (c1.greenPercent / (1 - c2.greenPercent)).clamp(0, 1),
+          (c1.bluePercent / (1 - c2.bluePercent)).clamp(0, 1),
+        );
       case SketchBlendMode.burn:
-        // TODO: Handle this case.
-        return const Color(0xFF000000);
+        return _colorFromPercentARGB(
+          1.0,
+          (1 - ((1 - c1.redPercent) / c2.redPercent)).clamp(0, 1),
+          (1 - ((1 - c1.greenPercent) / c2.greenPercent)).clamp(0, 1),
+          (1 - ((1 - c1.bluePercent) / c2.bluePercent)).clamp(0, 1),
+        );
     }
   }
 
@@ -111,7 +125,8 @@ class PImage {
     _pixels = ByteData(width * height * 4);
   }
 
-  PImage.fromPixels(int width, int height, ByteData pixels, ImageFileFormat format)
+  PImage.fromPixels(
+      int width, int height, ByteData pixels, ImageFileFormat format)
       : _width = width,
         _height = height,
         _format = format,
@@ -162,7 +177,8 @@ class PImage {
       y: y,
     );
     final rgbaColor = pixels.getUint32(pixelDataOffset);
-    final argbColor = ((rgbaColor & 0x000000FF) << 24) | ((rgbaColor & 0xFFFFFF00) >> 8);
+    final argbColor =
+        ((rgbaColor & 0x000000FF) << 24) | ((rgbaColor & 0xFFFFFF00) >> 8);
     return Color(argbColor);
   }
 
@@ -216,7 +232,8 @@ class PImage {
     );
 
     final argbColorInt = color.value;
-    final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) | ((argbColorInt & 0x00FFFFFF) << 8);
+    final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) |
+        ((argbColorInt & 0x00FFFFFF) << 8);
     pixels.setUint32(pixelIndex, rgbaColorInt);
 
     _isFlutterImageDirty = true;
@@ -280,10 +297,12 @@ class PImage {
     ByteData? maskPixels,
   }) {
     if (maskImage == null && maskPixels == null) {
-      throw Exception("PImage#mask() requires either a maskImage or maskPixels");
+      throw Exception(
+          "PImage#mask() requires either a maskImage or maskPixels");
     }
     if (maskImage != null && maskPixels != null) {
-      throw Exception("PImage#mask() should be given a maskImage or maskPixels, but not both");
+      throw Exception(
+          "PImage#mask() should be given a maskImage or maskPixels, but not both");
     }
 
     // TODO:
@@ -299,15 +318,20 @@ class PImage {
         _applyPixelTransform(
             this,
             this,
-            (_, __, x, y, colorIn) =>
-                HSVColor.fromColor(colorIn).value > value! ? const Color(0xFFFFFFFF) : const Color(0xFF000000));
+            (_, __, x, y, colorIn) => HSVColor.fromColor(colorIn).value > value!
+                ? const Color(0xFFFFFFFF)
+                : const Color(0xFF000000));
         break;
       case ImageFilter.gray:
         _applyPixelTransform(
-            this, this, (_, __, x, y, colorIn) => HSVColor.fromColor(colorIn).withSaturation(0).toColor());
+            this,
+            this,
+            (_, __, x, y, colorIn) =>
+                HSVColor.fromColor(colorIn).withSaturation(0).toColor());
         break;
       case ImageFilter.opaque:
-        _applyPixelTransform(this, this, (_, __, x, y, colorIn) => colorIn.withOpacity(1.0));
+        _applyPixelTransform(
+            this, this, (_, __, x, y, colorIn) => colorIn.withOpacity(1.0));
         break;
       case ImageFilter.invert:
         _applyPixelTransform(
@@ -431,7 +455,8 @@ class PImage {
     return colorOut;
   }
 
-  void _applyPixelTransform(PImage source, PImage dest, _PixelTransform transform) {
+  void _applyPixelTransform(
+      PImage source, PImage dest, _PixelTransform transform) {
     for (int col = 0; col < width; col += 1) {
       for (int row = 0; row < height; row += 1) {
         final oldColor = source.get(col, row);
@@ -444,13 +469,19 @@ class PImage {
   }
 
   PImage copy([Rect? rect]) {
-    final copyRect = rect ?? Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
-    if (copyRect.left < 0 || copyRect.top < 0 || copyRect.right > width || copyRect.bottom > height) {
-      throw Exception("Invalid copy region passed to PImage#copy. Image size: ${width}x$height, rect: $copyRect");
+    final copyRect =
+        rect ?? Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
+    if (copyRect.left < 0 ||
+        copyRect.top < 0 ||
+        copyRect.right > width ||
+        copyRect.bottom > height) {
+      throw Exception(
+          "Invalid copy region passed to PImage#copy. Image size: ${width}x$height, rect: $copyRect");
     }
     print("Copy rect: $copyRect");
 
-    final newImage = PImage.empty(copyRect.width.round(), copyRect.height.round(), ImageFileFormat.png);
+    final newImage = PImage.empty(
+        copyRect.width.round(), copyRect.height.round(), ImageFileFormat.png);
     final colStart = copyRect.left.round();
     final colEnd = copyRect.right.round();
     final rowStart = copyRect.top.round();
@@ -587,9 +618,12 @@ enum ImageFilter {
   dilate,
 }
 
-typedef _PixelTransform = Color Function(PImage source, PImage dest, int x, int y, Color colorIn);
+typedef _PixelTransform = Color Function(
+    PImage source, PImage dest, int x, int y, Color colorIn);
 
-Color _colorFromPercentARGB(double alpha, double red, double green, double blue) => Color.fromARGB(
+Color _colorFromPercentARGB(
+        double alpha, double red, double green, double blue) =>
+    Color.fromARGB(
       (alpha * 255).round(),
       (red * 255).round(),
       (green * 255).round(),
@@ -605,9 +639,11 @@ extension on Color {
 }
 
 extension on ByteData {
-  Color get(int imageWidth, int x, int y) => Color(getUint32(getPixelIndex(imageWidth, x, y)));
+  Color get(int imageWidth, int x, int y) =>
+      Color(getUint32(getPixelIndex(imageWidth, x, y)));
 
-  set(int imageWidth, int x, int y, Color color) => setUint32(getPixelIndex(imageWidth, x, y), color.value);
+  set(int imageWidth, int x, int y, Color color) =>
+      setUint32(getPixelIndex(imageWidth, x, y), color.value);
 
   int getPixelIndex(int imageWidth, int x, int y) => (y * imageWidth + x) * 4;
 

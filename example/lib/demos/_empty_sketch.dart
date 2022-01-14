@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
@@ -27,16 +25,16 @@ class _EmptySketchDemoState extends State<EmptySketchDemo> {
         s.size(width: 500, height: 500);
         s.background(color: const Color(0xFFFFFFFF));
 
-        _image1 = await s.loadPImage("assets/coffee.png");
-        _image2 = await s.loadPImage("assets/audio-mixer.png");
+        _image1 = await s.loadImage("assets/coffee.png");
+        _image2 = await s.loadImage("assets/audio-mixer.png");
         _image3 = _image1.copy();
 
         _image1.blend(
           _image1,
-          sourceRect:
-              Rect.fromLTRB(_image1.width.toDouble() / 2, 0, _image1.width.toDouble(), _image1.height.toDouble() / 2),
-          destRect:
-              Rect.fromLTRB(_image1.width.toDouble() / 2, 0, _image1.width.toDouble(), _image1.height.toDouble() / 2),
+          sourceRect: Rect.fromLTRB(_image1.width.toDouble() / 2, 0,
+              _image1.width.toDouble(), _image1.height.toDouble() / 2),
+          destRect: Rect.fromLTRB(_image1.width.toDouble() / 2, 0,
+              _image1.width.toDouble(), _image1.height.toDouble() / 2),
           mode: SketchBlendMode.add,
         );
         _image1.blend(

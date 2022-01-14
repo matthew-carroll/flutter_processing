@@ -13,7 +13,6 @@ import 'package:flutter_processing_example/the_coding_train/coding_challenges/00
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/028_metaballs.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/030_phyllotaxis.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/031_flappy_bird.dart';
-import 'package:flutter_processing_example/the_coding_train/coding_challenges/036_blobby.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing-with-text.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/052_random_walker.dart';
@@ -161,14 +160,14 @@ class FlutterProcessingExampleApp extends StatelessWidget {
                   );
                 },
               ),
-              DemoMenuItem(
-                title: '36: Blobby',
-                builder: (_, sketchController) {
-                  return CodingTrainBlobbyScreen(
-                    sketchDemoController: sketchController,
-                  );
-                },
-              ),
+              // DemoMenuItem(
+              //   title: '36: Blobby',
+              //   builder: (_, sketchController) {
+              //     return CodingTrainBlobbyScreen(
+              //       sketchDemoController: sketchController,
+              //     );
+              //   },
+              // ),
               DemoMenuItem(
                 title: '050: Circle Packing',
                 builder: (_, sketchController) {
