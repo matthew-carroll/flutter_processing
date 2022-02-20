@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
@@ -28,9 +27,7 @@ void main() {
               expect(randomValue, 38.63148172405516);
 
               // with a lower bound that is larger than upper bound
-              expectLater(() {
-                s.random(10, 5);
-              }, throwsA(isA<Exception>()));
+              expect(() => s.random(10, 5), throwsException);
             },
           ),
         ),
