@@ -124,6 +124,7 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
         _menuItem.builder(context, _sketchDemoController),
         _buildDrawer(),
         _buildLeftToolbar(),
+        _buildSketchSelectionToolbar(),
         _buildRightToolbar(),
       ],
     );
@@ -253,47 +254,105 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
         });
   }
 
+  Widget _buildSketchSelectionToolbar() {
+    return Align(
+      alignment: Alignment(-1.0, -0.1),
+      child: IconTheme(
+        data: IconThemeData(
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 72.0),
+          child: Material(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            color: Color(0xFF333333),
+            child: SizedBox(
+              width: 54,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 8),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.insert_drive_file),
+                    tooltip: 'Your Sketch',
+                  ),
+                  const SizedBox(height: 24),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.color_lens),
+                    tooltip: 'Generative Art',
+                  ),
+                  const SizedBox(height: 24),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.train),
+                    tooltip: 'The Coding Train',
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildRightToolbar() {
     return AnimatedBuilder(
         animation: _sketchDemoController,
         builder: (context, child) {
-          return Positioned(
-            top: 0,
-            bottom: 0,
-            right: 0,
+          return Align(
+            alignment: Alignment(1.0, -0.1),
             child: IconTheme(
               data: IconThemeData(
                 color: Colors.white,
               ),
-              child: Material(
-                color: Color(0xFF333333),
-                child: SizedBox(
-                  width: 54,
-                  child: Column(
-                    children: [
-                      Spacer(flex: 10),
-                      IconButton(
-                        key: _saveScreenshotButtonKey,
-                        onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveScreenshot : null,
-                        icon: Icon(Icons.image),
-                        tooltip: 'Screenshot',
-                      ),
-                      Spacer(flex: 2),
-                      IconButton(
-                        key: _saveGifButtonKey,
-                        onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveGif : null,
-                        icon: Icon(Icons.videocam),
-                        tooltip: 'GIF',
-                      ),
-                      Spacer(flex: 2),
-                      IconButton(
-                        key: _saveFramesButtonKey,
-                        onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveFrames : null,
-                        icon: Icon(Icons.style),
-                        tooltip: 'Image Frames',
-                      ),
-                      Spacer(flex: 10),
-                    ],
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Material(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: Color(0xFF333333),
+                  child: SizedBox(
+                    width: 54,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 8),
+                        IconButton(
+                          key: _saveScreenshotButtonKey,
+                          onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveScreenshot : null,
+                          icon: Icon(Icons.camera),
+                          tooltip: 'Screenshot',
+                        ),
+                        const SizedBox(height: 24),
+                        IconButton(
+                          key: _saveFramesButtonKey,
+                          onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveFrames : null,
+                          icon: Icon(Icons.style),
+                          tooltip: 'Image Frames',
+                        ),
+                        const SizedBox(height: 24),
+                        IconButton(
+                          key: _saveGifButtonKey,
+                          onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveGif : null,
+                          icon: Icon(Icons.videocam),
+                          tooltip: 'GIF',
+                        ),
+                        const SizedBox(height: 24),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.refresh),
+                          tooltip: 'Restart',
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
                   ),
                 ),
               ),
