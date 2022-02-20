@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
@@ -67,9 +68,7 @@ class PImage {
       case SketchBlendMode.overlay:
         return _colorFromPercentARGB(
           1.0,
-          c1.redPercent < 0.5
-              ? 2 * c1.redPercent * c2.redPercent
-              : 1 - (2 * (1 - c1.redPercent) * (1 - c2.redPercent)),
+          c1.redPercent < 0.5 ? 2 * c1.redPercent * c2.redPercent : 1 - (2 * (1 - c1.redPercent) * (1 - c2.redPercent)),
           c1.greenPercent < 0.5
               ? 2 * c1.greenPercent * c2.greenPercent
               : 1 - (2 * (1 - c1.greenPercent) * (1 - c2.greenPercent)),
@@ -81,9 +80,7 @@ class PImage {
         // This is the same as Overlay but with the c1 and c2's switched
         return _colorFromPercentARGB(
           1.0,
-          c2.redPercent < 0.5
-              ? 2 * c2.redPercent * c1.redPercent
-              : 1 - (2 * (1 - c2.redPercent) * (1 - c1.redPercent)),
+          c2.redPercent < 0.5 ? 2 * c2.redPercent * c1.redPercent : 1 - (2 * (1 - c2.redPercent) * (1 - c1.redPercent)),
           c2.greenPercent < 0.5
               ? 2 * c2.greenPercent * c1.greenPercent
               : 1 - (2 * (1 - c2.greenPercent) * (1 - c1.greenPercent)),
@@ -94,12 +91,9 @@ class PImage {
       case SketchBlendMode.softLight:
         return _colorFromPercentARGB(
           1.0,
-          (1 - (2 * c2.redPercent)) * (pow(c1.redPercent, 2)) +
-              (2 * c2.redPercent * c1.redPercent),
-          (1 - (2 * c2.greenPercent)) * (pow(c1.greenPercent, 2)) +
-              (2 * c2.greenPercent * c1.greenPercent),
-          (1 - (2 * c2.bluePercent)) * (pow(c1.bluePercent, 2)) +
-              (2 * c2.bluePercent * c1.bluePercent),
+          (1 - (2 * c2.redPercent)) * (pow(c1.redPercent, 2)) + (2 * c2.redPercent * c1.redPercent),
+          (1 - (2 * c2.greenPercent)) * (pow(c1.greenPercent, 2)) + (2 * c2.greenPercent * c1.greenPercent),
+          (1 - (2 * c2.bluePercent)) * (pow(c1.bluePercent, 2)) + (2 * c2.bluePercent * c1.bluePercent),
         );
       case SketchBlendMode.dodge:
         return _colorFromPercentARGB(
@@ -125,17 +119,16 @@ class PImage {
     _pixels = ByteData(width * height * 4);
   }
 
-  PImage.fromPixels(
-      int width, int height, ByteData pixels, ImageFileFormat format)
+  PImage.fromPixels(int width, int height, ByteData pixels, ImageFileFormat format)
       : _width = width,
         _height = height,
         _format = format,
         _pixels = pixels;
 
-  final int _width;
+  int _width;
   int get width => _width;
 
-  final int _height;
+  int _height;
   int get height => _height;
 
   final ImageFileFormat _format;
@@ -151,7 +144,7 @@ class PImage {
   /// redrawn before returning it from [toFlutterImage].
   bool _isFlutterImageDirty = true;
 
-  /// Returns a dart:io [Image] version of this `PImage` so that it
+  /// Returns a dart:io [Image] version of this [PImage] so that it
   /// can be drawn with Flutter.
   Future<ui.Image> toFlutterImage() async {
     if (_isFlutterImageDirty) {
@@ -170,19 +163,26 @@ class PImage {
     return _flutterImage!;
   }
 
+  /// Returns the ARGB color of the pixel at the given ([x], [y]).
   Color get(int x, int y) {
-    final pixelDataOffset = _getBitmapPixelOffset(
-      imageWidth: width,
-      x: x,
-      y: y,
-    );
-    final rgbaColor = pixels.getUint32(pixelDataOffset);
-    final argbColor =
-        ((rgbaColor & 0x000000FF) << 24) | ((rgbaColor & 0xFFFFFF00) >> 8);
+    final rgbaColor = pixels.getPixel(width, x, y).value;
+    final argbColor = ((rgbaColor & 0x000000FF) << 24) | ((rgbaColor & 0xFFFFFF00) >> 8);
     return Color(argbColor);
   }
 
-  Future<ui.Image> getRegion({
+  /// Sets the ARGB [color] of the pixel at the given ([x],[y]).
+  void set(int x, int y, Color color) {
+    final argbColorInt = color.value;
+    final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) | ((argbColorInt & 0x00FFFFFF) << 8);
+    pixels.setPixel(width, x, y, Color(rgbaColorInt));
+
+    _isFlutterImageDirty = true;
+  }
+
+  /// Creates a returns a new [PImage] that replicates a region of this
+  /// [PImage], defined by the given ([x],[y]) origin and the given
+  /// [width] and [height].
+  Future<PImage> getRegion({
     required int x,
     required int y,
     required int width,
@@ -210,69 +210,52 @@ class PImage {
       );
     }
 
-    final codec = await ui.ImageDescriptor.raw(
-      await ui.ImmutableBuffer.fromUint8List(destinationData),
-      width: width,
-      height: height,
-      pixelFormat: ui.PixelFormat.rgba8888,
-    ).instantiateCodec();
-
-    return (await codec.getNextFrame()).image;
+    return PImage.fromPixels(width, height, ByteData.view(destinationData.buffer), format);
   }
 
+  /// Copies the given [image] into this [PImage] at the given ([x],[y]).
+  ///
+  /// Any pixels in [image] that exceeds the available space in this [PImage]
+  /// are ignored.
+  ///
+  /// The given ([x],[y]) must sit within the bounds of this [PImage].
+  void setRegion({
+    required PImage image,
+    int x = 0,
+    int y = 0,
+  }) {
+    if (x < 0) {
+      throw Exception("x must be >= 0: $x");
+    }
+    if (x >= width) {
+      throw Exception("x must be < this image's width - width: $width, y: $y");
+    }
+    if (y < 0) {
+      throw Exception("y must be >= 0: $y");
+    }
+    if (y >= height) {
+      throw Exception("y must be < this image's height - height: $height, y: $y");
+    }
+
+    for (int destX = x; (destX - x) < image.width && destX < this.width; x += 1) {
+      for (int destY = y; (destY - y) < image.height && destY < this.height; y += 1) {
+        set(destX, destY, image.get(destX - x, destY - y));
+      }
+    }
+  }
+
+  /// Loads this image's pixels into an pixel in-memory buffer.
+  ///
+  /// This is a no-op for [PImage] because pixels are always kept in
+  /// an in-memory buffer.
   Future<void> loadPixels() async {
     // No-op: our pixels are always available in "pixels"
   }
 
-  void set(int x, int y, Color color) {
-    final pixelIndex = _getBitmapPixelOffset(
-      imageWidth: width,
-      x: x,
-      y: y,
-    );
-
-    final argbColorInt = color.value;
-    final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) |
-        ((argbColorInt & 0x00FFFFFF) << 8);
-    pixels.setUint32(pixelIndex, rgbaColorInt);
-
-    _isFlutterImageDirty = true;
-  }
-
-  Future<void> setRegion({
-    required ui.Image image,
-    int x = 0,
-    int y = 0,
-  }) async {
-    // Use the Canvas to draw the given image at the desired offset.
-    //
-    // Using a canvas removes our responsibility to calculate appropriate
-    // pixels offsets for a sub-region. However, this approach requires a
-    // bunch of async calls that would otherwise be unnecessary.
-    // TODO: copy pixels directly, using pixel offsets
-    final pixelsCodec = await ui.ImageDescriptor.raw(
-      await ui.ImmutableBuffer.fromUint8List(pixels.buffer.asUint8List()),
-      width: width.round(),
-      height: height.round(),
-      pixelFormat: ui.PixelFormat.rgba8888,
-    ).instantiateCodec();
-    final me = (await pixelsCodec.getNextFrame()).image;
-
-    final paint = Paint();
-
-    final recorder = ui.PictureRecorder();
-    Canvas(recorder)
-      ..drawImage(me, Offset.zero, paint)
-      ..drawImage(image, Offset(x.toDouble(), y.toDouble()), paint);
-    final picture = recorder.endRecording();
-
-    final newImage = await picture.toImage(width, height);
-
-    _pixels = (await newImage.toByteData())!;
-
-    _isFlutterImageDirty = true;
-  }
-
+  /// Applies all recent operations to the in-memory pixel buffer.
+  ///
+  /// This is a no-op for [PImage] because pixels are always kept in
+  /// an in-memory buffer.
   Future<void> updatePixels() async {
     // No-op: our pixels are always updated
   }
@@ -285,28 +268,104 @@ class PImage {
     return ((y * imageWidth) + x) * 4;
   }
 
-  void resize() {
-    // TODO:
-    throw UnimplementedError();
+  /// Resizes this [PImage] to the given [width] and [height].
+  ///
+  /// The pixels in this [PImage] are scaled up or down in the x and
+  /// y direction, to satisfy the given dimensions.
+  ///
+  /// To scale proportionally, pass in just a [width], or just a [height].
+  /// The dimension that you leave out will be scaled up/down to retain
+  /// the original aspect ratio of this [PImage].
+  void resize({
+    int? width,
+    int? height,
+  }) {
+    if (width == null && height == null) {
+      // This indicates no change in size. Don't do anything.
+      return;
+    }
+
+    final newWidth = (width ?? (height! / this.height) * this.width).toInt();
+    final newHeight = (height ?? (width! / this.width) * this.height).toInt();
+
+    final newPixelBuffer = ByteData(newWidth * newHeight * 4);
+
+    for (int x = 0; x < newWidth; x += 1) {
+      for (int y = 0; y < newHeight; y += 1) {
+        final sampledX = ((x / newWidth) * this.width).round();
+        final sampledY = ((y / newHeight) * this.height).round();
+
+        // TODO: de-dup this color calculation with the set() method. Consider creating
+        //       a PixelBuffer class
+        final argbColorInt = get(sampledX, sampledY).value;
+        final rgbaColorInt = ((argbColorInt & 0xFF000000) >> 24) | ((argbColorInt & 0x00FFFFFF) << 8);
+
+        newPixelBuffer.setPixel(newWidth, x, y, Color(rgbaColorInt));
+      }
+    }
+
+    // Switch the new pixel buffer for the standard pixel buffer in this PImage.
+    _pixels = newPixelBuffer;
+    _width = newWidth;
+    _height = newHeight;
 
     _isFlutterImageDirty = true;
   }
 
+  /// Masks this [PImage] with the given [maskImage] or the given [maskPixels].
+  ///
+  /// [maskImage] or [maskPixels] must be provided, but not both.
+  ///
+  /// If a [maskImage] is provided, the alpha channel in this [PImage] is set
+  /// equal to the blue channel of the pixels in the [maskImage]. A [maskImage]
+  /// pixel with a blue value of `255` will fully reveal the pixel within this
+  /// [PImage]. A pixel with a blue value of `0` will fully erase the pixel
+  /// within this [PImage].
+  ///
+  /// If [maskPixels] is provided, the pixel alpha values in this [PImage] are
+  /// set equal to the given [maskPixels] values.
   void mask({
     PImage? maskImage,
-    ByteData? maskPixels,
+    List<int>? maskPixels,
   }) {
     if (maskImage == null && maskPixels == null) {
-      throw Exception(
-          "PImage#mask() requires either a maskImage or maskPixels");
+      throw Exception("PImage#mask() requires either a maskImage or maskPixels");
     }
     if (maskImage != null && maskPixels != null) {
-      throw Exception(
-          "PImage#mask() should be given a maskImage or maskPixels, but not both");
+      throw Exception("PImage#mask() should be given a maskImage or maskPixels, but not both");
+    }
+    if (maskImage != null) {
+      if (maskImage.width != width || maskImage.height != height) {
+        throw Exception(
+            "PImage#mask() must use a maskImage (${maskImage.width}, ${maskImage.height}) with the same dimensions as the base image: ($width, $height)");
+      }
+    }
+    if (maskPixels != null) {
+      if (maskPixels.length != width * height) {
+        throw Exception(
+            "PImage#mask() must receive a maskPixels (${maskPixels.length}) with the same number of pixels as the base image (${width * height})");
+      }
     }
 
-    // TODO:
-    throw UnimplementedError();
+    if (maskImage != null) {
+      for (int x = 0; x < width; x += 1) {
+        for (int y = 0; y < height; y += 1) {
+          final existingColor = get(x, y);
+          final maskAlpha = maskImage.get(x, y).blue;
+          final newColor = maskAlpha == 0 ? const Color(0x00000000) : existingColor.withAlpha(maskAlpha);
+          set(x, y, newColor);
+        }
+      }
+    } else {
+      for (int x = 0; x < width; x += 1) {
+        for (int y = 0; y < height; y += 1) {
+          final existingColor = get(x, y);
+          final maskAlpha = maskPixels![_getBitmapPixelOffset(imageWidth: width, x: x, y: y)];
+          final newColor = maskAlpha == 0 ? const Color(0x00000000) : existingColor.withAlpha(maskAlpha);
+          set(x, y, newColor);
+        }
+      }
+    }
 
     _isFlutterImageDirty = true;
   }
@@ -318,20 +377,15 @@ class PImage {
         _applyPixelTransform(
             this,
             this,
-            (_, __, x, y, colorIn) => HSVColor.fromColor(colorIn).value > value!
-                ? const Color(0xFFFFFFFF)
-                : const Color(0xFF000000));
+            (_, __, x, y, colorIn) =>
+                HSVColor.fromColor(colorIn).value > value! ? const Color(0xFFFFFFFF) : const Color(0xFF000000));
         break;
       case ImageFilter.gray:
         _applyPixelTransform(
-            this,
-            this,
-            (_, __, x, y, colorIn) =>
-                HSVColor.fromColor(colorIn).withSaturation(0).toColor());
+            this, this, (_, __, x, y, colorIn) => HSVColor.fromColor(colorIn).withSaturation(0).toColor());
         break;
       case ImageFilter.opaque:
-        _applyPixelTransform(
-            this, this, (_, __, x, y, colorIn) => colorIn.withOpacity(1.0));
+        _applyPixelTransform(this, this, (_, __, x, y, colorIn) => colorIn.withOpacity(1.0));
         break;
       case ImageFilter.invert:
         _applyPixelTransform(
@@ -455,8 +509,11 @@ class PImage {
     return colorOut;
   }
 
-  void _applyPixelTransform(
-      PImage source, PImage dest, _PixelTransform transform) {
+  /// Runs the given [transform] function across every pixel in the [source]
+  /// image, painting the transformed pixel value into the [dest] image.
+  ///
+  /// [source] and [dest] must have the same dimensions.
+  void _applyPixelTransform(PImage source, PImage dest, _PixelTransform transform) {
     for (int col = 0; col < width; col += 1) {
       for (int row = 0; row < height; row += 1) {
         final oldColor = source.get(col, row);
@@ -468,20 +525,14 @@ class PImage {
     _isFlutterImageDirty = true;
   }
 
+  /// Copies and returns all, or part of, this [PImage].
   PImage copy([Rect? rect]) {
-    final copyRect =
-        rect ?? Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
-    if (copyRect.left < 0 ||
-        copyRect.top < 0 ||
-        copyRect.right > width ||
-        copyRect.bottom > height) {
-      throw Exception(
-          "Invalid copy region passed to PImage#copy. Image size: ${width}x$height, rect: $copyRect");
+    final copyRect = rect ?? Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
+    if (copyRect.left < 0 || copyRect.top < 0 || copyRect.right > width || copyRect.bottom > height) {
+      throw Exception("Invalid copy region passed to PImage#copy. Image size: ${width}x$height, rect: $copyRect");
     }
-    print("Copy rect: $copyRect");
 
-    final newImage = PImage.empty(
-        copyRect.width.round(), copyRect.height.round(), ImageFileFormat.png);
+    final newImage = PImage.empty(copyRect.width.round(), copyRect.height.round(), ImageFileFormat.png);
     final colStart = copyRect.left.round();
     final colEnd = copyRect.right.round();
     final rowStart = copyRect.top.round();
@@ -549,6 +600,13 @@ class PImage {
     }
   }
 
+  /// Blends pixels from the [other] image into this [PImage], using the
+  /// given blend [mode].
+  ///
+  /// The [sourceRect] is the rectangle within the [other] image that's
+  /// copied and blended into this [PImage]. The [destRect] is the rectangle
+  /// within this [PImage] where the blend is painted. [sourceRect] and
+  /// [destRect] must have the same dimensions.
   void blend(
     PImage other, {
     required Rect sourceRect,
@@ -585,11 +643,26 @@ class PImage {
     _isFlutterImageDirty = true;
   }
 
-  Future<void> save(String fileName) async {
-    throw UnimplementedError();
+  /// Saves this [PImage] to a file at the given [filePath].
+  ///
+  /// The [filePath] must include the file extension, and the extension
+  /// determines the file format. The extension can be one of: ".png", ".jpg",
+  /// ".tiff", ".tga".
+  Future<void> save(String filePath) async {
+    final file = File(filePath);
+    saveBytesToFile(
+      file: file,
+      imageData: _pixels.buffer.asUint8List(),
+      width: width,
+      height: height,
+    );
   }
 }
 
+/// Available modes for blending two pixels together.
+///
+/// These blend modes are similar to what you'll find in Photoshop, or
+/// other bitmap manipulation tools.
 enum SketchBlendMode {
   blend,
   add,
@@ -607,6 +680,12 @@ enum SketchBlendMode {
   burn,
 }
 
+/// Available pixel filters for [PImage]s.
+///
+/// Each [ImageFilter] represents a transformation that's applied to
+/// pixels within an image. For example, [ImageFilter.gray] converts
+/// all pixels to grayscale values, and [ImageFilter.invert] changes
+/// every pixel color to the color that sits opposite in color space.
 enum ImageFilter {
   threshold,
   gray,
@@ -618,18 +697,25 @@ enum ImageFilter {
   dilate,
 }
 
-typedef _PixelTransform = Color Function(
-    PImage source, PImage dest, int x, int y, Color colorIn);
+/// Function that calculates a new pixel color based on an existing [colorIn], as
+/// well as the position of that pixel within a [source] image.
+///
+/// This signature is roughly equivalent to the information that's normally passed
+/// to a GPU fragment shader, thus allowing for "software shaders", which are
+/// dramatically less performant, but they can be written in Dart instead of
+/// special shader languages.
+typedef _PixelTransform = Color Function(PImage source, PImage dest, int x, int y, Color colorIn);
 
-Color _colorFromPercentARGB(
-        double alpha, double red, double green, double blue) =>
-    Color.fromARGB(
+/// Creates a [Color] from ARGB percentage values.
+Color _colorFromPercentARGB(double alpha, double red, double green, double blue) => Color.fromARGB(
       (alpha * 255).round(),
       (red * 255).round(),
       (green * 255).round(),
       (blue * 255).round(),
     );
 
+/// Extension on [Color] that provides access to each color component as
+/// a percentage, rather than an `int` in [0, 255].
 extension on Color {
   double get redPercent => red.toDouble() / 255;
 
@@ -638,15 +724,23 @@ extension on Color {
   double get bluePercent => blue.toDouble() / 255;
 }
 
+/// Extension on [ByteData] that treats the bytes as pixels, providing common
+/// image-related data access, e.g., retrieving an individual pixel value.
 extension on ByteData {
-  Color get(int imageWidth, int x, int y) =>
-      Color(getUint32(getPixelIndex(imageWidth, x, y)));
+  /// Returns the pixel color value at the given ([x],[y]), assuming the
+  /// given [imageWidth].
+  Color getPixel(int imageWidth, int x, int y) => Color(getUint32(getPixelIndex(imageWidth, x, y)));
 
-  set(int imageWidth, int x, int y, Color color) =>
-      setUint32(getPixelIndex(imageWidth, x, y), color.value);
+  /// Sets the pixel color value at the given ([x],[y]), assuming the
+  /// given [imageWidth].
+  setPixel(int imageWidth, int x, int y, Color color) => setUint32(getPixelIndex(imageWidth, x, y), color.value);
 
+  /// Calculates the byte index within this [ByteData] for the pixel at
+  /// ([x],[y]), assuming the given [imageWidth].
   int getPixelIndex(int imageWidth, int x, int y) => (y * imageWidth + x) * 4;
 
+  /// Copies all the data in this [ByteData] to a new [ByteData]
+  /// and returns it.
   ByteData copy() {
     final copyBytes = ByteData(this.lengthInBytes);
     for (int i = 0; i < lengthInBytes; i += 1) {

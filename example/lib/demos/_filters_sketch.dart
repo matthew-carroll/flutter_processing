@@ -11,8 +11,7 @@ class PImageFiltersSketchDemo extends StatefulWidget {
   final SketchDemoController sketchDemoController;
 
   @override
-  _PImageFiltersSketchDemoState createState() =>
-      _PImageFiltersSketchDemoState();
+  _PImageFiltersSketchDemoState createState() => _PImageFiltersSketchDemoState();
 }
 
 class _PImageFiltersSketchDemoState extends State<PImageFiltersSketchDemo> {
@@ -90,7 +89,7 @@ class _PImageFiltersSketchDemoState extends State<PImageFiltersSketchDemo> {
         );
       },
       draw: (s) async {
-        await s.pImage(image: _canvasImage);
+        await s.image(image: _canvasImage);
 
         // await s.pImage(image: _opaqueImage);
       },

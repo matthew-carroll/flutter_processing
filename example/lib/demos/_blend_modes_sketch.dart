@@ -11,12 +11,10 @@ class PImageBlendModesSketchDemo extends StatefulWidget {
   final SketchDemoController sketchDemoController;
 
   @override
-  _PImageBlendModesSketchDemoState createState() =>
-      _PImageBlendModesSketchDemoState();
+  _PImageBlendModesSketchDemoState createState() => _PImageBlendModesSketchDemoState();
 }
 
-class _PImageBlendModesSketchDemoState
-    extends State<PImageBlendModesSketchDemo> {
+class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo> {
   late PImage _canvasImage;
 
   late PImage _bottomImage;
@@ -45,10 +43,8 @@ class _PImageBlendModesSketchDemoState
 
         _canvasImage = PImage.empty(1400, 400, ImageFileFormat.png);
 
-        _bottomImage = (await s.loadImage("assets/coffee.png"))
-            .copy(Rect.fromLTWH(0, 0, 200, 200));
-        _topImage = (await s.loadImage("assets/gradient.png"))
-            .copy(Rect.fromLTWH(0, 0, 200, 200));
+        _bottomImage = (await s.loadImage("assets/coffee.png")).copy(Rect.fromLTWH(0, 0, 200, 200));
+        _topImage = (await s.loadImage("assets/gradient.png")).copy(Rect.fromLTWH(0, 0, 200, 200));
 
         final copyRect = Rect.fromLTWH(0, 0, 200, 200);
 
@@ -235,7 +231,7 @@ class _PImageBlendModesSketchDemoState
         );
       },
       draw: (s) async {
-        await s.pImage(image: _canvasImage);
+        await s.image(image: _canvasImage);
 
         s.noLoop();
       },

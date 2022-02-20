@@ -20,47 +20,15 @@ mixin SketchOutputImage on BaseSketch {
       throw Exception('You must call loadPixels() before calling save()');
     }
 
-    late ImageFileFormat imageFormat;
-    if (format != null) {
-      imageFormat = format;
-    } else {
-      final imageFormatFromFile = _getImageFileFormatFromFilePath(file.path);
-      if (imageFormatFromFile == null) {
-        throw Exception('Cannot save image to file with invalid extension and no explicit image type: ${file.path}');
-      }
-      imageFormat = imageFormatFromFile;
-    }
-
     // Retrieve the pixel data for the current sketch painting.
     final rawImageData = _paintingContext.pixels!.buffer.asUint8List();
 
-    // Convert the pixel data to the desired format.
-    late List<int> formattedImageData;
-    switch (imageFormat) {
-      case ImageFileFormat.png:
-        formattedImageData = imageFormats.encodePng(
-          imageFormats.Image.fromBytes(
-              _paintingContext.size.width.round(), _paintingContext.size.height.round(), rawImageData),
-        );
-        break;
-      case ImageFileFormat.jpeg:
-        formattedImageData = imageFormats.encodeJpg(
-          imageFormats.Image.fromBytes(
-              _paintingContext.size.width.round(), _paintingContext.size.height.round(), rawImageData),
-        );
-        break;
-      case ImageFileFormat.tiff:
-        throw UnimplementedError('Tiff images are not supported in save()');
-      case ImageFileFormat.targa:
-        formattedImageData = imageFormats.encodeTga(
-          imageFormats.Image.fromBytes(
-              _paintingContext.size.width.round(), _paintingContext.size.height.round(), rawImageData),
-        );
-        break;
-    }
-
-    // Write the formatted pixels to the given file.
-    await file.writeAsBytes(formattedImageData);
+    await saveBytesToFile(
+      file: file,
+      imageData: rawImageData,
+      width: _paintingContext.size.width.round(),
+      height: _paintingContext.size.height.round(),
+    );
   }
 
   /// Saves a numbered sequence of images, one image each time the
@@ -120,20 +88,71 @@ mixin SketchOutputImage on BaseSketch {
 
     await save(file: file, format: imageFormat);
   }
+}
 
-  ImageFileFormat? _getImageFileFormatFromFilePath(String filePath) {
-    final fileExtension = path.extension(filePath);
-    switch (fileExtension) {
-      case '.png':
-        return ImageFileFormat.png;
-      case '.jpg':
-        return ImageFileFormat.jpeg;
-      case '.tif':
-        return ImageFileFormat.tiff;
-      case '.tga':
-        return ImageFileFormat.targa;
-      default:
-        return null;
+/// Saves the given [imageData] to the given [file].
+///
+/// The [file]'s extension is used to infer the desired image format.
+/// The extension may be one of ".png", ".jpg", ".tif", or ".tga".
+///
+/// To override the file extension, or use a file name without an
+/// extension, specify the desired [format].
+Future<void> saveBytesToFile({
+  required File file,
+  ImageFileFormat? format,
+  required Uint8List imageData,
+  required int width,
+  required int height,
+}) async {
+  late ImageFileFormat imageFormat;
+  if (format != null) {
+    imageFormat = format;
+  } else {
+    final imageFormatFromFile = _getImageFileFormatFromFilePath(file.path);
+    if (imageFormatFromFile == null) {
+      throw Exception('Cannot save image to file with invalid extension and no explicit image type: ${file.path}');
     }
+    imageFormat = imageFormatFromFile;
+  }
+
+  // Convert the pixel data to the desired format.
+  late List<int> formattedImageData;
+  switch (imageFormat) {
+    case ImageFileFormat.png:
+      formattedImageData = imageFormats.encodePng(
+        imageFormats.Image.fromBytes(width, height, imageData),
+      );
+      break;
+    case ImageFileFormat.jpeg:
+      formattedImageData = imageFormats.encodeJpg(
+        imageFormats.Image.fromBytes(width, height, imageData),
+      );
+      break;
+    case ImageFileFormat.tiff:
+      throw UnimplementedError('Tiff images are not supported in save()');
+    case ImageFileFormat.targa:
+      formattedImageData = imageFormats.encodeTga(
+        imageFormats.Image.fromBytes(width, height, imageData),
+      );
+      break;
+  }
+
+  // Write the formatted pixels to the given file.
+  await file.writeAsBytes(formattedImageData);
+}
+
+ImageFileFormat? _getImageFileFormatFromFilePath(String filePath) {
+  final fileExtension = path.extension(filePath);
+  switch (fileExtension) {
+    case '.png':
+      return ImageFileFormat.png;
+    case '.jpg':
+      return ImageFileFormat.jpeg;
+    case '.tif':
+      return ImageFileFormat.tiff;
+    case '.tga':
+      return ImageFileFormat.targa;
+    default:
+      return null;
   }
 }
