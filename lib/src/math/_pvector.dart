@@ -41,8 +41,8 @@ class PVector {
   num y;
 
   void set(num x, num y) {
-    x = x;
-    y = y;
+    this.x = x;
+    this.y = y;
   }
 
   PVector operator +(PVector other) {
@@ -144,8 +144,7 @@ class PVector {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PVector && runtimeType == other.runtimeType && x == other.x && y == other.y;
+      identical(this, other) || other is PVector && runtimeType == other.runtimeType && x == other.x && y == other.y;
 
   @override
   int get hashCode => x.hashCode ^ y.hashCode;
