@@ -29,9 +29,9 @@ void main() {
       });
 
       testWidgets('strokeWeight() invalid value', (tester) async {
-        await expectLater(
+        expect(
           () => Sketch.simple()..strokeWeight(-1),
-          throwsA(isA<Exception>()),
+          throwsException,
         );
       });
     });
