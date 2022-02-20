@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart' hide Image;
@@ -11,7 +10,7 @@ class HackingDemo extends StatefulWidget {
 }
 
 class _HackingDemoState extends State<HackingDemo> {
-  late Image _loadedImage;
+  late PImage _loadedImage;
 
   File? _fileToSaveImage;
 

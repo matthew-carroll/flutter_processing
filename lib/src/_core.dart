@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' hide Image;
@@ -19,7 +18,6 @@ import '_painting_context.dart';
 import 'data/conversion.dart';
 import 'input/_time_and_date.dart';
 import 'math/_calculations.dart';
-import 'shape/shapes.dart';
 
 part '_processing_widget.dart';
 part '_sketch.dart';

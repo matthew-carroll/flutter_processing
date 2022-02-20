@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
+import 'package:flutter_processing_example/demos/_blend_modes_sketch.dart';
 import 'package:flutter_processing_example/demos/_empty_sketch.dart';
+import 'package:flutter_processing_example/demos/_filters_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
+import 'package:flutter_processing_example/demos/colored_circles.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/003_snake_game.dart';
@@ -10,6 +13,7 @@ import 'package:flutter_processing_example/the_coding_train/coding_challenges/00
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/028_metaballs.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/030_phyllotaxis.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/031_flappy_bird.dart';
+import 'package:flutter_processing_example/the_coding_train/coding_challenges/036_blobby.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing-with-text.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/050_circle-packing.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/052_random_walker.dart';
@@ -42,6 +46,22 @@ class FlutterProcessingExampleApp extends StatelessWidget {
               },
             ),
             DemoMenuItem(
+              title: 'PImage Filters',
+              builder: (context, sketchController) {
+                return PImageFiltersSketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'PImage Blend Modes',
+              builder: (context, sketchController) {
+                return PImageBlendModesSketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
               title: 'Hacking Demo',
               builder: (context, sketchController) {
                 return HackingDemo(
@@ -53,6 +73,18 @@ class FlutterProcessingExampleApp extends StatelessWidget {
           DemoMenuGroup(
             title: 'SuperDeclarative',
             items: [
+              DemoMenuItem(
+                title: 'Circle Art',
+                builder: (_, sketchController) {
+                  return ProcessingDemo(
+                    createSketch: () => ColoredCirclesSketch(
+                      width: 1600,
+                      height: 600,
+                    ),
+                    sketchDemoController: sketchController,
+                  );
+                },
+              ),
               DemoMenuItem(
                 title: 'Perlin Noise',
                 builder: (_, sketchController) {
@@ -125,6 +157,14 @@ class FlutterProcessingExampleApp extends StatelessWidget {
                 title: '031: Flappy Bird',
                 builder: (_, sketchController) {
                   return CodingTrainFlappyBirdScreen(
+                    sketchDemoController: sketchController,
+                  );
+                },
+              ),
+              DemoMenuItem(
+                title: '036: Blobby',
+                builder: (_, sketchController) {
+                  return CodingTrainBlobbyScreen(
                     sketchDemoController: sketchController,
                   );
                 },

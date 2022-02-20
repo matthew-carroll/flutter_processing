@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -76,6 +74,11 @@ class TestAssetBundle implements AssetBundle {
 
   @override
   void evict(String key) {
-    // TODO: implement evict
+    _cache.remove(key);
+  }
+
+  @override
+  void clear() {
+    _cache.clear();
   }
 }

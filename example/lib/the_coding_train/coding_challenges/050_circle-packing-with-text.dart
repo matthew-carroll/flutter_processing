@@ -1,14 +1,11 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart' hide Image;
-import 'package:flutter/services.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 
 class CirclePackingWithTextSketch extends Sketch {
   final _newCirclesPerFrame = 5;
   final _maxNewCircleAttempts = 100;
 
-  late Image _textImage;
+  late PImage _textImage;
   final _whitePixels = <Offset>[];
   final _circles = <Circle>[];
 
@@ -18,11 +15,10 @@ class CirclePackingWithTextSketch extends Sketch {
 
     _textImage = await loadImage('assets/coding-train/flutter-text.png');
 
-    final imageBytes = (await _textImage.toByteData()) as ByteData;
     for (int col = 0; col < _textImage.width; col += 1) {
       for (int row = 0; row < _textImage.height; row += 1) {
         final pixelOffset = ((row * _textImage.width) + col) * 4;
-        final rgbaColor = imageBytes.getUint32(pixelOffset);
+        final rgbaColor = _textImage.pixels.getUint32(pixelOffset);
 
         if (rgbaColor == 0xFFFFFFFF) {
           _whitePixels.add(Offset(col.toDouble(), row.toDouble()));
