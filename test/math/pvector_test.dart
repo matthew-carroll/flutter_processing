@@ -61,6 +61,13 @@ void main() {
         );
       });
 
+      test('set components', () {
+        expect(
+          PVector(1, 2)..set(3, 4),
+          PVector(3, 4),
+        );
+      });
+
       test('angle between', () {
         expect(
           PVector.angleBetween(PVector(1, 1), PVector(1, 1)),
