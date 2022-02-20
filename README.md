@@ -4,7 +4,7 @@ A Flutter port of [Processing](https://processing.org/reference/).
 
 This project is not affiliated with the Processing project, or related organizations.
 
-The goal of flutter_processing is to provide the same easy learning environment as Processing, but with the additional utility of a production-ready UI toolkit, called Flutter. With traditional Processing, there is minimal professional value in the underlying language. With flutter_processing, the underlying tool, Flutter, is sufficient for employment as an app UI developer. flutter_processing offers an educational tool and an employment opportunity all in one.
+The goal of `flutter_processing` is to provide the same easy learning environment as **Processing**, but with the additional utility of a production-ready UI toolkit, called **Flutter**. With traditional Processing, there is minimal professional value in the underlying language. With `flutter_processing`, the underlying tool, Flutter, is sufficient for employment as an app UI developer. `flutter_processing` offers an educational tool and an employment opportunity all in one.
 
 Want to see how this project was implemented? Nearly every change was recorded and published to the [SuperDeclarative!](https://youtube.com/c/SuperDeclarative) channel on YouTube.
 
