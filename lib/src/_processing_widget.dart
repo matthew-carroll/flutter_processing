@@ -178,7 +178,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onPointerDown(PointerDownEvent event) {
-    if (event.kind != PointerDeviceKind.mouse) {
+    if (event.kind != PointerDeviceKind.mouse && event.kind != PointerDeviceKind.touch) {
       return;
     }
 
@@ -194,7 +194,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onPointerMove(PointerMoveEvent event) {
-    if (event.kind != PointerDeviceKind.mouse) {
+    if (event.kind != PointerDeviceKind.mouse && event.kind != PointerDeviceKind.touch) {
       return;
     }
 
@@ -209,7 +209,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onPointerUp(PointerUpEvent event) {
-    if (event.kind != PointerDeviceKind.mouse) {
+    if (event.kind != PointerDeviceKind.mouse && event.kind != PointerDeviceKind.touch) {
       return;
     }
 
@@ -230,7 +230,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onPointerCancel(PointerCancelEvent event) {
-    if (event.kind != PointerDeviceKind.mouse) {
+    if (event.kind != PointerDeviceKind.mouse && event.kind != PointerDeviceKind.touch) {
       return;
     }
 
@@ -250,7 +250,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   }
 
   void _onPointerHover(PointerHoverEvent event) {
-    if (event.kind != PointerDeviceKind.mouse) {
+    if (event.kind != PointerDeviceKind.mouse && event.kind != PointerDeviceKind.touch) {
       return;
     }
 

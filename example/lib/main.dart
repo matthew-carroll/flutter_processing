@@ -19,6 +19,7 @@ import 'package:flutter_processing_example/the_coding_train/coding_challenges/05
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/052_random_walker.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/085_game_of_life.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/124_boids.dart';
+import 'package:flutter_processing_example/verify_behaviors/_mouse_and_touch.dart';
 
 import '_demos_screen.dart';
 
@@ -207,6 +208,23 @@ class FlutterProcessingExampleApp extends StatelessWidget {
                 title: '124: Boids',
                 builder: (_, sketchController) {
                   return CodingTrainBoidsScreen(
+                    sketchDemoController: sketchController,
+                  );
+                },
+              ),
+            ],
+          ),
+          DemoMenuGroup(
+            title: 'Verifications',
+            items: [
+              DemoMenuItem(
+                title: 'Mouse and Gestures',
+                builder: (_, sketchController) {
+                  return ProcessingDemo(
+                    createSketch: () => MouseAndTouchSketch(
+                      width: 500,
+                      height: 500,
+                    ),
                     sketchDemoController: sketchController,
                   );
                 },
