@@ -32,7 +32,11 @@ class FlutterProcessingExampleApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Processing Example',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.dark(
+          primary: Colors.purple,
+          onPrimary: Colors.white,
+        ),
       ),
       home: ProcessingDemosScreen(
         demos: [
