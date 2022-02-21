@@ -21,6 +21,8 @@ Do you get value from this package? Please consider supporting SuperDeclarative!
 # Getting Started
 To play with some demos, clone this repository and run the example app!
 
+<img src="https://user-images.githubusercontent.com/7259036/154913204-f4fedbd2-1788-47f2-b640-4ff8a9fac705.gif" width="100%">
+
 To paint a canvas with a sketch in Flutter, the way you would in Processing, display a `Processing` widget and implement a `Sketch`.
 
 ```dart
