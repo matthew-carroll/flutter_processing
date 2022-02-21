@@ -33,6 +33,7 @@ part 'shape/_two_d_primitives.dart';
 part 'shape/_vertex.dart';
 part 'structure/_structure.dart';
 part 'transform/_transform.dart';
+part 'typography/_typography.dart';
 
 abstract class BaseSketch {
   SketchPaintingContext _paintingContext = SketchPaintingContext();
