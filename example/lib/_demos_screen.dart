@@ -8,6 +8,7 @@ import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing_example/api_demos/_image_blending_sketch.dart';
 import 'package:flutter_processing_example/api_demos/_image_mask_sketch.dart';
 import 'package:flutter_processing_example/api_demos/_image_resize_sketch.dart';
+import 'package:flutter_processing_example/api_demos/text_demos.dart';
 import 'package:flutter_processing_example/demos/_blend_modes_sketch.dart';
 import 'package:flutter_processing_example/demos/_filters_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
@@ -304,6 +305,46 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
               title: 'Image Blend Modes',
               builder: (context, sketchController) {
                 return PImageBlendModesSketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Text',
+              builder: (context, sketchController) {
+                return TextSketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Text - Width',
+              builder: (context, sketchController) {
+                return TextWidthSketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Text - Leading',
+              builder: (context, sketchController) {
+                return TextLeadingSketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Text - Ascent',
+              builder: (context, sketchController) {
+                return TextAscentSketchDemo(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Text - Descent',
+              builder: (context, sketchController) {
+                return TextDescentSketchDemo(
                   sketchDemoController: sketchController,
                 );
               },

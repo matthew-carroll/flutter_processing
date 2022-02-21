@@ -20,7 +20,8 @@ class Sketch extends BaseSketch
         SketchShapeTwoDPrimitives,
         SketchShapeVertex,
         SketchStructure,
-        SketchTransform {
+        SketchTransform,
+        SketchTypography {
   Sketch.simple({
     FutureOr<void> Function(Sketch)? setup,
     FutureOr<void> Function(Sketch)? draw,

@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart' hide Image;
+import 'package:flutter/widgets.dart' hide Image, TextStyle, TextAlignVertical;
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing/src/constants/_constants.dart';
 import 'package:flutter_processing/src/math/_random.dart';
@@ -33,6 +34,7 @@ part 'shape/_two_d_primitives.dart';
 part 'shape/_vertex.dart';
 part 'structure/_structure.dart';
 part 'transform/_transform.dart';
+part 'typography/_typography.dart';
 
 abstract class BaseSketch {
   SketchPaintingContext _paintingContext = SketchPaintingContext();
