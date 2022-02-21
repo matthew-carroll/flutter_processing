@@ -34,8 +34,8 @@ class _BlobbySketch extends Sketch {
 
   @override
   void draw() {
-    background(color: Colors.black);
-    fill(color: Colors.white);
+    background(color: Colors.white);
+    fill(color: Colors.black);
 
     final angularSteps = 64;
     final stepAngle = TWO_PI / angularSteps;

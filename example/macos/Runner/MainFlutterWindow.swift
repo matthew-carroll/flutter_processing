@@ -11,5 +11,12 @@ class MainFlutterWindow: NSWindow {
     RegisterGeneratedPlugins(registry: flutterViewController)
 
     super.awakeFromNib()
+
+    // Remove the title bar and expand content to fill the entire window.
+    self.setContentSize(NSSize(width: 1000, height: 650))
+    self.styleMask.update(with: StyleMask.fullSizeContentView)
+    self.titleVisibility = TitleVisibility.hidden
+    self.titlebarAppearsTransparent = true
+    self.backgroundColor = NSColor.white
   }
 }

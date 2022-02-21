@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart' hide Image;
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_processing/flutter_processing.dart';
 import 'package:flutter_processing_example/_demos_screen.dart';
 import 'package:flutter_processing_example/io/gif.dart';
@@ -42,6 +40,10 @@ class SketchDemoController with ChangeNotifier {
 /// A Processing sketch demo, which is capable of generating various
 /// screenshots.
 abstract class SketchDemo {
+  set background(Color color);
+
+  void restartSketch();
+
   Future<void> takeScreenshot(File file);
 
   Future<void> createGif({
@@ -94,7 +96,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
 
   Sketch? _sketch;
 
-  Color _backgroundColor = const Color(0xFF222222);
+  Color _backgroundColor = const Color(0xFFFFFFFF);
 
   @override
   void initState() {
@@ -129,6 +131,25 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
 
     _disposeSketch();
     super.dispose();
+  }
+
+  @override
+  set background(Color color) {
+    setState(() {
+      _backgroundColor = color;
+    });
+  }
+
+  @override
+  void restartSketch() {
+    setState(() {
+      if (_sketch != null) {
+        _sketch!.dispose();
+        _sketch = null;
+      }
+
+      _initSketch();
+    });
   }
 
   @override
@@ -436,17 +457,6 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
     widget.sketchFocusNode?.requestFocus();
   }
 
-  void restartSketch() {
-    setState(() {
-      if (_sketch != null) {
-        _sketch!.dispose();
-        _sketch = null;
-      }
-
-      _initSketch();
-    });
-  }
-
   void _disposeSketch() {
     _sketch?.removeOnFrameAvailableCallback(_onSketchFrameAvailable);
   }
@@ -464,10 +474,6 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
             ),
           ),
           _buildCountdownDisplay(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _buildDemoControls(),
-          ),
         ],
       ),
     );
@@ -487,62 +493,6 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
         padding: const EdgeInsets.only(top: 24.0),
         child: _CountdownDisplay(
           controller: _screenshotCountdown,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDemoControls() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildColorDot(const Color(0xFF222222), 'Dark grey'),
-          SizedBox(width: 24),
-          _buildColorDot(const Color(0xFFFFFFFF), 'White'),
-          SizedBox(width: 24),
-          _buildColorDot(const Color(0xFFFFFF00), 'Yellow'),
-          SizedBox(width: 48),
-          FloatingActionButton(
-            tooltip: 'Restart Sketch',
-            onPressed: restartSketch,
-            mini: true,
-            backgroundColor: const Color(0xFF333333),
-            child: Icon(Icons.refresh),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildColorDot(Color color, String colorDescription) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _backgroundColor = color;
-          });
-        },
-        child: Tooltip(
-          message: colorDescription,
-          child: Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color,
-              border: Border.all(color: Colors.white, width: 3),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
