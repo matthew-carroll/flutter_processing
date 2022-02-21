@@ -334,24 +334,24 @@ This is a list of public Processing APIs, as per the [official Processing refere
 - [ ] shader()
 
 ## Typography
-- [ ] PFont
+- [ ] ~~PFont~~: Use standard Flutter font configuration
 
 ### Loading & Displaying
-- [ ] createFont()
-- [ ] loadFont()
-- [ ] text()
-- [ ] textFont()
+- [ ] ~~createFont()~~: Use standard Flutter font configuration
+- [ ] ~~loadFont()~~: Use standard Flutter font configuration
+- [x] text()
+- [x] textFont()
 
 ### Attributes
-- [ ] textAlign()
-- [ ] textLeading()
-- [ ] textMode()
-- [ ] textSize()
-- [ ] textWidth()
+- [x] textAlign()
+- [x] textLeading()
+- [ ] ~~textMode()~~: Flutter only supports SKIA-rendered fonts
+- [x] textSize()
+- [x] textWidth()
 
 ### Metrics
-- [ ] textAscent()
-- [ ] textDescent()
+- [x] textAscent()
+- [x] textDescent()
 
 ## Math
 - [x] PVector
