@@ -12,8 +12,9 @@ import 'package:flutter_processing_example/api_demos/text_demos.dart';
 import 'package:flutter_processing_example/demos/_blend_modes_sketch.dart';
 import 'package:flutter_processing_example/demos/_filters_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
-import 'package:flutter_processing_example/demos/colored_circles.dart';
+import 'package:flutter_processing_example/generative_art/colored_circles.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
+import 'package:flutter_processing_example/generative_art/network.dart';
 import 'package:flutter_processing_example/io/_files.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/003_snake_game.dart';
@@ -32,6 +33,7 @@ import 'package:popover/popover.dart';
 
 import '_processing_demo_sketch_display.dart';
 import 'demos/_empty_sketch.dart';
+import 'the_coding_train/coding_challenges/024_perlin_noise_flow_field.dart';
 
 /// Screen that displays all example app demos.
 class ProcessingDemosScreen extends StatefulWidget {
@@ -98,6 +100,15 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
                 );
               },
             ),
+            DemoMenuItem(
+              title: 'Network',
+              builder: (_, sketchController) {
+                return ProcessingDemo(
+                  createSketch: () => NetworkSketch(),
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
           ],
         );
       },
@@ -140,6 +151,15 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
               title: '006: Mitosis Simulation',
               builder: (_, sketchController) {
                 return CodingTrainMitosisScreen(
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: '024: Perlin Noise Flow Field',
+              builder: (_, sketchController) {
+                return ProcessingDemo(
+                  createSketch: () => PerlinNoiseFlowFieldSketch(),
                   sketchDemoController: sketchController,
                 );
               },

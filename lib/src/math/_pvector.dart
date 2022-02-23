@@ -142,6 +142,8 @@ class PVector {
     return PVector(x, y);
   }
 
+  Offset toOffset() => Offset(x.toDouble(), y.toDouble());
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) || other is PVector && runtimeType == other.runtimeType && x == other.x && y == other.y;
