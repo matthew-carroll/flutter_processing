@@ -14,7 +14,10 @@ import 'package:flutter_processing_example/demos/_filters_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:flutter_processing_example/generative_art/colored_circles.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
+import 'package:flutter_processing_example/generative_art/liquid_gels.dart';
 import 'package:flutter_processing_example/generative_art/network.dart';
+import 'package:flutter_processing_example/generative_art/solar_storm.dart';
+import 'package:flutter_processing_example/generative_art/wobbly_swarm.dart';
 import 'package:flutter_processing_example/io/_files.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/003_snake_game.dart';
@@ -105,6 +108,33 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
               builder: (_, sketchController) {
                 return ProcessingDemo(
                   createSketch: () => NetworkSketch(),
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Liquid Gels',
+              builder: (_, sketchController) {
+                return ProcessingDemo(
+                  createSketch: () => LiquidGelsSketch(),
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Solar Storm',
+              builder: (_, sketchController) {
+                return ProcessingDemo(
+                  createSketch: () => SolarStormSketch(),
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Wobbly Swarm',
+              builder: (_, sketchController) {
+                return ProcessingDemo(
+                  createSketch: () => WobblySwarmSketch(),
                   sketchDemoController: sketchController,
                 );
               },
