@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -29,6 +28,7 @@ part 'input/_mouse.dart';
 part 'image/_loading_and_displaying.dart';
 part 'image/_pixels.dart';
 part 'output/_image.dart';
+part 'rendering/_rendering.dart';
 part 'shape/_attributes.dart';
 part 'shape/_two_d_primitives.dart';
 part 'shape/_vertex.dart';

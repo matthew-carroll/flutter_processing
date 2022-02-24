@@ -10,10 +10,9 @@ class LiquidGelsSketch extends Sketch {
 
   @override
   void draw() {
-    // TODO: implement blending
-    // blendMode(BLEND);
+    blendMode = BlendMode.src;
     background(color: Color.fromARGB(255, 245, 245, 245));
-    // blendMode(MULTIPLY);
+    blendMode = BlendMode.multiply;
     noStroke();
     translate(x: width / 2, y: height / 2);
 
@@ -38,7 +37,8 @@ class LiquidGelsSketch extends Sketch {
       final r =
           height * 0.3 + noise(x: frameCount / nm + ind) * height * 0.1 + sin(frameCount / sm + ind) * height * 0.05;
       // TODO: implement curve vertex
-      // curveVertex(cos(rad) * r, sin(rad) * r);
+      curveVertex(cos(rad) * r, sin(rad) * r);
+      // vertex(cos(rad) * r, sin(rad) * r);
     }
     endShape();
     popMatrix();

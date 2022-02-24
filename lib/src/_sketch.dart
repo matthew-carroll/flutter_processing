@@ -16,6 +16,7 @@ class Sketch extends BaseSketch
         SketchMathTrigonometry,
         SketchMathRandom,
         SketchOutputImage,
+        SketchRendering,
         SketchShapeAttributes,
         SketchShapeTwoDPrimitives,
         SketchShapeVertex,

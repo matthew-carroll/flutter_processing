@@ -97,7 +97,7 @@ mixin SketchShapeVertex on BaseSketch {
 
     _shape!.vertices.add(_CurveVertex(x, y));
 
-    throw UnimplementedError("Flutter Processing doesn't know how to draw curve vertices, do you?");
+    // throw UnimplementedError("Flutter Processing doesn't know how to draw curve vertices, do you?");
   }
 
   void bezierVertex(c1x, c1y, c2x, c2y, x2, y2) {
@@ -139,8 +139,34 @@ mixin SketchShapeVertex on BaseSketch {
     final firstVertex = shape.vertices.first as _PointVertex;
 
     final path = Path()..moveTo(firstVertex.x.toDouble(), firstVertex.y.toDouble());
+
+    final curveVertices = <_CurveVertex>[];
+    if (firstVertex is _CurveVertex) {
+      curveVertices.add(firstVertex);
+    }
+
     for (int i = 1; i < shape.vertices.length; i += 1) {
       final nextVertex = shape.vertices[i];
+
+      if (nextVertex is _CurveVertex) {
+        // TODO: implement the correct curve behavior, i.e., Catmull-Rom splines
+        if (curveVertices.length == 2) {
+          path.cubicTo(
+            curveVertices[0].x.toDouble(),
+            curveVertices[0].y.toDouble(),
+            curveVertices[1].x.toDouble(),
+            curveVertices[1].y.toDouble(),
+            nextVertex.x.toDouble(),
+            nextVertex.y.toDouble(),
+          );
+          curveVertices.clear();
+        } else {
+          curveVertices.add(nextVertex);
+        }
+        continue;
+      } else {
+        curveVertices.clear();
+      }
 
       if (nextVertex is _PointVertex) {
         path.lineTo(nextVertex.x.toDouble(), nextVertex.y.toDouble());
