@@ -180,6 +180,63 @@ void main() {
 
         await screenMatchesGolden(tester, 'color_setting_nostroke-example-1');
       });
+
+      processingLegacySpecTest('background in clear() replace background in setup() and drawn rect', (tester) async {
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              draw: (s) {
+                s
+                  ..noLoop()
+                  ..fill(color: const Color(0xFF969696))
+                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55))
+                  ..clear();
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'color_setting_background_draw_then_clear');
+      });
+
+      processingLegacySpecTest(
+          'background in clear() replace background, rect drawn after is shown on transparent background',
+          (tester) async {
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              draw: (s) {
+                s
+                  ..noLoop()
+                  ..clear()
+                  ..fill(color: const Color(0xFF969696))
+                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'color_setting_background_clear_then_draw');
+      });
+    });
+
+    processingLegacySpecTest('new background is set, rect is drawn after clear()', (tester) async {
+      await tester.pumpWidget(
+        Processing(
+          sketch: Sketch.simple(
+            draw: (s) {
+              s
+                ..noLoop()
+                ..clear()
+                ..background(color: const Color(0xFF404040))
+                ..fill(color: const Color(0xFF969696))
+                ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+            },
+          ),
+        ),
+      );
+
+      await screenMatchesGolden(tester, 'color_setting_background_clear_then_background_draw');
     });
   });
 }
