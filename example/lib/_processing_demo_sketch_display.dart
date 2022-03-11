@@ -228,7 +228,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
 
     _gifFile = file;
     _gifGenerator = GifGenerator(
-      totalDesiredFrameCount: fps * duration.inSeconds,
+      duration: duration,
       gifFrameRateFps: fps,
     );
 
@@ -327,7 +327,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
       }
     } else if (_gifCompleter != null) {
       print('Adding GIF frame');
-      await _gifGenerator!.addFrame(frame);
+      await _gifGenerator!.addFrame(frame, Duration(milliseconds: (1000 / _sketch!.frameRate).floor()));
 
       // Note: If the sketch is no longer looping then we won't get
       // another opportunity to add to the GIF. We need to complete it early.
