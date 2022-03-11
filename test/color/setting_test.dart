@@ -181,10 +181,13 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_nostroke-example-1');
       });
 
-      processingLegacySpecTest('background in clear() replace background in setup() and drawn rect', (tester) async {
+      processingLegacySpecTest('clear() replaces background in setup() and drawn rect', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
+              setup: (s) {
+                s.background(color: const Color(0xFF404040));
+              },
               draw: (s) {
                 s
                   ..noLoop()
@@ -196,15 +199,17 @@ void main() {
           ),
         );
 
-        await screenMatchesGolden(tester, 'color_setting_background_draw_then_clear');
+        await screenMatchesGolden(tester, 'color_setting_clear-draw-then-clear');
       });
 
-      processingLegacySpecTest(
-          'background in clear() replace background, rect drawn after is shown on transparent background',
+      processingLegacySpecTest('clear() replace background in setup(), then draw rect on transparent background',
           (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
+              setup: (s) {
+                s.background(color: const Color(0xFF404040));
+              },
               draw: (s) {
                 s
                   ..noLoop()
@@ -216,11 +221,11 @@ void main() {
           ),
         );
 
-        await screenMatchesGolden(tester, 'color_setting_background_clear_then_draw');
+        await screenMatchesGolden(tester, 'color_setting_clear-clear-then-draw');
       });
     });
 
-    processingLegacySpecTest('new background is set, rect is drawn after clear()', (tester) async {
+    processingLegacySpecTest('clear(), then set background, draw rect normally', (tester) async {
       await tester.pumpWidget(
         Processing(
           sketch: Sketch.simple(
@@ -236,7 +241,7 @@ void main() {
         ),
       );
 
-      await screenMatchesGolden(tester, 'color_setting_background_clear_then_background_draw');
+      await screenMatchesGolden(tester, 'color_setting_clear-then-background-and-draw');
     });
   });
 }
