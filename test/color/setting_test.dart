@@ -202,14 +202,10 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_clear-draw-then-clear');
       });
 
-      processingLegacySpecTest('clear() replace background in setup(), then draw rect on transparent background',
-          (tester) async {
+      processingLegacySpecTest('clear(), then draw rect on transparent background', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
-              setup: (s) {
-                s.background(color: const Color(0xFF404040));
-              },
               draw: (s) {
                 s
                   ..noLoop()
@@ -221,7 +217,7 @@ void main() {
           ),
         );
 
-        await screenMatchesGolden(tester, 'color_setting_clear-clear-then-draw');
+        await screenMatchesGolden(tester, 'color_setting_clear-then-draw');
       });
     });
 
