@@ -180,6 +180,62 @@ void main() {
 
         await screenMatchesGolden(tester, 'color_setting_nostroke-example-1');
       });
+
+      processingLegacySpecTest('clear() replaces background in setup()', (tester) async {
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              setup: (s) {
+                s.background(color: const Color(0xFF404040));
+              },
+              draw: (s) {
+                s
+                  ..noLoop()
+                  ..clear();
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'color_setting_clear-set-background-then-clear');
+      });
+
+      processingLegacySpecTest('clear(), then draw rect on transparent background', (tester) async {
+        await tester.pumpWidget(
+          Processing(
+            sketch: Sketch.simple(
+              draw: (s) {
+                s
+                  ..noLoop()
+                  ..clear()
+                  ..fill(color: const Color(0xFF969696))
+                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+              },
+            ),
+          ),
+        );
+
+        await screenMatchesGolden(tester, 'color_setting_clear-then-draw');
+      });
+    });
+
+    processingLegacySpecTest('clear(), then set background, draw rect normally', (tester) async {
+      await tester.pumpWidget(
+        Processing(
+          sketch: Sketch.simple(
+            draw: (s) {
+              s
+                ..noLoop()
+                ..clear()
+                ..background(color: const Color(0xFF404040))
+                ..fill(color: const Color(0xFF969696))
+                ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+            },
+          ),
+        ),
+      );
+
+      await screenMatchesGolden(tester, 'color_setting_clear-then-background-and-draw');
     });
   });
 }

@@ -33,4 +33,12 @@ mixin SketchColorSetting on BaseSketch {
   void noStroke() {
     _paintingContext.strokePaint.color = const Color(0x00000000);
   }
+
+  void clear() {
+    _backgroundColor = const Color(0x00000000);
+
+    _paintingContext.canvas.drawColor(const Color(0x00000000), BlendMode.clear);
+
+    _paintingContext.markHasUnappliedCanvasCommands();
+  }
 }
