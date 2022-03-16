@@ -181,7 +181,7 @@ void main() {
         await screenMatchesGolden(tester, 'color_setting_nostroke-example-1');
       });
 
-      processingLegacySpecTest('clear() replaces background in setup() and drawn rect', (tester) async {
+      processingLegacySpecTest('clear() replaces background in setup()', (tester) async {
         await tester.pumpWidget(
           Processing(
             sketch: Sketch.simple(
@@ -191,15 +191,13 @@ void main() {
               draw: (s) {
                 s
                   ..noLoop()
-                  ..fill(color: const Color(0xFF969696))
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55))
                   ..clear();
               },
             ),
           ),
         );
 
-        await screenMatchesGolden(tester, 'color_setting_clear-draw-then-clear');
+        await screenMatchesGolden(tester, 'color_setting_clear-set-background-then-clear');
       });
 
       processingLegacySpecTest('clear(), then draw rect on transparent background', (tester) async {
