@@ -34,9 +34,10 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
     required Offset center,
     required double diameter,
   }) {
-    _paintingContext.canvas
-      ..drawCircle(center, diameter / 2, _paintingContext.fillPaint)
-      ..drawCircle(center, diameter / 2, _paintingContext.strokePaint);
+    if (_paintingContext.strokePaint.color.alpha > 0) {
+      _paintingContext.canvas.drawCircle(center, diameter / 2, _paintingContext.strokePaint);
+    }
+    _paintingContext.canvas.drawCircle(center, diameter / 2, _paintingContext.fillPaint);
 
     _paintingContext.markHasUnappliedCanvasCommands();
   }

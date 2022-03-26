@@ -293,7 +293,7 @@ This is a list of public Processing APIs, as per the [official Processing refere
 - [x] saturation()
 
 ## Image
-- [ ] createImage()
+- [ ] ~~createImage()~~: Use the `PImage` constructor
 - [x] PImage
 
 ### Loading & Displaying
@@ -313,14 +313,15 @@ This is a list of public Processing APIs, as per the [official Processing refere
 - [ ] blend()
 - [ ] copy()
 - [ ] filter()
-- [x] get()
 - [x] loadPixels()
+- [ ] mask()
 - [x] pixels[]
 - [x] set()
 - [x] updatePixels()
+- [x] get()
 
 ## Rendering
-- [ ] blendMode()
+- [x] blendMode()
 - [ ] clip()
 - [ ] createGraphics()
 - [ ] hint()

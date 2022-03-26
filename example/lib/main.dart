@@ -6,6 +6,7 @@ import 'package:flutter_processing_example/demos/_filters_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:flutter_processing_example/generative_art/colored_circles.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
+import 'package:flutter_processing_example/generative_art/liquid_gels.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/003_snake_game.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/004_purple-rain.dart';
