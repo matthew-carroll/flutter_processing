@@ -8,8 +8,8 @@ class NetworkSketch extends Sketch {
   static const _maxDiameter = 50;
   static const _maxEdgeLength = 200;
   static const _maxEdgeWidth = 5;
-  static const _nodeColor = Color(0xFF888888);
-  static const _edgeColor = Color(0xFFEEEEEE);
+  static const _nodeColor = Colors.purpleAccent;
+  static final _edgeColor = Colors.deepPurple.withOpacity(0.2);
 
   final _nodes = <_Node>[];
 
@@ -31,7 +31,7 @@ class NetworkSketch extends Sketch {
 
   @override
   void draw() {
-    background(color: Colors.white);
+    background(color: const Color(0xFF333333));
 
     stroke(color: _edgeColor);
     for (final node1 in _nodes) {
