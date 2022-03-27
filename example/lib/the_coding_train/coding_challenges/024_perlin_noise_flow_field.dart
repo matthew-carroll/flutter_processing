@@ -5,7 +5,7 @@ import 'package:flutter_processing/flutter_processing.dart';
 
 class PerlinNoiseFlowFieldSketch extends Sketch {
   static const _pixelsPerFlowGrid = 10;
-  static const _particleCount = 5000;
+  static const _particleCount = 10000;
 
   late List<List<PVector>> _flowField;
   late List<_Particle> _particles;
@@ -46,7 +46,7 @@ class PerlinNoiseFlowFieldSketch extends Sketch {
       );
     }
 
-    background(color: Colors.white);
+    background(color: Colors.deepPurple);
   }
 
   @override
@@ -79,7 +79,7 @@ class PerlinNoiseFlowFieldSketch extends Sketch {
 
       // Draw a line between the particles previous position and
       // current position.
-      stroke(color: Color(0xFF444444).withOpacity(0.1));
+      stroke(color: Colors.purpleAccent.withOpacity(0.1));
       // This stroke interprets the flow field under the particle as a color.
       // stroke(
       //     color: HSVColor.fromAHSV(1.0, 360 * (_flowField[flowFieldX][flowFieldY].heading + PI) / TWO_PI, 1.0, 1.0)

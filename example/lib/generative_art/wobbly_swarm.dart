@@ -11,7 +11,7 @@ class WobblySwarmSketch extends Sketch {
 
   @override
   void setup() {
-    size(width: 1200, height: 800);
+    size(width: 800, height: 800);
   }
 
   @override
