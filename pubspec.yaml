@@ -1,6 +1,6 @@
 name: flutter_processing
 description: A Flutter version of Processing.
-version: 0.1.1
+version: 0.2.0
 homepage: https://github.com/matthew-carroll/flutter_processing
 
 environment:
