@@ -8,7 +8,7 @@ void main() {
   group('Complex shapes', () {
     testGoldens('stars', (tester) async {
       tester.binding.window
-        ..physicalSizeTestValue = Size(640, 360)
+        ..physicalSizeTestValue = const Size(640, 360)
         ..devicePixelRatioTestValue = 1.0;
 
       await tester.pumpWidget(
@@ -24,7 +24,7 @@ void main() {
 
     testGoldens('triangle strip circle', (tester) async {
       tester.binding.window
-        ..physicalSizeTestValue = Size(640, 360)
+        ..physicalSizeTestValue = const Size(640, 360)
         ..devicePixelRatioTestValue = 1.0;
 
       await tester.pumpWidget(
@@ -97,8 +97,8 @@ class TriangleStripCircleSketch extends Sketch {
 
     final x = width / 2;
     final y = height / 2;
-    final outsideRadius = 150;
-    final insideRadius = 100;
+    const outsideRadius = 150;
+    const insideRadius = 100;
 
     int numPoints = 30;
     double angle = 0;

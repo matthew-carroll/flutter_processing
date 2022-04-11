@@ -18,10 +18,10 @@ void main() {
                 s.noStroke();
                 final color = s.color(alpha: 102, comp1: 0, comp2: 126, comp3: 255);
                 s.fill(color: color);
-                s.rect(rect: Rect.fromLTWH(15, 15, 35, 70));
+                s.rect(rect: const Rect.fromLTWH(15, 15, 35, 70));
                 final value = s.alpha(color);
                 s.fill(color: s.color(grey: value));
-                s.rect(rect: Rect.fromLTWH(50, 15, 35, 70));
+                s.rect(rect: const Rect.fromLTWH(50, 15, 35, 70));
               },
             ),
           ),
@@ -42,11 +42,11 @@ void main() {
 
                 final c = s.color(comp1: 255, comp2: 204, comp3: 0);
                 s.fill(color: c);
-                s.rect(rect: Rect.fromLTWH(15, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(15, 20, 35, 60));
 
                 final redValue = s.red(c);
                 s.fill(color: s.color(comp1: redValue, comp2: 0, comp3: 0));
-                s.rect(rect: Rect.fromLTWH(50, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(50, 20, 35, 60));
               },
             ),
           ),
@@ -67,11 +67,11 @@ void main() {
 
                 final color = s.color(comp1: 20, comp2: 75, comp3: 200);
                 s.fill(color: color);
-                s.rect(rect: Rect.fromLTWH(15, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(15, 20, 35, 60));
 
                 final greenValue = s.green(color);
                 s.fill(color: s.color(comp1: 0, comp2: greenValue, comp3: 0));
-                s.rect(rect: Rect.fromLTWH(50, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(50, 20, 35, 60));
               },
             ),
           ),
@@ -92,11 +92,11 @@ void main() {
 
                 final color = s.color(comp1: 175, comp2: 110, comp3: 220);
                 s.fill(color: color);
-                s.rect(rect: Rect.fromLTWH(15, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(15, 20, 35, 60));
 
                 final blueValue = s.blue(color);
                 s.fill(color: s.color(comp1: 0, comp2: 0, comp3: blueValue));
-                s.rect(rect: Rect.fromLTWH(50, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(50, 20, 35, 60));
               },
             ),
           ),
@@ -119,10 +119,10 @@ void main() {
                 s.colorMode(ColorMode.hsb);
                 final c = s.color(comp1: 0, comp2: 126, comp3: 255);
                 s.fill(color: c);
-                s.rect(rect: Rect.fromLTWH(15, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(15, 20, 35, 60));
                 final value = s.hue(c);
                 s.fill(color: s.color(grey: value));
-                s.rect(rect: Rect.fromLTWH(50, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(50, 20, 35, 60));
               },
             ),
           ),
@@ -145,10 +145,10 @@ void main() {
                 s.colorMode(ColorMode.hsb);
                 final c = s.color(comp1: 0, comp2: 126, comp3: 255);
                 s.fill(color: c);
-                s.rect(rect: Rect.fromLTWH(15, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(15, 20, 35, 60));
                 final value = s.saturation(c);
                 s.fill(color: s.color(grey: value));
-                s.rect(rect: Rect.fromLTWH(50, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(50, 20, 35, 60));
               },
             ),
           ),
@@ -171,10 +171,10 @@ void main() {
                 s.colorMode(ColorMode.hsb);
                 final c = s.color(comp1: 0, comp2: 126, comp3: 255);
                 s.fill(color: c);
-                s.rect(rect: Rect.fromLTWH(15, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(15, 20, 35, 60));
                 final value = s.brightness(c);
                 s.fill(color: s.color(grey: value));
-                s.rect(rect: Rect.fromLTWH(50, 20, 35, 60));
+                s.rect(rect: const Rect.fromLTWH(50, 20, 35, 60));
               },
             ),
           ),
@@ -201,13 +201,13 @@ void main() {
                 final interB = s.lerpColor(from, to, .66);
                 s
                   ..fill(color: from)
-                  ..rect(rect: Rect.fromLTWH(10, 20, 20, 60))
+                  ..rect(rect: const Rect.fromLTWH(10, 20, 20, 60))
                   ..fill(color: interA)
-                  ..rect(rect: Rect.fromLTWH(30, 20, 20, 60))
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 20, 60))
                   ..fill(color: interB)
-                  ..rect(rect: Rect.fromLTWH(50, 20, 20, 60))
+                  ..rect(rect: const Rect.fromLTWH(50, 20, 20, 60))
                   ..fill(color: to)
-                  ..rect(rect: Rect.fromLTWH(70, 20, 20, 60));
+                  ..rect(rect: const Rect.fromLTWH(70, 20, 20, 60));
               },
             ),
           ),

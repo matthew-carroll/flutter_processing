@@ -25,7 +25,7 @@ class _CodingTrainRandomWalkerScreenState extends State<CodingTrainRandomWalkerS
       setup: (s) {
         s
           ..size(width: 400, height: 400)
-          ..background(color: Color(0xFF444444));
+          ..background(color: const Color(0xFF444444));
 
         x = (s.width / 2).round();
         y = (s.height / 2).round();

@@ -73,7 +73,7 @@ void main() {
               for (int i = 0; i < distribution.length; i++) {
                 s.rotate(2 * pi / distribution.length);
                 final dist = distribution[i].abs();
-                s.line(Offset(0, 0), Offset(dist, 0));
+                s.line(const Offset(0, 0), Offset(dist, 0));
               }
             },
           ),

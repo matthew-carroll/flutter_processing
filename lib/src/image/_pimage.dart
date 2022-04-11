@@ -237,8 +237,8 @@ class PImage {
       throw Exception("y must be < this image's height - height: $height, y: $y");
     }
 
-    for (int destX = x; (destX - x) < image.width && destX < this.width; x += 1) {
-      for (int destY = y; (destY - y) < image.height && destY < this.height; y += 1) {
+    for (int destX = x; (destX - x) < image.width && destX < width; x += 1) {
+      for (int destY = y; (destY - y) < image.height && destY < height; y += 1) {
         set(destX, destY, image.get(destX - x, destY - y));
       }
     }
@@ -742,9 +742,9 @@ extension on ByteData {
   /// Copies all the data in this [ByteData] to a new [ByteData]
   /// and returns it.
   ByteData copy() {
-    final copyBytes = ByteData(this.lengthInBytes);
+    final copyBytes = ByteData(lengthInBytes);
     for (int i = 0; i < lengthInBytes; i += 1) {
-      copyBytes.setUint8(i, this.getUint8(i));
+      copyBytes.setUint8(i, getUint8(i));
     }
     return copyBytes;
   }

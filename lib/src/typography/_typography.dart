@@ -37,7 +37,7 @@ mixin SketchTypography on BaseSketch {
       ..addText(text);
     final paragraph = paragraphBuilder.build()
       ..layout(
-        ParagraphConstraints(width: double.infinity),
+        const ParagraphConstraints(width: double.infinity),
       );
 
     late double textX;
@@ -111,7 +111,7 @@ mixin SketchTypography on BaseSketch {
       ..addText(text);
     final paragraph = paragraphBuilder.build()
       ..layout(
-        ParagraphConstraints(width: double.infinity),
+        const ParagraphConstraints(width: double.infinity),
       );
     return paragraph.maxIntrinsicWidth;
   }
@@ -130,7 +130,7 @@ mixin SketchTypography on BaseSketch {
       ..addText("d");
     final paragraph = paragraphBuilder.build()
       ..layout(
-        ParagraphConstraints(width: double.infinity),
+        const ParagraphConstraints(width: double.infinity),
       );
 
     return paragraph.computeLineMetrics().first.ascent;
@@ -150,7 +150,7 @@ mixin SketchTypography on BaseSketch {
       ..addText("p");
     final paragraph = paragraphBuilder.build()
       ..layout(
-        ParagraphConstraints(width: double.infinity),
+        const ParagraphConstraints(width: double.infinity),
       );
 
     return paragraph.computeLineMetrics().first.descent;

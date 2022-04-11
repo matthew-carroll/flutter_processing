@@ -7,7 +7,7 @@ void main() {
   group('Math', () {
     group('PVector', () {
       test('create random', () {
-        final seed = 12345;
+        const seed = 12345;
         final randomVector = PVector.random2D(seed: seed);
 
         expect(randomVector, equals(PVector(0.9170641544216254, -0.39873968535242293)));

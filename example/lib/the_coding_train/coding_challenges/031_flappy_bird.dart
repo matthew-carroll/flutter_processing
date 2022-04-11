@@ -62,7 +62,7 @@ class _FlappyBirdSketch extends Sketch {
 
   final _birdSolidSize = 30.0;
   final _birdVisualScale = 1.75;
-  late double _birdBitmapSize = _birdSolidSize * _birdVisualScale;
+  late final double _birdBitmapSize = _birdSolidSize * _birdVisualScale;
   late PImage _birdBitmap;
   late Bird _bird;
 
@@ -90,7 +90,7 @@ class _FlappyBirdSketch extends Sketch {
 
     _bird = Bird(
       size: _birdSolidSize,
-      position: Offset(100, 100),
+      position: const Offset(100, 100),
     );
   }
 
@@ -248,7 +248,7 @@ class Bird {
         _position = position,
         _velocity = velocity;
 
-  double _size; // interpreted as a circle diameter
+  final double _size; // interpreted as a circle diameter
   double get size => _size;
 
   Offset _position;
@@ -310,13 +310,13 @@ class Pipe {
 
   double get right => _left + _width;
 
-  double _width;
+  final double _width;
   double get width => _width;
 
-  double _holeTop;
+  final double _holeTop;
   double get holeTop => _holeTop;
 
-  double _holeBottom;
+  final double _holeBottom;
   double get holeBottom => _holeBottom;
 
   void move({required double distance}) {

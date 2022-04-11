@@ -48,7 +48,7 @@ void main() {
     processingLegacySpecTest('size()', (tester) async {
       // Expand the canvas to leave enough space for
       // a larger Processing sketch.
-      tester.binding.window.physicalSizeTestValue = Size(250, 250);
+      tester.binding.window.physicalSizeTestValue = const Size(250, 250);
 
       await tester.pumpWidget(
         Processing(
@@ -59,7 +59,7 @@ void main() {
                 ..size(width: 200, height: 200);
             },
             draw: (s) {
-              s.circle(center: Offset(100, 100), diameter: 50);
+              s.circle(center: const Offset(100, 100), diameter: 50);
             },
           ),
         ),

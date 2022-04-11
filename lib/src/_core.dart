@@ -37,7 +37,7 @@ part 'transform/_transform.dart';
 part 'typography/_typography.dart';
 
 abstract class BaseSketch {
-  SketchPaintingContext _paintingContext = SketchPaintingContext();
+  final SketchPaintingContext _paintingContext = SketchPaintingContext();
 
   AssetBundle? _assetBundle;
 }

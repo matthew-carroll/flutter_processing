@@ -15,11 +15,11 @@ void main() {
                 s
                   ..noLoop()
                   ..strokeWeight(1)
-                  ..line(Offset(20, 20), Offset(80, 20))
+                  ..line(const Offset(20, 20), const Offset(80, 20))
                   ..strokeWeight(4)
-                  ..line(Offset(20, 40), Offset(80, 40))
+                  ..line(const Offset(20, 40), const Offset(80, 40))
                   ..strokeWeight(10)
-                  ..line(Offset(20, 70), Offset(80, 70));
+                  ..line(const Offset(20, 70), const Offset(80, 70));
               },
             ),
           ),

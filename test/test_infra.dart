@@ -14,7 +14,7 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 void processingSpecTest(String description, Future<void> Function(WidgetTester) test) {
   testGoldens(description, (tester) async {
     tester.binding.window
-      ..physicalSizeTestValue = Size(400, 400)
+      ..physicalSizeTestValue = const Size(400, 400)
       ..devicePixelRatioTestValue = 1.0;
 
     await test(tester);
@@ -34,7 +34,7 @@ void processingLegacySpecTest(String description, Future<void> Function(WidgetTe
     // All the legacy Processing reference examples (before Aug 2021)
     // were 100x100 px.
     tester.binding.window
-      ..physicalSizeTestValue = Size(100, 100)
+      ..physicalSizeTestValue = const Size(100, 100)
       ..devicePixelRatioTestValue = 1.0;
 
     await test(tester);
@@ -44,7 +44,7 @@ void processingLegacySpecTest(String description, Future<void> Function(WidgetTe
 }
 
 class TestAssetBundle implements AssetBundle {
-  static Map<String, ByteData> _cache = {};
+  static final Map<String, ByteData> _cache = {};
 
   /// [filepath] is relative to the "/test/assets/" directory.
   @override

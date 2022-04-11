@@ -1,7 +1,7 @@
 part of '../_core.dart';
 
 mixin SketchInputKeyboard {
-  Set<LogicalKeyboardKey> _pressedKeys = {};
+  final Set<LogicalKeyboardKey> _pressedKeys = {};
 
   bool get isKeyPressed => _pressedKeys.isNotEmpty;
 

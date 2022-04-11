@@ -42,50 +42,50 @@ class _PImageFiltersSketchDemoState extends State<PImageFiltersSketchDemo> {
         _thresholdImage = _baseImage.copy()..filter(ImageFilter.threshold, 0.5);
         _canvasImage.copyFrom(
           source: _thresholdImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(0, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(0, 0, 200, 200),
         );
 
         _grayImage = _baseImage.copy()..filter(ImageFilter.gray);
         _canvasImage.copyFrom(
           source: _grayImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(200, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(200, 0, 200, 200),
         );
 
         _opaqueImage = _baseImage.copy()..filter(ImageFilter.opaque);
         _canvasImage.copyFrom(
           source: _opaqueImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(400, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(400, 0, 200, 200),
         );
 
         _invertedImage = _baseImage.copy()..filter(ImageFilter.invert);
         _canvasImage.copyFrom(
           source: _invertedImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(600, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(600, 0, 200, 200),
         );
 
         _posterizedImage = _baseImage.copy()..filter(ImageFilter.posterize, 4);
         _canvasImage.copyFrom(
           source: _posterizedImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(0, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(0, 200, 200, 200),
         );
 
         _erodedImage = _baseImage.copy()..filter(ImageFilter.erode);
         _canvasImage.copyFrom(
           source: _erodedImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(400, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(400, 200, 200, 200),
         );
 
         _dilatedImage = _baseImage.copy()..filter(ImageFilter.dilate);
         _canvasImage.copyFrom(
           source: _dilatedImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(600, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(600, 200, 200, 200),
         );
       },
       draw: (s) async {

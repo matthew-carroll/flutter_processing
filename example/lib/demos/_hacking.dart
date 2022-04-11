@@ -41,7 +41,7 @@ class _HackingDemoState extends State<HackingDemo> {
 
         for (int col = 0; col < 400; ++col) {
           for (int row = 0; row < 400; ++row) {
-            s.set(x: col, y: row, color: Color(0xFF00FF00));
+            s.set(x: col, y: row, color: const Color(0xFF00FF00));
           }
         }
         await s.setRegion(image: subImage);

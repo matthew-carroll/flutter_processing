@@ -16,10 +16,10 @@ class WobblySwarmSketch extends Sketch {
 
   @override
   void draw() {
-    background(color: Color.fromARGB(255, 32, 32, 32));
+    background(color: const Color.fromARGB(255, 32, 32, 32));
 
     noStroke();
-    fill(color: Color.fromARGB(192, 255, 255, 64));
+    fill(color: const Color.fromARGB(192, 255, 255, 64));
 
     for (var particleA = 0; particleA < mass.length; particleA++) {
       double accelerationX = 0;

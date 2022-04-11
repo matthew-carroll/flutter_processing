@@ -15,7 +15,7 @@ mixin SketchMathRandom {
 
   double random(num bound1, [num? bound2]) {
     final lowerBound = bound2 != null ? bound1 : 0;
-    final upperBound = bound2 != null ? bound2 : bound1;
+    final upperBound = bound2 ?? bound1;
 
     if (upperBound < lowerBound) {
       throw Exception('random() lower bound must be less than upper bound');
@@ -98,8 +98,8 @@ mixin SketchMathRandom {
       _previousGaussian = null;
     } else {
       do {
-        x1 = this.random(2) - 1;
-        x2 = this.random(2) - 1;
+        x1 = random(2) - 1;
+        x2 = random(2) - 1;
         w = x1 * x1 + x2 * x2;
       } while (w >= 1);
       w = sqrt(-2 * log(w) / w);

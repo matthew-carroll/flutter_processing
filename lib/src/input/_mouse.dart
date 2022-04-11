@@ -21,7 +21,7 @@ mixin SketchInputMouse {
     _mouseY = newPosition.dy.round();
   }
 
-  Set<MouseButton> _pressedMouseButtons = {};
+  final Set<MouseButton> _pressedMouseButtons = {};
 
   bool get isMousePressed => _pressedMouseButtons.isNotEmpty;
 

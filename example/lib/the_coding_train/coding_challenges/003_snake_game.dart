@@ -111,9 +111,7 @@ class _SnakeGameSketch extends Sketch {
     }
 
     // Generate food, if need
-    if (_food == null) {
-      _food = _getRandomCell();
-    }
+    _food ??= _getRandomCell();
   }
 
   @override
@@ -140,7 +138,7 @@ class Snake {
     required Point<int> position,
   }) : _cells = [position];
 
-  List<Point<int>> _cells;
+  final List<Point<int>> _cells;
   List<Point<int>> get cells => _cells;
 
   Point<int> get head => cells.first;
@@ -216,13 +214,13 @@ extension on _Direction {
   Point<int> move(Point<int> position) {
     switch (this) {
       case _Direction.left:
-        return position + Point(-1, 0);
+        return position + const Point(-1, 0);
       case _Direction.up:
-        return position + Point(0, -1);
+        return position + const Point(0, -1);
       case _Direction.right:
-        return position + Point(1, 0);
+        return position + const Point(1, 0);
       case _Direction.down:
-        return position + Point(0, 1);
+        return position + const Point(0, 1);
     }
   }
 }

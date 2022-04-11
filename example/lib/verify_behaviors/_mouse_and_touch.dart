@@ -6,8 +6,10 @@ class MouseAndTouchSketch extends Sketch {
     required this.height,
   });
 
-  final width;
-  final height;
+  @override
+  final int width;
+  @override
+  final int height;
 
   @override
   void setup() {

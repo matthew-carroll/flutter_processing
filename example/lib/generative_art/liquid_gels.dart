@@ -11,18 +11,18 @@ class LiquidGelsSketch extends Sketch {
   @override
   void draw() {
     blendMode = BlendMode.src;
-    background(color: Color.fromARGB(255, 245, 245, 245));
+    background(color: const Color.fromARGB(255, 245, 245, 245));
     blendMode = BlendMode.multiply;
     noStroke();
     translate(x: width / 2, y: height / 2);
 
-    fill(color: Color.fromARGB(255, 0, 150, 240));
+    fill(color: const Color.fromARGB(255, 0, 150, 240));
     drawGel(18, 50, 20, 100);
 
-    fill(color: Color.fromARGB(255, 240, 240, 0));
+    fill(color: const Color.fromARGB(255, 240, 240, 0));
     drawGel(15, 60, 25, 120);
 
-    fill(color: Color.fromARGB(255, 240, 0, 240));
+    fill(color: const Color.fromARGB(255, 240, 0, 240));
     drawGel(12, 45, 15, 150);
   }
 

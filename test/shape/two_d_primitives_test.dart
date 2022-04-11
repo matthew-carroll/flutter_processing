@@ -18,7 +18,7 @@ void main() {
                 s
                   ..noLoop()
                   ..circle(
-                    center: Offset(56, 46),
+                    center: const Offset(56, 46),
                     diameter: 55,
                   );
               },
@@ -40,7 +40,7 @@ void main() {
                 s
                   ..noLoop()
                   ..square(
-                    Square.fromLTE(Offset(30, 20), 55),
+                    Square.fromLTE(const Offset(30, 20), 55),
                   );
               },
             ),
@@ -60,7 +60,7 @@ void main() {
                 s
                   ..noLoop()
                   ..rect(
-                    rect: Rect.fromLTWH(30, 20, 55, 55),
+                    rect: const Rect.fromLTWH(30, 20, 55, 55),
                   );
               },
             ),
@@ -78,7 +78,7 @@ void main() {
                 s
                   ..noLoop()
                   ..rect(
-                    rect: Rect.fromLTWH(30, 20, 55, 55),
+                    rect: const Rect.fromLTWH(30, 20, 55, 55),
                     borderRadius: BorderRadius.circular(7),
                   );
               },
@@ -97,8 +97,8 @@ void main() {
                 s
                   ..noLoop()
                   ..rect(
-                    rect: Rect.fromLTWH(30, 20, 55, 55),
-                    borderRadius: BorderRadius.only(
+                    rect: const Rect.fromLTWH(30, 20, 55, 55),
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(3),
                       topRight: Radius.circular(6),
                       bottomRight: Radius.circular(12),
@@ -121,9 +121,9 @@ void main() {
                 s
                   ..noLoop()
                   ..triangle(
-                    Offset(30, 75),
-                    Offset(58, 20),
-                    Offset(86, 75),
+                    const Offset(30, 75),
+                    const Offset(58, 20),
+                    const Offset(86, 75),
                   );
               },
             ),
@@ -141,10 +141,10 @@ void main() {
                 s
                   ..noLoop()
                   ..quad(
-                    Offset(38, 31),
-                    Offset(86, 20),
-                    Offset(69, 63),
-                    Offset(30, 76),
+                    const Offset(38, 31),
+                    const Offset(86, 20),
+                    const Offset(69, 63),
+                    const Offset(30, 76),
                   );
               },
             ),
@@ -162,8 +162,8 @@ void main() {
                 s
                   ..noLoop()
                   ..line(
-                    Offset(30, 20),
-                    Offset(85, 75),
+                    const Offset(30, 20),
+                    const Offset(85, 75),
                   );
               },
             ),
@@ -181,18 +181,18 @@ void main() {
                 s
                   ..noLoop()
                   ..line(
-                    Offset(30, 20),
-                    Offset(85, 20),
+                    const Offset(30, 20),
+                    const Offset(85, 20),
                   )
-                  ..stroke(color: Color.fromARGB(255, 126, 126, 126))
+                  ..stroke(color: const Color.fromARGB(255, 126, 126, 126))
                   ..line(
-                    Offset(85, 20),
-                    Offset(85, 75),
+                    const Offset(85, 20),
+                    const Offset(85, 75),
                   )
-                  ..stroke(color: Color.fromARGB(255, 255, 255, 255))
+                  ..stroke(color: const Color.fromARGB(255, 255, 255, 255))
                   ..line(
-                    Offset(85, 75),
-                    Offset(30, 75),
+                    const Offset(85, 75),
+                    const Offset(30, 75),
                   );
               },
             ),
@@ -230,7 +230,7 @@ void main() {
                   ..noLoop()
                   ..ellipse(
                     Ellipse.fromCenter(
-                      center: Offset(56, 46),
+                      center: const Offset(56, 46),
                       width: 55,
                       height: 55,
                     ),
@@ -250,18 +250,18 @@ void main() {
               draw: (s) {
                 s
                   ..noLoop()
-                  ..fill(color: Color.fromARGB(255, 255, 255, 255))
+                  ..fill(color: const Color.fromARGB(255, 255, 255, 255))
                   ..ellipse(
                     Ellipse.fromCenterWithRadius(
-                      center: Offset(50, 50),
+                      center: const Offset(50, 50),
                       radius1: 30,
                       radius2: 30,
                     ),
                   )
-                  ..fill(color: Color.fromARGB(255, 100, 100, 100))
+                  ..fill(color: const Color.fromARGB(255, 100, 100, 100))
                   ..ellipse(
                     Ellipse.fromCenter(
-                      center: Offset(50, 50),
+                      center: const Offset(50, 50),
                       width: 30,
                       height: 30,
                     ),
@@ -281,19 +281,19 @@ void main() {
               draw: (s) {
                 s
                   ..noLoop()
-                  ..fill(color: Color.fromARGB(255, 255, 255, 255))
+                  ..fill(color: const Color.fromARGB(255, 255, 255, 255))
                   ..ellipse(
                     Ellipse.fromLTWH(
-                      topLeft: Offset(25, 25),
+                      topLeft: const Offset(25, 25),
                       width: 50,
                       height: 50,
                     ),
                   )
-                  ..fill(color: Color.fromARGB(255, 100, 100, 100))
+                  ..fill(color: const Color.fromARGB(255, 100, 100, 100))
                   ..ellipse(
                     Ellipse.fromLTRB(
-                      topLeft: Offset(25, 25),
-                      bottomRight: Offset(50, 50),
+                      topLeft: const Offset(25, 25),
+                      bottomRight: const Offset(50, 50),
                     ),
                   );
               },
@@ -312,23 +312,23 @@ void main() {
                 s //
                   ..noLoop()
                   ..arc(
-                    ellipse: Ellipse.fromCenter(center: Offset(50, 55), width: 50, height: 50),
+                    ellipse: Ellipse.fromCenter(center: const Offset(50, 55), width: 50, height: 50),
                     startAngle: 0,
                     endAngle: pi / 2,
                   )
                   ..noFill()
                   ..arc(
-                    ellipse: Ellipse.fromCenter(center: Offset(50, 55), width: 60, height: 60),
+                    ellipse: Ellipse.fromCenter(center: const Offset(50, 55), width: 60, height: 60),
                     startAngle: pi / 2,
                     endAngle: pi,
                   )
                   ..arc(
-                    ellipse: Ellipse.fromCenter(center: Offset(50, 55), width: 70, height: 70),
+                    ellipse: Ellipse.fromCenter(center: const Offset(50, 55), width: 70, height: 70),
                     startAngle: pi,
                     endAngle: pi + (pi / 4),
                   )
                   ..arc(
-                    ellipse: Ellipse.fromCenter(center: Offset(50, 55), width: 80, height: 80),
+                    ellipse: Ellipse.fromCenter(center: const Offset(50, 55), width: 80, height: 80),
                     startAngle: pi + (pi / 4),
                     endAngle: 2 * pi,
                   );
@@ -348,7 +348,7 @@ void main() {
                 s
                   ..noLoop()
                   ..arc(
-                    ellipse: Ellipse.fromCenter(center: Offset(50, 50), width: 80, height: 80),
+                    ellipse: Ellipse.fromCenter(center: const Offset(50, 50), width: 80, height: 80),
                     startAngle: 0,
                     endAngle: pi + (pi / 4),
                     mode: ArcMode.open,
@@ -369,7 +369,7 @@ void main() {
                 s
                   ..noLoop()
                   ..arc(
-                    ellipse: Ellipse.fromCenter(center: Offset(50, 50), width: 80, height: 80),
+                    ellipse: Ellipse.fromCenter(center: const Offset(50, 50), width: 80, height: 80),
                     startAngle: 0,
                     endAngle: pi + (pi / 4),
                     mode: ArcMode.chord,
@@ -390,7 +390,7 @@ void main() {
                 s
                   ..noLoop()
                   ..arc(
-                    ellipse: Ellipse.fromCenter(center: Offset(50, 50), width: 80, height: 80),
+                    ellipse: Ellipse.fromCenter(center: const Offset(50, 50), width: 80, height: 80),
                     startAngle: 0,
                     endAngle: pi + (pi / 4),
                     mode: ArcMode.pie,

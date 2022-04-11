@@ -16,14 +16,14 @@ void main() {
                 ..size(width: 400, height: 400)
                 ..noLoop()
                 ..fill(color: Colors.white)
-                ..rect(rect: Rect.fromLTWH(0, 0, 200, 200))
+                ..rect(rect: const Rect.fromLTWH(0, 0, 200, 200))
                 ..pushMatrix()
                 ..translate(x: 120, y: 80)
                 ..fill(color: Colors.black)
-                ..rect(rect: Rect.fromLTWH(0, 0, 200, 200))
+                ..rect(rect: const Rect.fromLTWH(0, 0, 200, 200))
                 ..popMatrix()
-                ..fill(color: Color.fromARGB(255, 100, 100, 100))
-                ..rect(rect: Rect.fromLTWH(60, 40, 200, 200));
+                ..fill(color: const Color.fromARGB(255, 100, 100, 100))
+                ..rect(rect: const Rect.fromLTWH(60, 40, 200, 200));
             },
           ),
         ),
@@ -43,7 +43,7 @@ void main() {
               s
                 ..noLoop()
                 ..translate(x: 30, y: 20)
-                ..rect(rect: Rect.fromLTWH(0, 0, 55, 55));
+                ..rect(rect: const Rect.fromLTWH(0, 0, 55, 55));
             },
           ),
         ),
@@ -62,11 +62,11 @@ void main() {
             draw: (s) {
               s
                 ..noLoop()
-                ..rect(rect: Rect.fromLTWH(0, 0, 55, 55))
+                ..rect(rect: const Rect.fromLTWH(0, 0, 55, 55))
                 ..translate(x: 30, y: 20)
-                ..rect(rect: Rect.fromLTWH(0, 0, 55, 55))
+                ..rect(rect: const Rect.fromLTWH(0, 0, 55, 55))
                 ..translate(x: 14, y: 14)
-                ..rect(rect: Rect.fromLTWH(0, 0, 55, 55));
+                ..rect(rect: const Rect.fromLTWH(0, 0, 55, 55));
             },
           ),
         ),

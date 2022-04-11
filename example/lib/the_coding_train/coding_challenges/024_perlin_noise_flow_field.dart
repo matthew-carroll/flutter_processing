@@ -136,7 +136,7 @@ class _Particle {
   double get bottom => position.y + 1;
 
   PVector _velocity;
-  double _maxSpeed;
+  final double _maxSpeed;
 
   PVector _acceleration;
 

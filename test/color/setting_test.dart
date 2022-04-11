@@ -86,7 +86,7 @@ void main() {
                 s
                   ..noLoop()
                   ..fill(color: const Color(0xFF969696))
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -103,7 +103,7 @@ void main() {
                 s
                   ..noLoop()
                   ..fill(color: const Color(0xFFCC6600))
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -119,9 +119,9 @@ void main() {
               draw: (s) {
                 s
                   ..noLoop()
-                  ..rect(rect: Rect.fromLTWH(15, 10, 55, 55))
+                  ..rect(rect: const Rect.fromLTWH(15, 10, 55, 55))
                   ..noFill()
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -138,7 +138,7 @@ void main() {
                 s
                   ..noLoop()
                   ..stroke(color: const Color(0xFFAAAAAA))
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -155,7 +155,7 @@ void main() {
                 s
                   ..noLoop()
                   ..stroke(color: const Color(0xFFCC6600))
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -172,7 +172,7 @@ void main() {
                 s
                   ..noLoop()
                   ..noStroke()
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -209,7 +209,7 @@ void main() {
                   ..noLoop()
                   ..clear()
                   ..fill(color: const Color(0xFF969696))
-                  ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                  ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
               },
             ),
           ),
@@ -229,7 +229,7 @@ void main() {
                 ..clear()
                 ..background(color: const Color(0xFF404040))
                 ..fill(color: const Color(0xFF969696))
-                ..rect(rect: Rect.fromLTWH(30, 20, 55, 55));
+                ..rect(rect: const Rect.fromLTWH(30, 20, 55, 55));
             },
           ),
         ),
