@@ -6,7 +6,6 @@ import 'package:flutter_processing_example/demos/_filters_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:flutter_processing_example/generative_art/colored_circles.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
-import 'package:flutter_processing_example/generative_art/liquid_gels.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/001_starfield.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/003_snake_game.dart';
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/004_purple-rain.dart';
@@ -25,17 +24,19 @@ import 'package:flutter_processing_example/verify_behaviors/_mouse_and_touch.dar
 import '_demos_screen.dart';
 
 void main() {
-  runApp(FlutterProcessingExampleApp());
+  runApp(const FlutterProcessingExampleApp());
 }
 
 class FlutterProcessingExampleApp extends StatelessWidget {
+  const FlutterProcessingExampleApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Processing Example',
       theme: ThemeData(
         brightness: Brightness.dark,
-        colorScheme: ColorScheme.dark(
+        colorScheme: const ColorScheme.dark(
           primary: Colors.purple,
           onPrimary: Colors.white,
         ),

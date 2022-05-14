@@ -33,13 +33,13 @@ class _TextSketchDemoState extends State<TextSketchDemo> {
           ..fill(color: Colors.white)
           ..textSize(44)
           ..textAlign(TextAlignHorizontal.center, TextAlignVertical.bottom)
-          ..line(Offset(0, 120), Offset(s.width.toDouble(), 120))
+          ..line(const Offset(0, 120), Offset(s.width.toDouble(), 120))
           ..text("CENTER,BOTTOM", 200, 120)
           ..textAlign(TextAlignHorizontal.center, TextAlignVertical.center)
-          ..line(Offset(0, 200), Offset(s.width.toDouble(), 200))
+          ..line(const Offset(0, 200), Offset(s.width.toDouble(), 200))
           ..text("CENTER,CENTER", 200, 200)
           ..textAlign(TextAlignHorizontal.center, TextAlignVertical.top)
-          ..line(Offset(0, 280), Offset(s.width.toDouble(), 280))
+          ..line(const Offset(0, 280), Offset(s.width.toDouble(), 280))
           ..text("CENTER,TOP", 200, 280);
       },
     );
@@ -73,7 +73,7 @@ class _TextLeadingSketchDemoState extends State<TextLeadingSketchDemo> {
         s
           ..size(width: 400, height: 400)
           ..stroke(color: Colors.black)
-          ..line(Offset(0, 100), Offset(s.width.toDouble(), 100))
+          ..line(const Offset(0, 100), Offset(s.width.toDouble(), 100))
           ..fill(color: Colors.black)
           ..textSize(48)
           ..textLeading(40)
@@ -154,7 +154,7 @@ class _TextAscentSketchDemoState extends State<TextAscentSketchDemo> {
           ..textAlign(TextAlignHorizontal.left, TextAlignVertical.baseline);
 
         final baseline = s.height * 0.75;
-        final scalar = 0.8;
+        const scalar = 0.8;
 
         // Draw smaller text
         s.textSize(128);
@@ -203,7 +203,7 @@ class _TextDescentSketchDemoState extends State<TextDescentSketchDemo> {
           ..textAlign(TextAlignHorizontal.left, TextAlignVertical.baseline);
 
         final baseline = s.height * 0.75;
-        final scalar = 0.8;
+        const scalar = 0.8;
 
         // Draw smaller text
         s.textSize(128);

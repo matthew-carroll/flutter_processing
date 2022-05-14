@@ -46,13 +46,13 @@ class _BoidsSketch extends Sketch {
 
   @override
   void draw() {
-    background(color: Color.fromARGB(255, 50, 50, 50));
+    background(color: const Color.fromARGB(255, 50, 50, 50));
     _flock.update(this);
   }
 }
 
 class _Flock {
-  List<_Boid> _boids = [];
+  final List<_Boid> _boids = [];
 
   void addBoid(_Boid boid) => _boids.add(boid);
 
@@ -73,7 +73,7 @@ class _Boid {
   final _maxForce = 0.03;
   final _boidRadius = 2.0;
 
-  PVector _position;
+  final PVector _position;
   late PVector _velocity;
   late PVector _acceleration;
 
@@ -103,7 +103,7 @@ class _Boid {
   }
 
   PVector _separate(List<_Boid> boids) {
-    final desiredSeparation = 25.0;
+    const desiredSeparation = 25.0;
     final steer = PVector(0, 0);
     int count = 0;
 
@@ -144,7 +144,7 @@ class _Boid {
   }
 
   PVector _align(List<_Boid> boids) {
-    final neighborDistance = 50.0;
+    const neighborDistance = 50.0;
     final sum = PVector(0, 0);
     int count = 0;
 
@@ -173,7 +173,7 @@ class _Boid {
   }
 
   PVector _cohesion(List<_Boid> boids) {
-    final neighborDistance = 50.0;
+    const neighborDistance = 50.0;
     final sum = PVector(0, 0);
     int count = 0;
 
@@ -245,7 +245,7 @@ class _Boid {
     final directionOfMotion = _velocity.heading + (pi / 2);
 
     s
-      ..fill(color: Color.fromARGB(255, 200, 200, 200))
+      ..fill(color: const Color.fromARGB(255, 200, 200, 200))
       ..stroke(color: Colors.white)
       ..pushMatrix()
       ..translate(x: _position.x, y: _position.y)

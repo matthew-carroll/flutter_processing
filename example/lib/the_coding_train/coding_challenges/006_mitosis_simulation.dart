@@ -29,7 +29,7 @@ class _CodingTrainMitosisScreenState extends State<CodingTrainMitosisScreen> {
         }
       },
       draw: (s) {
-        s.background(color: Color.fromARGB(255, 200, 200, 200));
+        s.background(color: const Color.fromARGB(255, 200, 200, 200));
 
         for (final cell in _cells) {
           cell.move();

@@ -484,7 +484,7 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
       animation: _screenshotCountdown,
       builder: (context, child) {
         return AnimatedAlign(
-          alignment: _screenshotCountdown.isCountingDown ? Alignment.topCenter : Alignment(0.0, -1.4),
+          alignment: _screenshotCountdown.isCountingDown ? Alignment.topCenter : const Alignment(0.0, -1.4),
           duration: const Duration(milliseconds: 150),
           child: child,
         );
@@ -560,7 +560,7 @@ class _CountdownController with ChangeNotifier {
     super.dispose();
   }
 
-  AnimationController _timerController;
+  final AnimationController _timerController;
   VoidCallback? _onComplete;
 
   bool get isCountingDown => _timerController.isAnimating;

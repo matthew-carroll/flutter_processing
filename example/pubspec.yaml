@@ -17,6 +17,8 @@ dependencies:
 
   file_selector: ^0.8.2
   file_selector_macos: ^0.0.4
+  image: ^3.0.2
+  path: ^1.8.0
   patterns_canvas: ^0.3.5
   popover: ^0.2.6+2
 
@@ -25,6 +27,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
+  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true

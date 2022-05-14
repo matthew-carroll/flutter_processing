@@ -24,7 +24,7 @@ class _CodingTrainPurpleRainScreenState extends State<CodingTrainPurpleRainScree
       setup: (s) {
         s
           ..size(width: 256, height: 256)
-          ..background(color: Color.fromARGB(255, 200, 175, 220));
+          ..background(color: const Color.fromARGB(255, 200, 175, 220));
 
         for (int i = 0; i < 100; ++i) {
           _droplets.add(
@@ -38,7 +38,7 @@ class _CodingTrainPurpleRainScreenState extends State<CodingTrainPurpleRainScree
         }
       },
       draw: (s) {
-        s.background(color: Color.fromARGB(255, 200, 175, 220));
+        s.background(color: const Color.fromARGB(255, 200, 175, 220));
 
         for (final droplet in _droplets) {
           droplet
@@ -84,7 +84,7 @@ class Droplet {
     final perspectiveLength = lerpDouble(0.2 * length, length, z)!;
 
     s
-      ..stroke(color: Color.fromARGB(255, 128, 43, 226))
+      ..stroke(color: const Color.fromARGB(255, 128, 43, 226))
       ..line(Offset(x, y), Offset(x, y + perspectiveLength));
   }
 }

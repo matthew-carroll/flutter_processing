@@ -104,13 +104,13 @@ class Circle {
   })  : _offset = offset,
         _radius = radius;
 
-  Offset _offset;
+  final Offset _offset;
   double _radius;
 
   bool _isGrowing = true;
   bool get isGrowing => _isGrowing;
 
-  double _strokeWeight = 2;
+  final double _strokeWeight = 2;
 
   bool isAgainstEdges(Size screenSize) {
     final boundaryRect = Rect.fromCircle(center: _offset, radius: _radius);

@@ -14,12 +14,10 @@ class CodingTrainFlappyBirdScreen extends StatefulWidget {
   final SketchDemoController sketchDemoController;
 
   @override
-  _CodingTrainFlappyBirdScreenState createState() =>
-      _CodingTrainFlappyBirdScreenState();
+  _CodingTrainFlappyBirdScreenState createState() => _CodingTrainFlappyBirdScreenState();
 }
 
-class _CodingTrainFlappyBirdScreenState
-    extends State<CodingTrainFlappyBirdScreen> {
+class _CodingTrainFlappyBirdScreenState extends State<CodingTrainFlappyBirdScreen> {
   final _sketchFocusNode = FocusNode();
 
   @override
@@ -62,7 +60,7 @@ class _FlappyBirdSketch extends Sketch {
 
   final _birdSolidSize = 30.0;
   final _birdVisualScale = 1.75;
-  late double _birdBitmapSize = _birdSolidSize * _birdVisualScale;
+  late final double _birdBitmapSize = _birdSolidSize * _birdVisualScale;
   late PImage _birdBitmap;
   late Bird _bird;
 
@@ -72,14 +70,10 @@ class _FlappyBirdSketch extends Sketch {
   Future<void> setup() async {
     size(width: 400, height: 600);
 
-    _backdropBitmap = await loadImage(
-        'assets/coding-train/031_flappy_bird/flappy-bird_bk.png');
-    _topPipeBitmap =
-        await loadImage('assets/coding-train/031_flappy_bird/pipe_top.png');
-    _bottomPipeBitmap =
-        await loadImage('assets/coding-train/031_flappy_bird/pipe_bottom.png');
-    _birdBitmap =
-        await loadImage('assets/coding-train/031_flappy_bird/dash.png');
+    _backdropBitmap = await loadImage('assets/coding-train/031_flappy_bird/flappy-bird_bk.png');
+    _topPipeBitmap = await loadImage('assets/coding-train/031_flappy_bird/pipe_top.png');
+    _bottomPipeBitmap = await loadImage('assets/coding-train/031_flappy_bird/pipe_bottom.png');
+    _birdBitmap = await loadImage('assets/coding-train/031_flappy_bird/dash.png');
 
     // Scale the backdrop so it fits exactly the height of the canvas
     _backdropScale = height / _backdropBitmap.height;
@@ -90,7 +84,7 @@ class _FlappyBirdSketch extends Sketch {
 
     _bird = Bird(
       size: _birdSolidSize,
-      position: Offset(100, 100),
+      position: const Offset(100, 100),
     );
   }
 
@@ -130,14 +124,8 @@ class _FlappyBirdSketch extends Sketch {
   }
 
   void _drawAndUpdateBackdrop() {
-    image(
-        image: _backdropBitmap,
-        origin: Offset(_backdrop1XOffset, 0),
-        height: height.toDouble());
-    image(
-        image: _backdropBitmap,
-        origin: Offset(_backdrop2XOffset, 0),
-        height: height.toDouble());
+    image(image: _backdropBitmap, origin: Offset(_backdrop1XOffset, 0), height: height.toDouble());
+    image(image: _backdropBitmap, origin: Offset(_backdrop2XOffset, 0), height: height.toDouble());
 
     _backdrop1XOffset -= _parallaxSpeedMultiple;
     _backdrop2XOffset -= _parallaxSpeedMultiple;
@@ -152,8 +140,7 @@ class _FlappyBirdSketch extends Sketch {
   }) {
     for (final pipe in _pipes) {
       final bitmapScale = pipe.width / _topPipeBitmap.width;
-      final topPipeBitmapHeight =
-          max(_topPipeBitmap.height * bitmapScale, pipe.holeTop);
+      final topPipeBitmapHeight = max(_topPipeBitmap.height * bitmapScale, pipe.holeTop);
       image(
         image: _topPipeBitmap,
         origin: Offset(pipe.left, pipe.holeTop - topPipeBitmapHeight),
@@ -164,8 +151,7 @@ class _FlappyBirdSketch extends Sketch {
         image: _bottomPipeBitmap,
         origin: Offset(pipe.left, pipe.holeBottom),
         width: pipe.width,
-        height: max(
-            _bottomPipeBitmap.height * bitmapScale, height - pipe.holeBottom),
+        height: max(_bottomPipeBitmap.height * bitmapScale, height - pipe.holeBottom),
       );
     }
 
@@ -173,9 +159,7 @@ class _FlappyBirdSketch extends Sketch {
       fill(color: Colors.blue);
       for (final pipe in _pipes) {
         rect(rect: Rect.fromLTRB(pipe.left, 0, pipe.right, pipe.holeTop));
-        rect(
-            rect: Rect.fromLTRB(
-                pipe.left, pipe.holeBottom, pipe.right, height.toDouble()));
+        rect(rect: Rect.fromLTRB(pipe.left, pipe.holeBottom, pipe.right, height.toDouble()));
       }
     }
   }
@@ -183,8 +167,7 @@ class _FlappyBirdSketch extends Sketch {
   void _drawBird({
     bool drawSolids = false,
   }) {
-    final birdBitmapOffset =
-        _bird.position - (Offset(_birdBitmapSize, _birdBitmapSize) / 2);
+    final birdBitmapOffset = _bird.position - (Offset(_birdBitmapSize, _birdBitmapSize) / 2);
     image(
       image: _birdBitmap,
       origin: birdBitmapOffset,
@@ -201,8 +184,7 @@ class _FlappyBirdSketch extends Sketch {
   Pipe _createPipe() {
     final random = Random();
     final holeTop = random.nextInt((height / 2).round()) + 50;
-    final holeHeight =
-        random.nextInt((6 * _birdSolidSize).round()) + (3 * _birdSolidSize);
+    final holeHeight = random.nextInt((6 * _birdSolidSize).round()) + (3 * _birdSolidSize);
 
     return Pipe(
       left: width.toDouble(),
@@ -248,7 +230,7 @@ class Bird {
         _position = position,
         _velocity = velocity;
 
-  double _size; // interpreted as a circle diameter
+  final double _size; // interpreted as a circle diameter
   double get size => _size;
 
   Offset _position;
@@ -310,13 +292,13 @@ class Pipe {
 
   double get right => _left + _width;
 
-  double _width;
+  final double _width;
   double get width => _width;
 
-  double _holeTop;
+  final double _holeTop;
   double get holeTop => _holeTop;
 
-  double _holeBottom;
+  final double _holeBottom;
   double get holeBottom => _holeBottom;
 
   void move({required double distance}) {

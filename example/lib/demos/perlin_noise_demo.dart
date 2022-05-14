@@ -10,7 +10,9 @@ class PerlinNoiseDemoSketch extends Sketch {
     this.animateZIndex = false,
   });
 
+  @override
   final int width;
+  @override
   final int height;
   final bool animateZIndex;
 
@@ -27,7 +29,7 @@ class PerlinNoiseDemoSketch extends Sketch {
 
     noiseDetail(octaves: 8);
 
-    final increment = 1.5;
+    const increment = 1.5;
     double x = 0;
     double y = 0;
     for (int col = 0; col < width; col += 1) {

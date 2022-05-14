@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_processing/flutter_processing.dart';
 
@@ -12,7 +10,9 @@ class ColoredCirclesSketch extends Sketch {
     this.innerCircleProbability = 0.50,
   });
 
+  @override
   final int width;
+  @override
   final int height;
   final double maxCircleRadius;
   final double circleMargin;

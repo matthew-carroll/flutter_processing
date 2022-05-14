@@ -481,9 +481,9 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
 
   Widget _buildLeftToolbar() {
     return Align(
-      alignment: Alignment(-1.0, -0.1),
+      alignment: const Alignment(-1.0, -0.1),
       child: IconTheme(
-        data: IconThemeData(
+        data: const IconThemeData(
           color: Colors.white,
         ),
         child: Padding(
@@ -503,40 +503,40 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
                     width: 28,
                     child: Image.asset("assets/logo_128.png"),
                   ),
-                  Divider(),
+                  const Divider(),
                   IconButton(
                     onPressed: () {
                       _menuItem.value = _exampleDemoListItem;
                     },
-                    icon: Icon(Icons.insert_drive_file),
+                    icon: const Icon(Icons.insert_drive_file),
                     tooltip: 'Your Sketch',
                   ),
                   const SizedBox(height: 16),
                   IconButton(
                     key: _generativeArtButtonKey,
                     onPressed: _promptToSelectGenerativeArtDemo,
-                    icon: Icon(Icons.color_lens),
+                    icon: const Icon(Icons.color_lens),
                     tooltip: 'Generative Art',
                   ),
                   const SizedBox(height: 16),
                   IconButton(
                     key: _codingTrainButtonKey,
                     onPressed: _promptToSelectCodingTrainDemo,
-                    icon: Icon(Icons.train),
+                    icon: const Icon(Icons.train),
                     tooltip: 'The Coding Train',
                   ),
                   const SizedBox(height: 16),
                   IconButton(
                     key: _experimentsButtonKey,
                     onPressed: _promptToSelectExperimentDemo,
-                    icon: Icon(Icons.science),
+                    icon: const Icon(Icons.science),
                     tooltip: 'Experiments',
                   ),
                   const SizedBox(height: 16),
                   IconButton(
                     key: _apiDemosButtonKey,
                     onPressed: _promptToSelectApiDemo,
-                    icon: Icon(Icons.extension),
+                    icon: const Icon(Icons.extension),
                     tooltip: 'API Demos',
                   ),
                   const SizedBox(height: 8),
@@ -554,9 +554,9 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
       animation: _sketchDemoController,
       builder: (context, child) {
         return Align(
-          alignment: Alignment(1.0, -0.1),
+          alignment: const Alignment(1.0, -0.1),
           child: IconTheme(
-            data: IconThemeData(
+            data: const IconThemeData(
               color: Colors.white,
             ),
             child: Padding(
@@ -575,30 +575,30 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
                       IconButton(
                         key: _saveScreenshotButtonKey,
                         onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveScreenshot : null,
-                        icon: Icon(Icons.camera),
+                        icon: const Icon(Icons.camera),
                         tooltip: 'Take Screenshot',
                       ),
                       const SizedBox(height: 16),
                       IconButton(
                         key: _saveFramesButtonKey,
                         onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveFrames : null,
-                        icon: Icon(Icons.style),
+                        icon: const Icon(Icons.style),
                         tooltip: 'Record Image Frames',
                       ),
                       const SizedBox(height: 16),
                       IconButton(
                         key: _saveGifButtonKey,
                         onPressed: _sketchDemoController.hasDemoClient ? _promptToSaveGif : null,
-                        icon: Icon(Icons.videocam),
+                        icon: const Icon(Icons.videocam),
                         tooltip: 'Record GIF',
                       ),
-                      Divider(),
+                      const Divider(),
                       IconButton(
                         onPressed: () => _sketchDemoController.client?.restartSketch(),
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                         tooltip: 'Restart Sketch',
                       ),
-                      Divider(),
+                      const Divider(),
                       const SizedBox(height: 8),
                       _buildColorDot(const Color(0xFFFFFFFF), "Background - White"),
                       const SizedBox(height: 12),
@@ -659,14 +659,14 @@ class _DemoSelectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (demoList.isEmpty) {
-      return ListTile(
+      return const ListTile(
         title: Text("Empty"),
         enabled: false,
       );
     }
 
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 400),
+      constraints: const BoxConstraints(maxHeight: 400),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -676,7 +676,7 @@ class _DemoSelectionList extends StatelessWidget {
               ListTile(
                 title: Text(
                   demo.title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                   ),
                 ),
@@ -684,9 +684,9 @@ class _DemoSelectionList extends StatelessWidget {
                   selectedItem.value = demo;
                 },
               ),
-              Divider(
+              const Divider(
                 height: 1,
-                color: const Color(0xFF2A2A2A),
+                color: Color(0xFF2A2A2A),
               ),
             ],
           ],
@@ -738,13 +738,13 @@ class _TakeScreenshotPromptState extends State<_TakeScreenshotPrompt> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          const Text(
             'Screenshot',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: _ImageFormatSelector(
@@ -756,7 +756,7 @@ class _TakeScreenshotPromptState extends State<_TakeScreenshotPrompt> {
               },
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -776,10 +776,10 @@ class _TakeScreenshotPromptState extends State<_TakeScreenshotPrompt> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _selectFilePath,
-              child: Text('Select Destination'),
+              child: const Text('Select Destination'),
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           TextButton(
             onPressed: _selectedPath != null
                 ? () {
@@ -788,7 +788,7 @@ class _TakeScreenshotPromptState extends State<_TakeScreenshotPrompt> {
                     );
                   }
                 : null,
-            child: Text('Take Screenshot'),
+            child: const Text('Take Screenshot'),
           ),
         ],
       ),
@@ -840,13 +840,13 @@ class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               'GIF',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -866,19 +866,19 @@ class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _selectFilePath,
-                child: Text('Select Destination'),
+                child: const Text('Select Destination'),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Text(
+                const Text(
                   'Duration',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   '${_durationInSeconds}s',
                   style: const TextStyle(
@@ -897,16 +897,16 @@ class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Text(
+                const Text(
                   'Frame Rate',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   '$_fps FPS',
                   style: const TextStyle(
@@ -925,7 +925,7 @@ class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextButton(
               onPressed: _selectedPath != null
                   ? () {
@@ -936,7 +936,7 @@ class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
                       );
                     }
                   : null,
-              child: Text('Generate GIF'),
+              child: const Text('Generate GIF'),
             ),
           ],
         ),
@@ -982,7 +982,7 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
 
         if (filePath != null) {
           final fileName = FileName.fromFilePath(filePath);
-          _titleTemplate = fileName.name.endsWith('#') ? fileName.name : fileName.name + '_###';
+          _titleTemplate = fileName.name.endsWith('#') ? fileName.name : '${fileName.name}_###';
           _templatePath = filePath;
         } else {
           _titleTemplate = 'frame_###';
@@ -999,13 +999,13 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               'Frames',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: _ImageFormatSelector(
@@ -1017,7 +1017,7 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
                 },
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -1037,19 +1037,19 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _selectFilePath,
-                child: Text('Select Destination'),
+                child: const Text('Select Destination'),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Text(
+                const Text(
                   'Frames',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   '$_frameCount',
                   style: const TextStyle(
@@ -1068,7 +1068,7 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextButton(
               onPressed: _templatePath != null
                   ? () {
@@ -1080,7 +1080,7 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
                       );
                     }
                   : null,
-              child: Text('Generate Frames'),
+              child: const Text('Generate Frames'),
             ),
           ],
         ),
@@ -1105,28 +1105,28 @@ class _ImageFormatSelector extends StatelessWidget {
       padding: EdgeInsets.zero,
       groupValue: imageFormat,
       onValueChanged: onFormatSelected,
-      children: {
+      children: const {
         ImageFileFormat.png: Text(
           'PNG',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 8,
           ),
         ),
         ImageFileFormat.jpeg: Text(
           'JPEG',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 8,
           ),
         ),
         ImageFileFormat.tiff: Text(
           'TIFF',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 8,
           ),
         ),
         ImageFileFormat.targa: Text(
           'TARGA',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 8,
           ),
         ),

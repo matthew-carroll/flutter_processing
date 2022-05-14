@@ -86,7 +86,7 @@ class _Node {
   double get top => position.y - (diameter / 2);
   double get bottom => position.y + (diameter / 2);
 
-  PVector _velocity;
+  final PVector _velocity;
 
   final double diameter;
 

@@ -43,10 +43,10 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
 
         _canvasImage = PImage.empty(1400, 400, ImageFileFormat.png);
 
-        _bottomImage = (await s.loadImage("assets/coffee.png")).copy(Rect.fromLTWH(0, 0, 200, 200));
-        _topImage = (await s.loadImage("assets/gradient.png")).copy(Rect.fromLTWH(0, 0, 200, 200));
+        _bottomImage = (await s.loadImage("assets/coffee.png")).copy(const Rect.fromLTWH(0, 0, 200, 200));
+        _topImage = (await s.loadImage("assets/gradient.png")).copy(const Rect.fromLTWH(0, 0, 200, 200));
 
-        final copyRect = Rect.fromLTWH(0, 0, 200, 200);
+        const copyRect = Rect.fromLTWH(0, 0, 200, 200);
 
         _blendImage = _bottomImage.copy()
           ..blend(
@@ -57,8 +57,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _blendImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(0, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(0, 0, 200, 200),
         );
 
         _addImage = _bottomImage.copy()
@@ -70,8 +70,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _addImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(200, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(200, 0, 200, 200),
         );
 
         _subtractImage = _bottomImage.copy()
@@ -83,8 +83,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _subtractImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(400, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(400, 0, 200, 200),
         );
 
         _darkestImage = _bottomImage.copy()
@@ -96,8 +96,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _darkestImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(600, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(600, 0, 200, 200),
         );
 
         _lightestImage = _bottomImage.copy()
@@ -109,8 +109,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _lightestImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(800, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(800, 0, 200, 200),
         );
 
         _differenceImage = _bottomImage.copy()
@@ -122,8 +122,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _differenceImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(1000, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(1000, 0, 200, 200),
         );
 
         _exclusionImage = _bottomImage.copy()
@@ -135,8 +135,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _exclusionImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(1200, 0, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(1200, 0, 200, 200),
         );
 
         _multiplyImage = _bottomImage.copy()
@@ -148,8 +148,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _multiplyImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(0, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(0, 200, 200, 200),
         );
 
         _screenImage = _bottomImage.copy()
@@ -161,8 +161,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _screenImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(200, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(200, 200, 200, 200),
         );
 
         _overlayImage = _bottomImage.copy()
@@ -174,8 +174,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _overlayImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(400, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(400, 200, 200, 200),
         );
 
         _hardLightImage = _bottomImage.copy()
@@ -187,8 +187,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _hardLightImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(600, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(600, 200, 200, 200),
         );
 
         _softLightImage = _bottomImage.copy()
@@ -200,8 +200,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _softLightImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(800, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(800, 200, 200, 200),
         );
 
         _dodgeImage = _bottomImage.copy()
@@ -213,8 +213,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _dodgeImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(1000, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(1000, 200, 200, 200),
         );
 
         _burnImage = _bottomImage.copy()
@@ -226,8 +226,8 @@ class _PImageBlendModesSketchDemoState extends State<PImageBlendModesSketchDemo>
           );
         _canvasImage.copyFrom(
           source: _burnImage,
-          sourceRect: Rect.fromLTWH(0, 0, 200, 200),
-          destRect: Rect.fromLTWH(1200, 200, 200, 200),
+          sourceRect: const Rect.fromLTWH(0, 0, 200, 200),
+          destRect: const Rect.fromLTWH(1200, 200, 200, 200),
         );
       },
       draw: (s) async {

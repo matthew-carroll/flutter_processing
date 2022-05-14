@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_processing/flutter_processing.dart';
-import 'package:flutter_processing_example/_processing_demo_sketch_display.dart';
 
 class MetaBallsSketch extends Sketch {
   final _blobCount = 6;
@@ -77,7 +76,7 @@ class Blob {
 
   Offset _velocity;
 
-  double _radius;
+  final double _radius;
   double get radius => _radius;
 
   void move(Size screenSize) {

@@ -37,9 +37,9 @@ class _BlobbySketch extends Sketch {
     background(color: Colors.white);
     fill(color: Colors.black);
 
-    final angularSteps = 64;
+    const angularSteps = 64;
     final stepAngle = TWO_PI / angularSteps;
-    final radius = 100;
+    const radius = 100;
 
     translate(x: width / 2, y: height / 2);
     beginShape();
