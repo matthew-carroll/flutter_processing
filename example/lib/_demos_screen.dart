@@ -14,6 +14,7 @@ import 'package:flutter_processing_example/demos/_filters_sketch.dart';
 import 'package:flutter_processing_example/demos/_hacking.dart';
 import 'package:flutter_processing_example/generative_art/colored_circles.dart';
 import 'package:flutter_processing_example/demos/perlin_noise_demo.dart';
+import 'package:flutter_processing_example/generative_art/dot_field.dart';
 import 'package:flutter_processing_example/generative_art/liquid_gels.dart';
 import 'package:flutter_processing_example/generative_art/network.dart';
 import 'package:flutter_processing_example/generative_art/solar_storm.dart';
@@ -97,6 +98,18 @@ class _ProcessingDemosScreenState extends State<ProcessingDemosScreen> with Sing
                 return ProcessingDemo(
                   createSketch: () => ColoredCirclesSketch(
                     width: 1600,
+                    height: 600,
+                  ),
+                  sketchDemoController: sketchController,
+                );
+              },
+            ),
+            DemoMenuItem(
+              title: 'Dot Field',
+              builder: (_, sketchController) {
+                return ProcessingDemo(
+                  createSketch: () => DotFieldSketch(
+                    width: 1200,
                     height: 600,
                   ),
                   sketchDemoController: sketchController,
