@@ -33,16 +33,21 @@ class DotFieldSketch extends Sketch {
     while (x < width) {
       while (y < height) {
         final dotNoise = noise(
-          x: map(x, 0, width, 0, 500).toDouble(),
-          y: map(y, 0, height, 0, 500 * (height / width)).toDouble(),
-          z: frameCount.toDouble() / 3,
+          x: map(x, 0, width, 0, 1000).toDouble(),
+          y: map(y, 0, height, 0, 1000 * (height / width)).toDouble(),
+          z: frameCount.toDouble() / 2,
         );
 
-        if (dotNoise > 0.0) {
+        const threshold = 0.0;
+        const dotMaxAlpha = 0.5;
+        if (dotNoise > threshold) {
+          const thresholdMidpoint = (1.0 + threshold) / 2;
+          final verticalOffset = (dotNoise - thresholdMidpoint) * 30;
+
           // Adjust the alpha so that dots that are near the boundary,
           // appear translucent, so that movement through the z-coord
           // looks continuous.
-          final alpha = (dotNoise * 5).clamp(0.0, 0.4);
+          final alpha = ((dotNoise - threshold) * 5).clamp(0.0, dotMaxAlpha);
           fill(
             color: HSVColor.fromAHSV(alpha, map(x, 0, width, 360, 0).toDouble(), 1.0, 1.0).toColor(),
           );
@@ -53,7 +58,7 @@ class DotFieldSketch extends Sketch {
           // final alpha = (dotNoise * 5).clamp(0.0, 0.2);
           // fill(color: Colors.white.withOpacity(alpha));
 
-          circle(center: Offset(x, y), diameter: dotDiameter);
+          circle(center: Offset(x, y + verticalOffset), diameter: dotDiameter);
         }
 
         y += gridSize;
