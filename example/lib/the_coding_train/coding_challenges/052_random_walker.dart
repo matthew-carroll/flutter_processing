@@ -33,7 +33,7 @@ class _CodingTrainRandomWalkerScreenState extends State<CodingTrainRandomWalkerS
       draw: (s) {
         s
           ..noStroke()
-          ..fill(color: Colors.white)
+          ..fill(color: Colors.black)
           ..circle(center: Offset(x.toDouble(), y.toDouble()), diameter: 4);
 
         final randomDirection = Random().nextInt(4);

@@ -44,23 +44,29 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
   final _sketchCanvasKey = GlobalKey();
 
-  late Ticker _ticker;
+  late Size _canvasSize;
+  PlaybackMode _playbackMode = PlaybackMode.continuous;
+
+  // late Ticker _ticker;
   late FocusNode _focusNode;
 
-  Image? _currentImage;
+  // Image? _currentImage;
 
   @override
   void initState() {
+    print("Initializing ProcessingWidget");
     super.initState();
-    _ticker = createTicker(_onTick)..start();
+    // _ticker = createTicker(_onTick)..start();
 
     _focusNode = widget.focusNode ?? FocusNode();
 
     widget.sketch
-      ..addOnFrameAvailableCallback(_onFrameAvailable)
-      .._onSizeChanged = _onSizeChanged
+      // ..addOnFrameAvailableCallback(_onFrameAvailable)
+      // .._onSizeChanged = _onSizeChanged
       .._loop = _loop
       .._noLoop = _noLoop;
+
+    _canvasSize = Size(widget.sketch.width.toDouble(), widget.sketch.height.toDouble());
   }
 
   @override
@@ -79,22 +85,22 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
     if (widget.sketch != oldWidget.sketch) {
       oldWidget.sketch
-        ..removeOnFrameAvailableCallback(_onFrameAvailable)
-        .._onSizeChanged = null
+        // ..removeOnFrameAvailableCallback(_onFrameAvailable)
+        // .._onSizeChanged = null
         .._loop = null
         .._noLoop = null;
 
       widget.sketch
-        ..addOnFrameAvailableCallback(_onFrameAvailable)
+        // ..addOnFrameAvailableCallback(_onFrameAvailable)
         .._assetBundle = DefaultAssetBundle.of(context)
-        .._onSizeChanged = _onSizeChanged
+        // .._onSizeChanged = _onSizeChanged
         .._loop = _loop
         .._noLoop = _noLoop;
 
-      _ticker.stop();
-      if (widget.sketch._isLooping) {
-        _ticker.start();
-      }
+      // _ticker.stop();
+      // if (widget.sketch._isLooping) {
+      //   _ticker.start();
+      // }
     }
   }
 
@@ -103,40 +109,52 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     if (widget.focusNode == null) {
       _focusNode.dispose();
     }
-    _ticker.dispose();
+    // _ticker.dispose();
     super.dispose();
   }
 
-  void _onTick(elapsedTime) {
-    widget.sketch._doDrawFrame(elapsedTime);
+  Future<void> _onPaint(BitmapPaintingContext paintingContext) async {
+    print("ABOUT TO PAINT SKETCH FRAME");
+    print("SETTING NEW PAINTING CONTEXT");
+    widget.sketch.paintingContext = SketchPaintingContext(paintingContext, _onSizeChanged);
+
+    await widget.sketch._doDrawFrame(paintingContext.elapsedTime);
+    print("DONE PAINTING SKETCH FRAME");
   }
 
-  void _onFrameAvailable(Image newFrame) {
-    if (mounted) {
-      setState(() {
-        _currentImage = newFrame;
-      });
-    }
-  }
+  // void _onTick(elapsedTime) {
+  //   widget.sketch._doDrawFrame(elapsedTime);
+  // }
 
-  void _onSizeChanged() {
+  // void _onFrameAvailable(Image newFrame) {
+  //   if (mounted) {
+  //     setState(() {
+  //       _currentImage = newFrame;
+  //     });
+  //   }
+  // }
+
+  void _onSizeChanged(Size size) {
+    print("SIZE CHANGED TO: $size");
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (mounted) {
-        setState(() {});
+        setState(() {
+          _canvasSize = size;
+        });
       }
     });
   }
 
   void _noLoop() {
-    if (_ticker.isTicking) {
-      _ticker.stop();
-    }
+    setState(() {
+      _playbackMode = PlaybackMode.singleFrame;
+    });
   }
 
   void _loop() {
-    if (!_ticker.isTicking) {
-      _ticker.start();
-    }
+    setState(() {
+      _playbackMode = PlaybackMode.continuous;
+    });
   }
 
   void _onKeyEvent(KeyEvent event) {
@@ -285,23 +303,23 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
         onPointerCancel: _onPointerCancel,
         onPointerHover: _onPointerHover,
         onPointerSignal: _onPointerSignal,
-        child: Center(
-          child: _currentImage != null
-              ? OverflowBox(
-                  maxWidth: double.infinity,
-                  maxHeight: double.infinity,
-                  child: SizedBox(
-                    width: _currentImage!.width.toDouble(),
-                    height: _currentImage!.height.toDouble(),
-                    child: RawImage(
-                      key: _sketchCanvasKey,
-                      image: _currentImage,
-                    ),
-                  ),
-                )
-              : SizedBox(
-                  key: _sketchCanvasKey,
-                ),
+        child: OverflowBox(
+          maxWidth: double.infinity,
+          maxHeight: double.infinity,
+          // child: SizedBox(
+          //   width: _currentImage!.width.toDouble(),
+          //   height: _currentImage!.height.toDouble(),
+          child: BitmapPaint(
+            key: _sketchCanvasKey,
+            painter: BitmapPainter.fromCallback(_onPaint),
+            size: _canvasSize,
+            playbackMode: _playbackMode,
+          ),
+          // child: RawImage(
+          //   key: _sketchCanvasKey,
+          //   image: _currentImage,
+          // ),
+          // ),
         ),
       ),
     );

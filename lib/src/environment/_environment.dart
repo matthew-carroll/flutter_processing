@@ -19,7 +19,7 @@ mixin SketchEnvironment on BaseSketch, SketchColorSetting {
 
   int _desiredWidth = 100;
   int _desiredHeight = 100;
-  VoidCallback? _onSizeChanged;
+  // VoidCallback? _onSizeChanged;
 
   int get width => _desiredWidth;
 
@@ -32,7 +32,7 @@ mixin SketchEnvironment on BaseSketch, SketchColorSetting {
     _desiredWidth = width;
     _desiredHeight = height;
     _paintingContext.size = Size(width.toDouble(), height.toDouble());
-    _onSizeChanged?.call();
+    // _onSizeChanged?.call();
 
     background(color: _backgroundColor);
   }

@@ -24,18 +24,20 @@ mixin SketchImageLoadingAndDisplaying on BaseSketch {
     double? width,
     double? height,
   }) async {
+    print("PaintingContext before: ${_paintingContext.hashCode}");
+    print("Canvas before image() load: ${_paintingContext.canvas.canvas.hashCode}");
     final horizontalScale = width != null ? width / image.width : 1.0;
     final verticalScale = height != null ? height / image.height : 1.0;
 
     final flutterImage = await image.toFlutterImage();
 
+    print("PaintingContext after: ${_paintingContext.hashCode}");
+    print("Canvas after image() load: ${_paintingContext.canvas.canvas.hashCode}");
     _paintingContext.canvas
       ..save()
       ..translate(origin.dx, origin.dy)
       ..scale(horizontalScale, verticalScale)
       ..drawImage(flutterImage, Offset.zero, Paint())
       ..restore();
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 }

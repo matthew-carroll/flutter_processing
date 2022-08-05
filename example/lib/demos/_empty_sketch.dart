@@ -29,6 +29,7 @@ class _EmptySketchDemoState extends State<EmptySketchDemo> {
       setup: (s) {
         s.size(width: 500, height: 500);
         s.background(color: Colors.white);
+        s.noLoop();
       },
     );
   }

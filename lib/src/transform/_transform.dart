@@ -19,12 +19,9 @@ mixin SketchTransform on BaseSketch {
     }
 
     _paintingContext.canvas.translate(x?.toDouble() ?? 0, y?.toDouble() ?? 0);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void rotate(double angleInRadians) {
     _paintingContext.canvas.rotate(angleInRadians);
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 }

@@ -22,9 +22,14 @@ import 'package:flutter_processing_example/the_coding_train/coding_challenges/08
 import 'package:flutter_processing_example/the_coding_train/coding_challenges/124_boids.dart';
 import 'package:flutter_processing_example/verify_behaviors/_mouse_and_touch.dart';
 
+import 'package:bitmap_canvas/src/logging.dart';
+import 'package:logging/logging.dart';
+
 import '_demos_screen.dart';
 
 void main() {
+  initAllLogs(Level.FINE);
+
   runApp(const FlutterProcessingExampleApp());
 }
 

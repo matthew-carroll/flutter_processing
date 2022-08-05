@@ -26,39 +26,39 @@ class SolarStormSketch extends Sketch {
 
   @override
   Future<void> draw() async {
-    noStroke();
-    blendMode = BlendMode.plus;
-
-    for (var i = 0; i < _particles.length; i++) {
-      final particle = _particles[i];
-
-      final distanceToMouse = dist(
-        Offset(mouseX.toDouble(), mouseY.toDouble()),
-        particle.position.toOffset(),
-      );
-
-      if (distanceToMouse > 3) {
-        particle.acceleration = PVector(
-          _magnetism * (mouseX - particle.position.x) / (distanceToMouse * distanceToMouse),
-          _magnetism * (mouseY - particle.position.y) / (distanceToMouse * distanceToMouse),
-        );
-      }
-
-      particle
-        ..applyAcceleration()
-        ..applyFrictionPercent(_friction)
-        ..move();
-
-      var speed = particle.velocity.mag;
-      var r = map(speed, 0, 5, 0, 255).toInt();
-      var g = map(speed, 0, 5, 64, 255).toInt();
-      var b = map(speed, 0, 5, 128, 255).toInt();
-      fill(color: Color.fromARGB(32, r, g, b));
-
-      if (particle.isInWindow(width, height)) {
-        circle(center: particle.position.toOffset(), diameter: 2.0 * _radius);
-      }
-    }
+    // noStroke();
+    // blendMode = BlendMode.plus;
+    //
+    // for (var i = 0; i < _particles.length; i++) {
+    //   final particle = _particles[i];
+    //
+    //   final distanceToMouse = dist(
+    //     Offset(mouseX.toDouble(), mouseY.toDouble()),
+    //     particle.position.toOffset(),
+    //   );
+    //
+    //   if (distanceToMouse > 3) {
+    //     particle.acceleration = PVector(
+    //       _magnetism * (mouseX - particle.position.x) / (distanceToMouse * distanceToMouse),
+    //       _magnetism * (mouseY - particle.position.y) / (distanceToMouse * distanceToMouse),
+    //     );
+    //   }
+    //
+    //   particle
+    //     ..applyAcceleration()
+    //     ..applyFrictionPercent(_friction)
+    //     ..move();
+    //
+    //   var speed = particle.velocity.mag;
+    //   var r = map(speed, 0, 5, 0, 255).toInt();
+    //   var g = map(speed, 0, 5, 64, 255).toInt();
+    //   var b = map(speed, 0, 5, 128, 255).toInt();
+    //   fill(color: Color.fromARGB(32, r, g, b));
+    //
+    //   if (particle.isInWindow(width, height)) {
+    //     circle(center: particle.position.toOffset(), diameter: 2.0 * _radius);
+    //   }
+    // }
   }
 }
 

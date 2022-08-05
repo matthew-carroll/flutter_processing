@@ -65,7 +65,7 @@ class Sketch extends BaseSketch
   void Function(Sketch)? _mouseMoved;
   void Function(Sketch, double count)? _mouseWheel;
 
-  Image? get publishedFrame => _paintingContext.publishedImage;
+  Image? get publishedFrame => _paintingContext.canvas.publishedImage;
 
   final _onFrameAvailableCallbacks = <FrameCallback>{};
 
@@ -92,12 +92,13 @@ class Sketch extends BaseSketch
 
     _updateElapsedTime(elapsedTime);
     if (_lastDrawTime != null && (_elapsedTime - _lastDrawTime! < _desiredFrameTime)) {
+      print("SKIPPING FRAME TO LIMIT FRAME RATE");
       return;
     }
 
     _isDrawing = true;
 
-    _paintingContext.startRecording();
+    // _paintingContext.canvas.startRecording();
 
     // Run Processing setup method.
     await _doSetup();
@@ -105,12 +106,12 @@ class Sketch extends BaseSketch
     // Run Processing draw method.
     await _onDraw();
 
-    await _paintingContext.finishRecording();
+    // await _paintingContext.canvas.finishRecording();
 
     // Let all interested listeners know that we've produced a new frame.
-    for (final callback in _onFrameAvailableCallbacks) {
-      await callback(_paintingContext.publishedImage!);
-    }
+    // for (final callback in _onFrameAvailableCallbacks) {
+    //   await callback(_paintingContext.canvas.publishedImage!);
+    // }
 
     _isDrawing = false;
   }
@@ -123,9 +124,18 @@ class Sketch extends BaseSketch
     }
     _hasDoneSetup = true;
 
+    _paintingContext.fillPaint = Paint()
+      ..color = const Color(0xFFFFFFFF)
+      ..style = PaintingStyle.fill;
+    _paintingContext.strokePaint = Paint()
+      ..color = const Color(0xFF000000)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
     // By default fill the background with a light grey.
     background(color: _backgroundColor);
 
+    print("SETTING UP SKETCH");
     await setup();
   }
 
@@ -134,10 +144,19 @@ class Sketch extends BaseSketch
   }
 
   Future<void> _onDraw() async {
-    if (_paintingContext.publishedImage != null) {
-      _paintingContext.canvas.drawImage(_paintingContext.publishedImage!, Offset.zero, Paint());
+    if (_paintingContext.canvas.publishedImage != null) {
+      _paintingContext.canvas.drawImage(_paintingContext.canvas.publishedImage!, Offset.zero, Paint());
     }
 
+    _paintingContext.fillPaint = Paint()
+      ..color = const Color(0xFFFFFFFF)
+      ..style = PaintingStyle.fill;
+    _paintingContext.strokePaint = Paint()
+      ..color = const Color(0xFF000000)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+    print("DRAWING SKETCH FRAME");
     await draw();
 
     _frameCount += 1;

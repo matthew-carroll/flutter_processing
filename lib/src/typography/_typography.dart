@@ -39,6 +39,7 @@ mixin SketchTypography on BaseSketch {
       ..layout(
         ParagraphConstraints(width: double.infinity),
       );
+    paragraph.layout(ParagraphConstraints(width: paragraph.maxIntrinsicWidth));
 
     late double textX;
     late double textY;
@@ -60,6 +61,10 @@ mixin SketchTypography on BaseSketch {
         // leading to the first line of text, but Processing wants the top of the
         // first line to sit exactly on the given `y` value. We do our best to
         // correct for that, here.
+        print("Getting first character height for text: '$text'");
+        print("Paragraph width: ${paragraph.width}, height: ${paragraph.height}");
+        print("Paragraph max intrinsic width: ${paragraph.maxIntrinsicWidth}");
+        print("Paragraph details: ${paragraph.computeLineMetrics()}");
         final firstCharacterHeight = paragraph.getBoxesForRange(0, 1).first.toRect().height;
         final leadingAdjustment = _textLeading != null ? (_textLeading! - firstCharacterHeight) : 0;
 

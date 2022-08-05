@@ -4,13 +4,17 @@ version: 0.2.0
 homepage: https://github.com/matthew-carroll/flutter_processing
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
+  bitmap_canvas:
+    git:
+      url: git@github.com:Flutter-Bounty-Hunters/bitmap_canvas.git
+      ref: head
   fast_noise: ^1.0.1
   image: ^3.0.2
   path: ^1.8.0

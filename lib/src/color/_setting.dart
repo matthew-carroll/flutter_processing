@@ -9,9 +9,8 @@ mixin SketchColorSetting on BaseSketch {
     _backgroundColor = color;
 
     final paint = Paint()..color = color;
+    print("Painting context size: ${_paintingContext.size}");
     _paintingContext.canvas.drawRect(Offset.zero & _paintingContext.size, paint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void fill({
@@ -38,7 +37,5 @@ mixin SketchColorSetting on BaseSketch {
     _backgroundColor = const Color(0x00000000);
 
     _paintingContext.canvas.drawColor(const Color(0x00000000), BlendMode.clear);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 }

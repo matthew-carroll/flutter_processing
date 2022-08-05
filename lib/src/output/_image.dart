@@ -16,12 +16,12 @@ mixin SketchOutputImage on BaseSketch {
     required File file,
     ImageFileFormat? format,
   }) async {
-    if (_paintingContext.pixels == null) {
+    if (_paintingContext.canvas.pixels == null) {
       throw Exception('You must call loadPixels() before calling save()');
     }
 
     // Retrieve the pixel data for the current sketch painting.
-    final rawImageData = _paintingContext.pixels!.buffer.asUint8List();
+    final rawImageData = _paintingContext.canvas.pixels!.buffer.asUint8List();
 
     await saveBytesToFile(
       file: file,

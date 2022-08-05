@@ -16,8 +16,6 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
       _paintingContext.strokePaint,
     );
     _paintingContext.strokePaint.style = PaintingStyle.stroke;
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void line(Offset p1, Offset p2, [Offset? p3]) {
@@ -26,8 +24,6 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
     }
 
     _paintingContext.canvas.drawLine(p1, p2, _paintingContext.strokePaint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void circle({
@@ -38,16 +34,12 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
       _paintingContext.canvas.drawCircle(center, diameter / 2, _paintingContext.strokePaint);
     }
     _paintingContext.canvas.drawCircle(center, diameter / 2, _paintingContext.fillPaint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void ellipse(Ellipse ellipse) {
     _paintingContext.canvas //
       ..drawOval(ellipse.rect, _paintingContext.fillPaint) //
       ..drawOval(ellipse.rect, _paintingContext.strokePaint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void arc({
@@ -82,16 +74,12 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
           ..drawArc(ellipse.rect, startAngle, endAngle - startAngle, true, _paintingContext.strokePaint);
         break;
     }
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void square(Square square) {
     _paintingContext.canvas //
       ..drawRect(square.rect, _paintingContext.fillPaint) //
       ..drawRect(square.rect, _paintingContext.strokePaint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void rect({
@@ -114,8 +102,6 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
         ..drawRRect(rrect, _paintingContext.fillPaint) //
         ..drawRRect(rrect, _paintingContext.strokePaint);
     }
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void triangle(Offset p1, Offset p2, Offset p3) {
@@ -128,8 +114,6 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
     _paintingContext.canvas //
       ..drawPath(path, _paintingContext.fillPaint) //
       ..drawPath(path, _paintingContext.strokePaint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 
   void quad(Offset p1, Offset p2, Offset p3, Offset p4) {
@@ -143,7 +127,5 @@ mixin SketchShapeTwoDPrimitives on BaseSketch {
     _paintingContext.canvas //
       ..drawPath(path, _paintingContext.fillPaint) //
       ..drawPath(path, _paintingContext.strokePaint);
-
-    _paintingContext.markHasUnappliedCanvasCommands();
   }
 }

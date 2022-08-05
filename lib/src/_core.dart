@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:bitmap_canvas/bitmap_canvas.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +38,8 @@ part 'transform/_transform.dart';
 part 'typography/_typography.dart';
 
 abstract class BaseSketch {
-  SketchPaintingContext _paintingContext = SketchPaintingContext();
+  set paintingContext(SketchPaintingContext context) => _paintingContext = context;
+  late SketchPaintingContext _paintingContext;
 
   AssetBundle? _assetBundle;
 }
