@@ -7,9 +7,9 @@ jobs:
       # Checkout the PR branch
       - uses: actions/checkout@v2
       # Setup Flutter environment
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
-          channel: "dev"
+          channel: stable
       # Download all the packages that the app uses
       - run: flutter pub get
       # Run all tests
