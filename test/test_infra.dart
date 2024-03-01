@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/rendering.dart';
@@ -80,5 +81,17 @@ class TestAssetBundle implements AssetBundle {
   @override
   void clear() {
     _cache.clear();
+  }
+
+  @override
+  Future<ImmutableBuffer> loadBuffer(String key) {
+    // TODO: implement loadBuffer
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<T> loadStructuredBinaryData<T>(String key, FutureOr<T> Function(ByteData data) parser) {
+    // TODO: implement loadStructuredBinaryData
+    throw UnimplementedError();
   }
 }
