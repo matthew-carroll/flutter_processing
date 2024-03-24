@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fast_noise: ^1.0.1
+  fast_noise: ^2.0.0
   image: ^3.0.2
   path: ^1.8.0
 
