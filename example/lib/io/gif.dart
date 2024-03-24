@@ -40,7 +40,7 @@ class GifGenerator {
 
     await sketch.loadPixels();
 
-    final gifFrame = gif.Image.fromBytes(sketch.width, sketch.height, sketch.pixels!.buffer.asUint8List());
+    final gifFrame = gif.Image.fromBytes(width: sketch.width, height: sketch.height, bytes: sketch.pixels!.buffer);
     final timeInHundredths = (_gifFrameRateFps.inMilliseconds / 10).round();
     _gifEncoder.addFrame(gifFrame, duration: timeInHundredths);
     _addedFrameCount += 1;
@@ -68,7 +68,7 @@ class GifGenerator {
     }
 
     final frameBytes = await frame.toByteData();
-    final gifFrame = gif.Image.fromBytes(frame.width, frame.height, frameBytes!.buffer.asUint8List());
+    final gifFrame = gif.Image.fromBytes(width: frame.width, height: frame.height, bytes: frameBytes!.buffer);
     _frames.add(gifFrame);
     // final timeInHundredths = (_gifFrameRateFps.inMilliseconds / 10).round();
     // _gifEncoder.addFrame(gifFrame, duration: timeInHundredths);

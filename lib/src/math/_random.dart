@@ -27,7 +27,7 @@ mixin SketchMathRandom {
   int _perlinNoiseSeed = 1337;
   int _perlinNoiseOctaves = 4;
   double _perlinNoiseFalloff = 0.5;
-  PerlinNoise? _perlinNoise;
+  PerlinFractalNoise? _perlinNoise;
 
   /// Sets the seed value for all [noise()] invocations to the given
   /// [seed].
@@ -68,11 +68,11 @@ mixin SketchMathRandom {
       _initializePerlinNoise();
     }
 
-    return _perlinNoise!.getPerlin3(x, y, z);
+    return _perlinNoise!.getNoise3(x, y, z);
   }
 
   void _initializePerlinNoise() {
-    _perlinNoise = PerlinNoise(
+    _perlinNoise = PerlinFractalNoise(
       seed: _perlinNoiseSeed,
       octaves: _perlinNoiseOctaves,
       gain: _perlinNoiseFalloff,

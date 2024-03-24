@@ -120,19 +120,19 @@ Future<void> saveBytesToFile({
   switch (imageFormat) {
     case ImageFileFormat.png:
       formattedImageData = imageFormats.encodePng(
-        imageFormats.Image.fromBytes(width, height, imageData),
+        imageFormats.Image.fromBytes(width: width, height: height, bytes: imageData.buffer),
       );
       break;
     case ImageFileFormat.jpeg:
       formattedImageData = imageFormats.encodeJpg(
-        imageFormats.Image.fromBytes(width, height, imageData),
+        imageFormats.Image.fromBytes(width: width, height: height, bytes: imageData.buffer),
       );
       break;
     case ImageFileFormat.tiff:
       throw UnimplementedError('Tiff images are not supported in save()');
     case ImageFileFormat.targa:
       formattedImageData = imageFormats.encodeTga(
-        imageFormats.Image.fromBytes(width, height, imageData),
+        imageFormats.Image.fromBytes(width: width, height: height, bytes: imageData.buffer),
       );
       break;
   }

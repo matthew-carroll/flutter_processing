@@ -364,26 +364,26 @@ class ProcessingDemoState extends State<ProcessingDemo> with SingleTickerProvide
 
     // Retrieve the pixel data for the current sketch painting.
     final frameBytes = await image.toByteData();
-    final rawImageData = frameBytes!.buffer.asUint8List();
+    final rawImageBuffer = frameBytes!.buffer;
 
     // Convert the pixel data to the desired format.
     late List<int> formattedImageData;
     switch (imageFormat) {
       case ImageFileFormat.png:
         formattedImageData = imageFormats.encodePng(
-          imageFormats.Image.fromBytes(image.width, image.height, rawImageData),
+          imageFormats.Image.fromBytes(width: image.width, height: image.height, bytes: rawImageBuffer),
         );
         break;
       case ImageFileFormat.jpeg:
         formattedImageData = imageFormats.encodeJpg(
-          imageFormats.Image.fromBytes(image.width, image.height, rawImageData),
+          imageFormats.Image.fromBytes(width: image.width, height: image.height, bytes: rawImageBuffer),
         );
         break;
       case ImageFileFormat.tiff:
         throw UnimplementedError('Tiff images are not supported in save()');
       case ImageFileFormat.targa:
         formattedImageData = imageFormats.encodeTga(
-          imageFormats.Image.fromBytes(image.width, image.height, rawImageData),
+          imageFormats.Image.fromBytes(width: image.width, height: image.height, bytes: rawImageBuffer),
         );
         break;
     }
