@@ -7,9 +7,9 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 void main() {
   group('Complex shapes', () {
     testGoldens('stars', (tester) async {
-      tester.binding.window
-        ..physicalSizeTestValue = Size(640, 360)
-        ..devicePixelRatioTestValue = 1.0;
+      tester.view
+        ..physicalSize = Size(640, 360)
+        ..devicePixelRatio = 1.0;
 
       await tester.pumpWidget(
         Processing(
@@ -19,13 +19,13 @@ void main() {
 
       await screenMatchesGolden(tester, 'complex-shapes_stars');
 
-      tester.binding.window.clearAllTestValues();
+      tester.platformDispatcher.clearAllTestValues();
     });
 
     testGoldens('triangle strip circle', (tester) async {
-      tester.binding.window
-        ..physicalSizeTestValue = Size(640, 360)
-        ..devicePixelRatioTestValue = 1.0;
+      tester.view
+        ..physicalSize = Size(640, 360)
+        ..devicePixelRatio = 1.0;
 
       await tester.pumpWidget(
         Processing(
@@ -35,7 +35,7 @@ void main() {
 
       await screenMatchesGolden(tester, 'complex-shapes_triangle-strip-circle');
 
-      tester.binding.window.clearAllTestValues();
+      tester.platformDispatcher.clearAllTestValues();
     });
   });
 }
