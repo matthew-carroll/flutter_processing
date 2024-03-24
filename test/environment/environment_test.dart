@@ -48,7 +48,7 @@ void main() {
     processingLegacySpecTest('size()', (tester) async {
       // Expand the canvas to leave enough space for
       // a larger Processing sketch.
-      tester.binding.window.physicalSizeTestValue = Size(250, 250);
+      tester.view.physicalSize = Size(250, 250);
 
       await tester.pumpWidget(
         Processing(
