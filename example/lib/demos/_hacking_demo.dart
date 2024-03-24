@@ -42,7 +42,7 @@ class _HackingDemoState extends State<HackingDemo> {
         break;
     }
 
-    final filePath = await getSavePath(
+    final fileLocation = await getSaveLocation(
       acceptedTypeGroups: [
         XTypeGroup(
           extensions: [extension],
@@ -50,22 +50,22 @@ class _HackingDemoState extends State<HackingDemo> {
         ),
       ],
     );
-    if (filePath == null) {
+    if (fileLocation == null) {
       print('User cancelled the file selection');
       return;
     }
 
-    _fileToSaveImage = File(filePath);
+    _fileToSaveImage = File(fileLocation.path);
   }
 
   Future<void> _saveImageFrame() async {
-    final filePath = await getSavePath();
-    if (filePath == null) {
+    final fileLocation = await getSaveLocation();
+    if (fileLocation == null) {
       print('User cancelled the file selection');
       return;
     }
 
-    _dirToSaveFrames = File(filePath).parent;
+    _dirToSaveFrames = File(fileLocation.path).parent;
     _remainingFrames = 10;
   }
 

@@ -726,7 +726,7 @@ class _TakeScreenshotPromptState extends State<_TakeScreenshotPrompt> {
   String? _selectedPath;
 
   Future<void> _selectFilePath() async {
-    final filePath = await getSavePath(
+    final fileLocation = await getSaveLocation(
       acceptedTypeGroups: [
         XTypeGroup(
           extensions: [_imageFormat.extension],
@@ -739,7 +739,7 @@ class _TakeScreenshotPromptState extends State<_TakeScreenshotPrompt> {
 
     if (mounted) {
       setState(() {
-        _selectedPath = filePath;
+        _selectedPath = fileLocation?.path;
       });
     }
   }
@@ -827,9 +827,9 @@ class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
   int _fps = 30;
 
   Future<void> _selectFilePath() async {
-    final filePath = await getSavePath(
+    final fileLocation = await getSaveLocation(
       acceptedTypeGroups: [
-        XTypeGroup(
+        const XTypeGroup(
           extensions: ['gif'],
           mimeTypes: ['image/gif'],
         ),
@@ -840,7 +840,7 @@ class _GenerateGifPromptState extends State<_GenerateGifPrompt> {
 
     if (mounted) {
       setState(() {
-        _selectedPath = filePath;
+        _selectedPath = fileLocation?.path;
       });
     }
   }
@@ -978,7 +978,7 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
   int _frameCount = 10;
 
   Future<void> _selectFilePath() async {
-    final filePath = await getSavePath(
+    final fileLocation = await getSaveLocation(
       acceptedTypeGroups: [
         XTypeGroup(
           extensions: [_imageFormat.extension],
@@ -991,12 +991,12 @@ class _GenerateScreenshotFramesPromptState extends State<_GenerateScreenshotFram
 
     if (mounted) {
       setState(() {
-        _selectedDirectory = filePath != null ? File(filePath).parent : null;
+        _selectedDirectory = fileLocation != null ? File(fileLocation.path).parent : null;
 
-        if (filePath != null) {
-          final fileName = FileName.fromFilePath(filePath);
+        if (fileLocation != null) {
+          final fileName = FileName.fromFilePath(fileLocation.path);
           _titleTemplate = fileName.name.endsWith('#') ? fileName.name : '${fileName.name}_###';
-          _templatePath = filePath;
+          _templatePath = fileLocation.path;
         } else {
           _titleTemplate = 'frame_###';
         }

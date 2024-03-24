@@ -15,8 +15,8 @@ dependencies:
   flutter_processing:
     path: ../
 
-  file_selector: ^0.8.2
-  file_selector_macos: ^0.0.4
+  file_selector: ^1.0.3
+  file_selector_macos: ^0.9.3+3
   image: ^4.1.7
   path: ^1.8.0
   patterns_canvas: ^0.3.5
