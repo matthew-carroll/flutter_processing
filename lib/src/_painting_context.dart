@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:bitmap_canvas/bitmap_canvas.dart';
@@ -22,22 +21,14 @@ import 'package:bitmap_canvas/bitmap_canvas.dart';
 /// **Produce the final frame image:**
 /// [finishRecording()], which produces the final [publishedImage].
 class SketchPaintingContext {
-  SketchPaintingContext(this._bitmapPaintingContext, this._onSizeChanged);
+  SketchPaintingContext(this._bitmapCanvas);
 
-  final BitmapPaintingContext _bitmapPaintingContext;
+  BitmapCanvas _bitmapCanvas;
+  void replaceBitmapCanvas(BitmapCanvas bitmapCanvas) => _bitmapCanvas = bitmapCanvas;
 
-  BitmapCanvas get canvas => _bitmapPaintingContext.canvas;
+  BitmapCanvas get canvas => _bitmapCanvas;
 
-  Size get size => _newRequestedSize ?? _bitmapPaintingContext.size;
-  set size(Size size) {
-    print("Setting size to $size");
-    _newRequestedSize = size;
-    _onSizeChanged(size);
-  }
-
-  Size? _newRequestedSize;
-
-  final void Function(Size) _onSizeChanged;
+  Size get size => _bitmapCanvas.size;
 
   // /// The size of the painting region.
   // Size size;

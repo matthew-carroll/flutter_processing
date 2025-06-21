@@ -98,7 +98,8 @@ class Sketch extends BaseSketch
 
     _isDrawing = true;
 
-    // _paintingContext.canvas.startRecording();
+    // Create the bitmap cache (if not already created), and start recording operations.
+    _startRecording();
 
     // Run Processing setup method.
     await _doSetup();
@@ -106,14 +107,19 @@ class Sketch extends BaseSketch
     // Run Processing draw method.
     await _onDraw();
 
-    // await _paintingContext.canvas.finishRecording();
-
-    // Let all interested listeners know that we've produced a new frame.
-    // for (final callback in _onFrameAvailableCallbacks) {
-    //   await callback(_paintingContext.canvas.publishedImage!);
-    // }
+    // Publish the frame.
+    await _publishFrame();
 
     _isDrawing = false;
+  }
+
+  void _startRecording() {
+    if (!_hasDoneSetup) {
+      _paintingContext = SketchPaintingContext(
+        BitmapCanvas(size: Size(width.toDouble(), height.toDouble())),
+      );
+    }
+    _paintingContext.canvas.startRecording();
   }
 
   Future<void> _doSetup() async {
@@ -135,7 +141,7 @@ class Sketch extends BaseSketch
     // By default fill the background with a light grey.
     background(color: _backgroundColor);
 
-    print("SETTING UP SKETCH");
+    lifecycleLog.info("Setting up a sketch");
     await setup();
   }
 
@@ -156,7 +162,7 @@ class Sketch extends BaseSketch
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
-    print("DRAWING SKETCH FRAME");
+    lifecycleLog.info("Drawing the frame");
     await draw();
 
     _frameCount += 1;
@@ -168,6 +174,15 @@ class Sketch extends BaseSketch
 
   FutureOr<void> draw() async {
     await _draw?.call(this);
+  }
+
+  Future<void> _publishFrame() async {
+    lifecycleLog.info("Publishing the frame");
+    await _paintingContext.canvas.finishRecording();
+
+    for (final frameAvailableCallback in _onFrameAvailableCallbacks) {
+      frameAvailableCallback(_paintingContext.canvas.publishedImage!);
+    }
   }
 
   @override

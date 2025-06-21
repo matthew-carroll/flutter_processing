@@ -42,27 +42,26 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     LogicalKeyboardKey.pageDown,
   };
 
-  final _sketchCanvasKey = GlobalKey();
-
-  late Size _canvasSize;
-  PlaybackMode _playbackMode = PlaybackMode.continuous;
-
-  // late Ticker _ticker;
   late FocusNode _focusNode;
 
-  // Image? _currentImage;
+  final _sketchCanvasKey = GlobalKey();
+  late Size _canvasSize;
+  late Ticker _ticker;
+  Duration _elapsedDrawingTime = Duration.zero;
+  Image? _currentImage;
 
   @override
   void initState() {
-    print("Initializing ProcessingWidget");
+    lifecycleLog.info("Initializing ProcessingWidget");
     super.initState();
-    // _ticker = createTicker(_onTick)..start();
+    _ticker = createTicker(_onTick);
+    if (widget.sketch._isLooping) {
+      _ticker.start();
+    }
 
     _focusNode = widget.focusNode ?? FocusNode();
 
     widget.sketch
-      // ..addOnFrameAvailableCallback(_onFrameAvailable)
-      // .._onSizeChanged = _onSizeChanged
       .._loop = _loop
       .._noLoop = _noLoop;
 
@@ -73,6 +72,9 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
   void didChangeDependencies() {
     super.didChangeDependencies();
     widget.sketch._assetBundle = DefaultAssetBundle.of(context);
+
+    // Note: We need to wait for the asset bundle before painting the first frame.
+    _paintFrame();
   }
 
   @override
@@ -85,22 +87,18 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
     if (widget.sketch != oldWidget.sketch) {
       oldWidget.sketch
-        // ..removeOnFrameAvailableCallback(_onFrameAvailable)
-        // .._onSizeChanged = null
         .._loop = null
         .._noLoop = null;
 
       widget.sketch
-        // ..addOnFrameAvailableCallback(_onFrameAvailable)
         .._assetBundle = DefaultAssetBundle.of(context)
-        // .._onSizeChanged = _onSizeChanged
         .._loop = _loop
         .._noLoop = _noLoop;
 
-      // _ticker.stop();
-      // if (widget.sketch._isLooping) {
-      //   _ticker.start();
-      // }
+      _ticker.stop();
+      if (widget.sketch._isLooping) {
+        _ticker.start();
+      }
     }
   }
 
@@ -109,52 +107,8 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     if (widget.focusNode == null) {
       _focusNode.dispose();
     }
-    // _ticker.dispose();
+    _ticker.dispose();
     super.dispose();
-  }
-
-  Future<void> _onPaint(BitmapPaintingContext paintingContext) async {
-    print("ABOUT TO PAINT SKETCH FRAME");
-    print("SETTING NEW PAINTING CONTEXT");
-    widget.sketch.paintingContext = SketchPaintingContext(paintingContext, _onSizeChanged);
-
-    await widget.sketch._doDrawFrame(paintingContext.elapsedTime);
-    print("DONE PAINTING SKETCH FRAME");
-  }
-
-  // void _onTick(elapsedTime) {
-  //   widget.sketch._doDrawFrame(elapsedTime);
-  // }
-
-  // void _onFrameAvailable(Image newFrame) {
-  //   if (mounted) {
-  //     setState(() {
-  //       _currentImage = newFrame;
-  //     });
-  //   }
-  // }
-
-  void _onSizeChanged(Size size) {
-    print("SIZE CHANGED TO: $size");
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (mounted) {
-        setState(() {
-          _canvasSize = size;
-        });
-      }
-    });
-  }
-
-  void _noLoop() {
-    setState(() {
-      _playbackMode = PlaybackMode.singleFrame;
-    });
-  }
-
-  void _loop() {
-    setState(() {
-      _playbackMode = PlaybackMode.continuous;
-    });
   }
 
   void _onKeyEvent(KeyEvent event) {
@@ -206,12 +160,13 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     widget.sketch
       .._mouseButton = mouseButton
       .._updateMousePosition(
-        _getCanvasOffsetFromWidgetOffset(event.position),
+        _getCanvasOffsetFromWidgetOffset(event.localPosition),
       )
       ..mousePressed();
   }
 
   void _onPointerMove(PointerMoveEvent event) {
+    gesturesLog.fine("Pointer move: ${event.localPosition}");
     if (event.kind != PointerDeviceKind.mouse && event.kind != PointerDeviceKind.touch) {
       return;
     }
@@ -221,7 +176,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     widget.sketch
       .._mouseButton = mouseButton
       .._updateMousePosition(
-        _getCanvasOffsetFromWidgetOffset(event.position),
+        _getCanvasOffsetFromWidgetOffset(event.localPosition),
       )
       ..mouseDragged();
   }
@@ -241,7 +196,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     widget.sketch
       .._mouseButton = null
       .._updateMousePosition(
-        _getCanvasOffsetFromWidgetOffset(event.position),
+        _getCanvasOffsetFromWidgetOffset(event.localPosition),
       )
       ..mouseReleased()
       ..mouseClicked();
@@ -262,7 +217,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     widget.sketch
       .._mouseButton = null
       .._updateMousePosition(
-        _getCanvasOffsetFromWidgetOffset(event.position),
+        _getCanvasOffsetFromWidgetOffset(event.localPosition),
       )
       ..mouseReleased();
   }
@@ -274,7 +229,7 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
 
     widget.sketch
       .._updateMousePosition(
-        _getCanvasOffsetFromWidgetOffset(event.position),
+        _getCanvasOffsetFromWidgetOffset(event.localPosition),
       )
       ..mouseMoved();
   }
@@ -285,6 +240,43 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
     }
 
     widget.sketch.mouseWheel(event.scrollDelta.dy);
+  }
+
+  void _onTick(elapsedTime) {
+    _elapsedDrawingTime = elapsedTime;
+    _paintFrame();
+  }
+
+  Future<void> _paintFrame() async {
+    final sketch = widget.sketch;
+    if (sketch._isDrawing) {
+      return;
+    }
+
+    lifecycleLog.info("Painting a frame");
+    await sketch._doDrawFrame(_elapsedDrawingTime);
+    lifecycleLog.info("Done painting a frame");
+
+    // Ensure that we're still mounted, and our Sketch wasn't switched out while
+    // we were drawing.
+    if (mounted && sketch == widget.sketch) {
+      setState(() {
+        _currentImage = widget.sketch.publishedFrame!;
+      });
+    }
+  }
+
+  void _noLoop() {
+    if (_ticker.isTicking) {
+      _ticker.stop();
+    }
+  }
+
+  void _loop() {
+    if (!_ticker.isTicking) {
+      _elapsedDrawingTime = Duration.zero;
+      _ticker.start();
+    }
   }
 
   @override
@@ -303,25 +295,23 @@ class _ProcessingState extends State<Processing> with SingleTickerProviderStateM
         onPointerCancel: _onPointerCancel,
         onPointerHover: _onPointerHover,
         onPointerSignal: _onPointerSignal,
-        child: OverflowBox(
-          maxWidth: double.infinity,
-          maxHeight: double.infinity,
-          // child: SizedBox(
-          //   width: _currentImage!.width.toDouble(),
-          //   height: _currentImage!.height.toDouble(),
-          child: BitmapPaint(
-            key: _sketchCanvasKey,
-            painter: BitmapPainter.fromCallback(_onPaint),
-            size: _canvasSize,
-            playbackMode: _playbackMode,
-          ),
-          // child: RawImage(
-          //   key: _sketchCanvasKey,
-          //   image: _currentImage,
-          // ),
-          // ),
-        ),
+        child: _buildBitmap(),
       ),
     );
+  }
+
+  Widget _buildBitmap() {
+    return _currentImage != null
+        ? SizedBox(
+            key: _sketchCanvasKey,
+            width: _currentImage!.width.toDouble(),
+            height: _currentImage!.height.toDouble(),
+            child: RepaintBoundary(
+              child: RawImage(
+                image: _currentImage,
+              ),
+            ),
+          )
+        : SizedBox.fromSize(size: _canvasSize);
   }
 }

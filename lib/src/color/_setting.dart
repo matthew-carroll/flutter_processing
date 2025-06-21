@@ -9,7 +9,6 @@ mixin SketchColorSetting on BaseSketch {
     _backgroundColor = color;
 
     final paint = Paint()..color = color;
-    print("Painting context size: ${_paintingContext.size}");
     _paintingContext.canvas.drawRect(Offset.zero & _paintingContext.size, paint);
   }
 

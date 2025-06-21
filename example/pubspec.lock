@@ -19,8 +19,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: head
-      resolved-ref: "2ec18b434d3c6c79fefef88dbc813ca2a62f34e6"
+      ref: fixing-size-bug
+      resolved-ref: defd41bd7be7a51e816c2de47367acbdbd725105
       url: "git@github.com:Flutter-Bounty-Hunters/bitmap_canvas.git"
     source: git
     version: "0.0.1"

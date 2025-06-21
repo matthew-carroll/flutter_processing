@@ -31,7 +31,6 @@ class NetworkSketch extends Sketch {
 
   @override
   void draw() {
-    print("DRAWING NETWORK");
     background(color: const Color(0xFF333333));
 
     stroke(color: _edgeColor);

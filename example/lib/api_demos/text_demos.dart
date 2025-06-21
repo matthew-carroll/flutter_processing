@@ -28,6 +28,7 @@ class _TextSketchDemoState extends State<TextSketchDemo> {
       setup: (s) async {
         s
           ..size(width: 400, height: 400)
+          ..noLoop()
           ..background(color: Colors.black)
           ..stroke(color: Colors.white)
           ..fill(color: Colors.white)
@@ -72,6 +73,7 @@ class _TextLeadingSketchDemoState extends State<TextLeadingSketchDemo> {
       setup: (s) async {
         s
           ..size(width: 400, height: 400)
+          ..noLoop()
           ..stroke(color: Colors.black)
           ..line(const Offset(0, 100), Offset(s.width.toDouble(), 100))
           ..fill(color: Colors.black)
@@ -113,6 +115,7 @@ class _TextWidthSketchDemoState extends State<TextWidthSketchDemo> {
       setup: (s) async {
         s
           ..size(width: 400, height: 400)
+          ..noLoop()
           ..textSize(112)
           ..textAlign(TextAlignHorizontal.left, TextAlignVertical.bottom)
           ..text("T", 0, 160)
@@ -151,6 +154,7 @@ class _TextAscentSketchDemoState extends State<TextAscentSketchDemo> {
       setup: (s) async {
         s
           ..size(width: 400, height: 400)
+          ..noLoop()
           ..textAlign(TextAlignHorizontal.left, TextAlignVertical.baseline);
 
         final baseline = s.height * 0.75;
@@ -200,6 +204,7 @@ class _TextDescentSketchDemoState extends State<TextDescentSketchDemo> {
       setup: (s) async {
         s
           ..size(width: 400, height: 400)
+          ..noLoop()
           ..textAlign(TextAlignHorizontal.left, TextAlignVertical.baseline);
 
         final baseline = s.height * 0.75;
